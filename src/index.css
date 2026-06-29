@@ -5,14 +5,22 @@
 @tailwind utilities;
 
 :root {
-  --color-primary: #2563EB;
-  --color-primary-light: #60A5FA;
-  --color-accent: #06B6D4;
-  --color-background: #F8FAFC;
-  --color-text: #0F172A;
-  --color-border: #E2E8F0;
+  --brand-50:  #EFF8FF;
+  --brand-100: #DBEEFF;
+  --brand-200: #B9DEFE;
+  --brand-300: #88C6FC;
+  --brand-400: #199EF3;
+  --brand-500: #0082F0;
+  --brand-600: #006ACC;
+  --brand-900: #0A2463;
+
+  --dark-bg:      #0B1426;
+  --dark-surface: #112035;
+  --dark-border:  #1E3352;
+
   --color-success: #22C55E;
-  --color-error: #EF4444;
+  --color-error:   #EF4444;
+  --color-warning: #F59E0B;
 }
 
 * {
@@ -27,38 +35,29 @@ html {
 
 body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  color: var(--color-text);
-  background: var(--color-background);
+  color: #0F172A;
+  background: #FEFEFF;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Glass effect */
-.glass {
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+/* Dark mode body */
+body.dark {
+  color: #E2EEFF;
+  background: var(--dark-bg);
 }
 
 /* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 3px; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
-::-webkit-scrollbar-track {
-  background: #f1f5f9;
-  border-radius: 3px;
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
-
-::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 3px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
-}
+.scrollbar-hide::-webkit-scrollbar { display: none; }
 
 /* Line clamp */
 .line-clamp-2 {
@@ -67,7 +66,6 @@ body {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
-
 .line-clamp-3 {
   display: -webkit-box;
   -webkit-line-clamp: 3;
@@ -75,99 +73,31 @@ body {
   overflow: hidden;
 }
 
-/* Hide scrollbar */
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
-}
-
 /* Gradient text */
 .gradient-text {
-  background: linear-gradient(135deg, #2563EB 0%, #60A5FA 100%);
+  background: linear-gradient(135deg, #0082F0 0%, #199EF3 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-/* Safe area for mobile bottom nav */
-.safe-bottom {
-  padding-bottom: 0;
+/* Glass */
+.glass {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
-/* Better input styling */
-.input:hover {
-  border-color: #cbd5e1;
-}
-
-.input::placeholder {
-  color: #94a3b8;
-}
-
-/* Card hover effects */
+/* Card hover */
 .card-hover {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
-
 .card-hover:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 12px 40px rgba(0, 130, 240, 0.14);
 }
 
-@layer utilities {
-  .animate-fade-in {
-    animation: fadeIn 0.5s ease-out;
-  }
-
-  .animate-slide-up {
-    animation: slideUp 0.5s ease-out;
-  }
-
-  .animate-scale-in {
-    animation: scaleIn 0.3s ease-out;
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes scaleIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-/* Prevent body scroll when modal is open */
-body.modal-open {
-  overflow: hidden;
-}
-
-/* Minimal input style */
+/* Input */
 .input {
   width: 100%;
   padding: 0.625rem 0.875rem;
@@ -179,8 +109,55 @@ body.modal-open {
   outline: none;
   transition: border-color 0.15s, box-shadow 0.15s;
 }
-
 .input:focus {
-  border-color: #0f172a;
-  box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.08);
+  border-color: #0082F0;
+  box-shadow: 0 0 0 3px rgba(0, 130, 240, 0.12);
+}
+
+/* Modal open */
+body.modal-open { overflow: hidden; }
+
+/* Apple-style spring easing */
+:root {
+  --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --spring-soft: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer utilities {
+  .animate-fade-in       { animation: fadeIn 0.4s var(--spring-soft) both; }
+  .animate-slide-up      { animation: slideUp 0.5s var(--spring-soft) both; }
+  .animate-slide-in-left { animation: slideInLeft 0.35s var(--spring-soft) both; }
+  .animate-scale-in      { animation: scaleIn 0.3s var(--spring) both; }
+  .animate-float         { animation: float 6s ease-in-out infinite; }
+  .animate-stagger-1     { animation-delay: 0.05s; }
+  .animate-stagger-2     { animation-delay: 0.1s; }
+  .animate-stagger-3     { animation-delay: 0.15s; }
+  .animate-stagger-4     { animation-delay: 0.2s; }
+  .animate-stagger-5     { animation-delay: 0.25s; }
+
+  .spring-hover {
+    transition: transform 0.25s var(--spring), box-shadow 0.25s ease;
+  }
+  .spring-hover:hover {
+    transform: scale(1.02) translateY(-2px);
+  }
+  .spring-hover:active {
+    transform: scale(0.98);
+  }
+
+  .btn-spring {
+    transition: transform 0.2s var(--spring), box-shadow 0.2s ease, background-color 0.15s ease;
+  }
+  .btn-spring:hover  { transform: translateY(-1px) scale(1.01); }
+  .btn-spring:active { transform: translateY(0px) scale(0.97); }
+}
+
+@keyframes fadeIn      { from { opacity: 0; }                            to { opacity: 1; } }
+@keyframes slideUp     { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideInLeft { from { opacity: 0; transform: translateX(-16px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes scaleIn     { from { opacity: 0; transform: scale(0.93); }   to { opacity: 1; transform: scale(1); } }
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-10px); }
 }
