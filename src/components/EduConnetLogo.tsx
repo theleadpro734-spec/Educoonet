@@ -5,9 +5,9 @@ interface EduConnetLogoProps {
 
 export function EduConnetLogo({ size = 'md', variant = 'light' }: EduConnetLogoProps) {
   const dims = {
-    sm: { img: 26, fs: 14, pad: 3, br: 5 },
-    md: { img: 32, fs: 18, pad: 4, br: 6 },
-    lg: { img: 40, fs: 22, pad: 5, br: 8 },
+    sm: { img: 28, fs: 14 },
+    md: { img: 36, fs: 18 },
+    lg: { img: 44, fs: 22 },
   }[size];
 
   return (
@@ -21,34 +21,20 @@ export function EduConnetLogo({ size = 'md', variant = 'light' }: EduConnetLogoP
         flexShrink: 0,
       }}
     >
-      {/* On dark backgrounds: wrap in a white pill so the logo is visible */}
-      <span
+      <img
+        src="/9dedd1da-760d-4b8f-95d7-2c4884db1d37.png"
+        alt="EduConnet"
+        width={dims.img}
+        height={dims.img}
         style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          width: dims.img + dims.pad * 2,
-          height: dims.img + dims.pad * 2,
-          borderRadius: dims.br,
-          backgroundColor: variant === 'dark' ? 'rgba(255,255,255,0.92)' : 'transparent',
+          width: dims.img,
+          height: dims.img,
+          objectFit: 'contain',
+          display: 'block',
           flexShrink: 0,
-          transition: 'background-color 0.3s ease',
+          filter: variant === 'dark' ? 'brightness(0) invert(1)' : 'none',
         }}
-      >
-        <img
-          src="/logo.png"
-          alt="EduConnet"
-          width={dims.img}
-          height={dims.img}
-          style={{
-            width: dims.img,
-            height: dims.img,
-            objectFit: 'contain',
-            display: 'block',
-          }}
-        />
-      </span>
-
+      />
       <span
         style={{
           fontSize: dims.fs,
@@ -58,7 +44,7 @@ export function EduConnetLogo({ size = 'md', variant = 'light' }: EduConnetLogoP
         }}
       >
         <span style={{ color: variant === 'dark' ? '#ffffff' : '#0A2463' }}>Edu</span>
-        <span style={{ color: variant === 'dark' ? '#88C6FC' : '#2D8BDB' }}>Connet</span>
+        <span style={{ color: variant === 'dark' ? '#88C6FC' : '#4A90D9' }}>Connet</span>
       </span>
     </span>
   );
