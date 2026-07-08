@@ -20,6 +20,7 @@ export const colors = {
 
 export const countryOptions = [
   'Todos',
+  'Venezuela',
   'Estados Unidos',
   'Reino Unido',
   'Suiza',

@@ -17,11 +17,13 @@ export function EduConnetLogo({ size = 'md', variant = 'light' }: EduConnetLogoP
       }}
     >
       <img
-        src="/image copy copy.png"
-        alt=""
+        src="/logo.png"
+        alt="EduConnet"
         width={dims.img}
         height={dims.img}
         style={{
+          width: dims.img,
+          height: dims.img,
           objectFit: 'contain',
           flexShrink: 0,
           filter: variant === 'dark' ? 'brightness(0) invert(1)' : 'none',

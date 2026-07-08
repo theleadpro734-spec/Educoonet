@@ -434,14 +434,14 @@ export function InstitutionProfile({ onExit }: InstitutionProfileProps) {
                           type="text"
                           value={form.location}
                           onChange={(e) => setForm({ ...form, location: e.target.value })}
-                          placeholder="Ubicacion"
+placeholder="Carabobo, Venezuela"
                           className="w-full bg-slate-50 rounded-lg px-3 py-1.5 border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
                         />
                         <input
                           type="text"
                           value={form.address}
                           onChange={(e) => setForm({ ...form, address: e.target.value })}
-                          placeholder="Direccion"
+placeholder="Dirección, Carabobo, Venezuela"
                           className="w-full bg-slate-50 rounded-lg px-3 py-1.5 border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
                         />
                       </div>

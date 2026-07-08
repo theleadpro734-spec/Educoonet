@@ -83,9 +83,9 @@ function App() {
       id: 'demo-student-1',
       name: 'Postulante',
       last_name: 'Demo',
-      email: 'postulante@demo.ec',
+      email: 'postulante@demo.ve',
     }));
-    setStudentEmail('postulante@demo.ec');
+    setStudentEmail('postulante@demo.ve');
     setView('student');
   };
 
@@ -183,7 +183,7 @@ function App() {
             <div className="text-center lg:text-left animate-fade-in">
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full mb-6">
                 <Zap className="w-4 h-4 text-[#88C6FC]" />
-                <span className="text-sm font-medium text-[#B9DEFE]">Plataforma educativa #1 en Ecuador</span>
+                <span className="text-sm font-medium text-[#B9DEFE]">Plataforma educativa #1 en Venezuela</span>
               </div>
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-[1.1]">
                 Conecta tu futuro
