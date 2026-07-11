@@ -5,20 +5,21 @@
 @tailwind utilities;
 
 :root {
-  --brand-50:  #EFF8FF;
-  --brand-100: #DBEEFF;
-  --brand-200: #B9DEFE;
-  --brand-300: #88C6FC;
-  --brand-400: #199EF3;
-  --brand-500: #0082F0;
-  --brand-600: #006ACC;
-  --brand-900: #0A2463;
+  --brand-50:  #F0FDFA;
+  --brand-100: #CCFBF1;
+  --brand-200: #99F6E4;
+  --brand-300: #5EEAD4;
+  --brand-400: #2DD4BF;
+  --brand-500: #14B8A6;
+  --brand-600: #0D9488;
+  --brand-700: #0F766E;
+  --brand-900: #134E4A;
 
-  --dark-bg:      #0B1426;
-  --dark-surface: #112035;
-  --dark-border:  #1E3352;
+  --ink-bg:      #0F172A;
+  --ink-surface: #1E293B;
+  --ink-border:  #334155;
 
-  --color-success: #22C55E;
+  --color-success: #10B981;
   --color-error:   #EF4444;
   --color-warning: #F59E0B;
 }
@@ -41,82 +42,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Dark mode body */
 body.dark {
-  color: #E2EEFF;
-  background: var(--dark-bg);
+  color: #E2E8F0;
+  background: var(--ink-bg);
 }
-
-/* ── Light-mode blue softening ──────────────────────────────────
-   Only applies when body does NOT have .dark class.
-   Softens the primary blue (#0082F0 → #2D8BDB) and related shades
-   so cards, buttons, nav bars, and backgrounds are easier to
-   distinguish. Dark mode is completely untouched.
-*/
-body:not(.dark) {
-  --lm-primary:   #4A90D9;
-  --lm-primary-d: #3A7ABF;
-  --lm-accent:    #6BAEEC;
-  --lm-light:     #F0F6FB;
-  --lm-light-2:   #DDEBF7;
-  --lm-pale:      #C5DDF5;
-  --lm-pale-2:    #A8CCEF;
-}
-
-/* Text color */
-body:not(.dark) .text-\[\#0082F0\] { color: var(--lm-primary) !important; }
-
-/* Background color */
-body:not(.dark) .bg-\[\#0082F0\] { background-color: var(--lm-primary) !important; }
-body:not(.dark) .bg-\[\#0082F0\]\/10 { background-color: rgba(74, 144, 217, 0.10) !important; }
-body:not(.dark) .bg-\[\#0082F0\]\/20 { background-color: rgba(74, 144, 217, 0.20) !important; }
-body:not(.dark) .bg-\[\#0082F0\]\/30 { background-color: rgba(74, 144, 217, 0.30) !important; }
-body:not(.dark) .bg-\[\#0082F0\]\/80 { background-color: rgba(74, 144, 217, 0.80) !important; }
-body:not(.dark) .bg-\[\#199EF3\]\/20 { background-color: rgba(107, 174, 236, 0.20) !important; }
-body:not(.dark) .bg-\[\#199EF3\]\/30 { background-color: rgba(107, 174, 236, 0.30) !important; }
-body:not(.dark) .bg-\[\#EFF8FF\] { background-color: var(--lm-light) !important; }
-body:not(.dark) .bg-\[\#DBEEFF\] { background-color: var(--lm-light-2) !important; }
-
-/* Border color */
-body:not(.dark) .border-\[\#0082F0\] { border-color: var(--lm-primary) !important; }
-body:not(.dark) .border-\[\#199EF3\]\/30 { border-color: rgba(107, 174, 236, 0.30) !important; }
-body:not(.dark) .border-\[\#199EF3\]\/40 { border-color: rgba(107, 174, 236, 0.40) !important; }
-body:not(.dark) .border-\[\#B9DEFE\]\/40 { border-color: rgba(197, 221, 245, 0.40) !important; }
-
-/* Hover states */
-body:not(.dark) .hover\:bg-\[\#006ACC\]:hover { background-color: var(--lm-primary-d) !important; }
-body:not(.dark) .hover\:bg-\[\#EFF8FF\]:hover { background-color: var(--lm-light) !important; }
-body:not(.dark) .hover\:bg-\[\#DBEEFF\]:hover { background-color: var(--lm-light-2) !important; }
-body:not(.dark) .hover\:text-\[\#0082F0\]:hover { color: var(--lm-primary) !important; }
-body:not(.dark) .hover\:border-\[\#0082F0\]:hover { border-color: var(--lm-primary) !important; }
-body:not(.dark) .hover\:border-\[\#199EF3\]\/40:hover { border-color: rgba(107, 174, 236, 0.40) !important; }
-
-/* Focus states */
-body:not(.dark) .focus\:border-\[\#0082F0\]:focus { border-color: var(--lm-primary) !important; }
-body:not(.dark) .focus\:ring-\[\#0082F0\]\/20:focus { --tw-ring-color: rgba(74, 144, 217, 0.20) !important; }
-
-/* Gradients */
-body:not(.dark) .from-\[\#199EF3\] { --tw-gradient-from: var(--lm-accent) var(--tw-gradient-from-position) !important; }
-body:not(.dark) .to-\[\#0082F0\] { --tw-gradient-to: var(--lm-primary) var(--tw-gradient-to-position) !important; }
-body:not(.dark) .via-\[\#0082F0\] { --tw-gradient-via: var(--lm-primary) var(--tw-gradient-via-position) !important; }
-body:not(.dark) .from-\[\#EFF8FF\] { --tw-gradient-from: var(--lm-light) var(--tw-gradient-from-position) !important; }
-body:not(.dark) .hover\:from-\[\#0082F0\]:hover { --tw-gradient-from: var(--lm-primary) var(--tw-gradient-from-position) !important; }
-body:not(.dark) .hover\:to-\[\#006ACC\]:hover { --tw-gradient-to: var(--lm-primary-d) var(--tw-gradient-to-position) !important; }
-
-/* Shadow colors */
-body:not(.dark) .shadow-\[\#0082F0\]\/10 { --tw-shadow-color: rgba(74, 144, 217, 0.10) }
-body:not(.dark) .shadow-\[\#0082F0\]\/20 { --tw-shadow-color: rgba(74, 144, 217, 0.20) }
-body:not(.dark) .shadow-\[\#0082F0\]\/25 { --tw-shadow-color: rgba(74, 144, 217, 0.25) }
-body:not(.dark) .shadow-\[\#0082F0\]\/30 { --tw-shadow-color: rgba(74, 144, 217, 0.30) }
-
-/* Additional opacity variants */
-body:not(.dark) .bg-\[\#0082F0\]\/40 { background-color: rgba(74, 144, 217, 0.40) !important; }
-body:not(.dark) .text-\[\#0082F0\]\/40 { color: rgba(74, 144, 217, 0.40) !important; }
-body:not(.dark) .border-\[\#B9DEFE\]\/50 { border-color: rgba(197, 221, 245, 0.50) !important; }
-body:not(.dark) .border-\[\#0082F0\]\/30 { border-color: rgba(74, 144, 217, 0.30) !important; }
-body:not(.dark) .border-t-\[\#0082F0\] { border-top-color: var(--lm-primary) !important; }
-body:not(.dark) .hover\:text-\[\#006ACC\]:hover { color: var(--lm-primary-d) !important; }
-body:not(.dark) .hover\:bg-\[\#EFF8FF\]\/30:hover { background-color: rgba(240, 246, 251, 0.30) !important; }
 
 /* Custom scrollbar */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -146,7 +75,7 @@ body:not(.dark) .hover\:bg-\[\#EFF8FF\]\/30:hover { background-color: rgba(240, 
 
 /* Gradient text */
 .gradient-text {
-  background: linear-gradient(135deg, #0082F0 0%, #199EF3 100%);
+  background: linear-gradient(135deg, #0D9488 0%, #14B8A6 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -165,7 +94,7 @@ body:not(.dark) .hover\:bg-\[\#EFF8FF\]\/30:hover { background-color: rgba(240, 
 }
 .card-hover:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 40px rgba(0, 130, 240, 0.14);
+  box-shadow: 0 12px 40px rgba(15, 23, 42, 0.10);
 }
 
 /* Input */
@@ -181,8 +110,8 @@ body:not(.dark) .hover\:bg-\[\#EFF8FF\]\/30:hover { background-color: rgba(240, 
   transition: border-color 0.15s, box-shadow 0.15s;
 }
 .input:focus {
-  border-color: #0082F0;
-  box-shadow: 0 0 0 3px rgba(0, 130, 240, 0.12);
+  border-color: #0D9488;
+  box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.12);
 }
 
 /* Modal open */

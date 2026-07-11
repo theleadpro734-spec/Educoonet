@@ -111,12 +111,12 @@ export function InstitutionDashboard({
       {/* Institution chip */}
       <div className="px-5 py-3">
         <div className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl bg-white/10 border border-white/10">
-          <div className="w-8 h-8 rounded-lg bg-[#0082F0] flex items-center justify-center flex-shrink-0 shadow-lg">
+          <div className="w-8 h-8 rounded-lg bg-[#0D9488] flex items-center justify-center flex-shrink-0 shadow-lg">
             <Building2 className="w-4 h-4 text-white" />
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-white text-xs font-bold truncate">{institutionName || 'Institucion'}</p>
-            <p className="text-[#88C6FC] text-[10px]">Panel Admin</p>
+            <p className="text-[#5EEAD4] text-[10px]">Panel Admin</p>
           </div>
         </div>
       </div>
@@ -132,7 +132,7 @@ export function InstitutionDashboard({
               style={{ animationDelay: `${i * 0.05}s` }}
               className={`animate-slide-in-left w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 btn-spring ${
                 active
-                  ? 'bg-[#0082F0] text-white shadow-lg shadow-[#0082F0]/30'
+                  ? 'bg-[#0D9488] text-white shadow-lg shadow-[#0D9488]/30'
                   : 'text-white/70 hover:text-white hover:bg-white/10'
               }`}
             >
@@ -140,7 +140,7 @@ export function InstitutionDashboard({
               <span className="flex-1 text-left">{item.label}</span>
               {item.badge !== undefined && item.badge > 0 && (
                 <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full transition-all ${
-                  active ? 'bg-white/25 text-white' : 'bg-[#0082F0]/80 text-white'
+                  active ? 'bg-white/25 text-white' : 'bg-[#0D9488]/80 text-white'
                 }`}>
                   {item.badge}
                 </span>
@@ -153,14 +153,14 @@ export function InstitutionDashboard({
       {/* Acceptance rate widget */}
       <div className="mx-3 mb-3 p-4 rounded-xl bg-white/8 border border-white/10">
         <div className="flex items-center justify-between mb-2">
-          <p className="text-[#88C6FC] text-xs font-semibold uppercase tracking-wider">Aceptacion</p>
+          <p className="text-[#5EEAD4] text-xs font-semibold uppercase tracking-wider">Aceptacion</p>
           <span className="text-xs font-bold text-white bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full">
             {acceptanceRate}%
           </span>
         </div>
         <div className="h-1.5 bg-white/10 rounded-full overflow-hidden mb-3">
           <div
-            className="h-full bg-gradient-to-r from-[#199EF3] to-emerald-400 rounded-full transition-all duration-700"
+            className="h-full bg-gradient-to-r from-[#14B8A6] to-emerald-400 rounded-full transition-all duration-700"
             style={{ width: `${acceptanceRate}%` }}
           />
         </div>
@@ -184,7 +184,7 @@ export function InstitutionDashboard({
           onClick={() => setAccountMenuOpen(!accountMenuOpen)}
           className="w-full flex items-center gap-3 px-3 py-3 rounded-xl bg-white/8 border border-white/10 hover:bg-white/15 transition-all"
         >
-          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#199EF3] to-[#0082F0] flex items-center justify-center flex-shrink-0 shadow-lg">
+          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#14B8A6] to-[#0D9488] flex items-center justify-center flex-shrink-0 shadow-lg">
             <Building2 className="w-4 h-4 text-white" />
           </div>
           <div className="flex-1 min-w-0 text-left">
@@ -194,7 +194,7 @@ export function InstitutionDashboard({
           <ChevronDown className={`w-4 h-4 text-white/40 transition-transform duration-300 ${accountMenuOpen ? 'rotate-180' : ''}`} />
         </button>
         {accountMenuOpen && (
-          <div className="absolute bottom-full left-3 right-3 mb-2 bg-[#0B1426] border border-white/10 rounded-xl shadow-2xl py-1 z-10 animate-scale-in">
+          <div className="absolute bottom-full left-3 right-3 mb-2 bg-[#0F172A] border border-white/10 rounded-xl shadow-2xl py-1 z-10 animate-scale-in">
             <button
               onClick={onExit}
               className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-400 hover:bg-red-500/10 transition-colors rounded-lg mx-1"
@@ -210,12 +210,12 @@ export function InstitutionDashboard({
   );
 
   return (
-    <div className="min-h-screen bg-[#f4f7ff]">
+    <div className="min-h-screen bg-[#F8FAFC]">
       {/* Desktop Sidebar */}
       <aside className="hidden lg:fixed lg:inset-y-0 lg:left-0 lg:flex lg:w-64 lg:flex-col z-40">
         <div
           className="flex grow flex-col overflow-hidden"
-          style={{ background: 'linear-gradient(160deg, #0A2463 0%, #0D2F7A 40%, #112035 100%)' }}
+          style={{ background: 'linear-gradient(165deg, #1E293B 0%, #0F172A 60%, #0F172A 100%)' }}
         >
           <SidebarContent />
         </div>
@@ -248,7 +248,7 @@ export function InstitutionDashboard({
       )}
       <div
         className={`lg:hidden fixed inset-y-0 left-0 z-50 w-64 transform transition-all duration-300 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}
-        style={{ background: 'linear-gradient(160deg, #0A2463 0%, #0D2F7A 40%, #112035 100%)' }}
+        style={{ background: 'linear-gradient(165deg, #1E293B 0%, #0F172A 60%, #0F172A 100%)' }}
       >
         <div className="absolute top-4 right-4">
           <button onClick={() => setSidebarOpen(false)} className="p-2 rounded-xl bg-white/10 hover:bg-white/20 transition-colors">
@@ -266,7 +266,7 @@ export function InstitutionDashboard({
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-8 animate-fade-in">
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <span className="px-2.5 py-1 bg-[#0082F0]/10 text-[#0082F0] text-xs font-semibold rounded-lg">Panel Admin</span>
+                <span className="px-2.5 py-1 bg-[#0D9488]/10 text-[#0D9488] text-xs font-semibold rounded-lg">Panel Admin</span>
                 {pendingToday > 0 && (
                   <span className="px-2.5 py-1 bg-amber-100 text-amber-700 text-xs font-semibold rounded-lg flex items-center gap-1 animate-scale-in">
                     <AlertCircle className="w-3 h-3" />
@@ -280,14 +280,14 @@ export function InstitutionDashboard({
             <div className="flex items-center gap-3">
               <button
                 onClick={onProfile}
-                className="flex items-center gap-2 px-4 py-2.5 bg-[#0A2463] hover:bg-[#0082F0] text-white text-sm font-medium rounded-xl transition-all btn-spring shadow-lg shadow-[#0A2463]/20"
+                className="flex items-center gap-2 px-4 py-2.5 bg-[#134E4A] hover:bg-[#0D9488] text-white text-sm font-medium rounded-xl transition-all btn-spring shadow-lg shadow-[#134E4A]/20"
               >
                 <Settings className="w-4 h-4" />
                 Editar Perfil
               </button>
               <button
                 onClick={() => handleTabChange('messages')}
-                className="relative flex items-center gap-2 px-4 py-2.5 bg-[#0082F0]/10 hover:bg-[#0082F0]/20 text-[#0082F0] text-sm font-medium rounded-xl transition-all btn-spring"
+                className="relative flex items-center gap-2 px-4 py-2.5 bg-[#0D9488]/10 hover:bg-[#0D9488]/20 text-[#0D9488] text-sm font-medium rounded-xl transition-all btn-spring"
               >
                 <MessageSquare className="w-4 h-4" />
                 Mensajes
@@ -316,12 +316,12 @@ export function InstitutionDashboard({
               >
                 <div className="flex items-center justify-between mb-3">
                   <div className={`w-11 h-11 rounded-xl flex items-center justify-center ${
-                    s.color === 'blue' ? 'bg-[#0082F0]/10' :
+                    s.color === 'blue' ? 'bg-[#0D9488]/10' :
                     s.color === 'amber' ? 'bg-amber-100' :
                     s.color === 'green' ? 'bg-emerald-100' : 'bg-red-100'
                   }`}>
                     <s.icon className={`w-5 h-5 ${
-                      s.color === 'blue' ? 'text-[#0082F0]' :
+                      s.color === 'blue' ? 'text-[#0D9488]' :
                       s.color === 'amber' ? 'text-amber-600' :
                       s.color === 'green' ? 'text-emerald-600' : 'text-red-500'
                     }`} />
@@ -343,8 +343,8 @@ export function InstitutionDashboard({
           <div className="grid lg:grid-cols-3 gap-4 mb-6">
             {[
               {
-                icon: UserCheck, iconBg: 'bg-[#0082F0]',
-                cardBg: 'from-[#EFF8FF] to-white border-[#B9DEFE]/40',
+                icon: UserCheck, iconBg: 'bg-[#0D9488]',
+                cardBg: 'from-[#F0FDFA] to-white border-[#99F6E4]/40',
                 title: 'Proceso de Revision',
                 sub: 'Tiempo de respuesta',
                 text: 'Responde las postulaciones en menos de 5 dias habiles para mejorar la experiencia del postulante.',
@@ -396,7 +396,7 @@ export function InstitutionDashboard({
                   <select
                     value={filterStatus}
                     onChange={(e) => setFilterStatus(e.target.value)}
-                    className="pl-9 pr-8 py-2.5 bg-[#EFF8FF] border border-[#B9DEFE]/50 rounded-xl text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0082F0]/20 focus:border-[#0082F0] appearance-none cursor-pointer transition-all"
+                    className="pl-9 pr-8 py-2.5 bg-[#F0FDFA] border border-[#99F6E4]/50 rounded-xl text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0D9488]/20 focus:border-[#0D9488] appearance-none cursor-pointer transition-all"
                   >
                     <option value="all">Todas ({total})</option>
                     <option value="pendiente">Pendientes ({pending})</option>
@@ -427,8 +427,8 @@ export function InstitutionDashboard({
               </div>
             ) : (
               <div className="p-16 text-center">
-                <div className="w-16 h-16 bg-[#EFF8FF] rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <FileText className="w-8 h-8 text-[#0082F0]/40" />
+                <div className="w-16 h-16 bg-[#F0FDFA] rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <FileText className="w-8 h-8 text-[#0D9488]/40" />
                 </div>
                 <p className="text-slate-500 font-medium">No hay postulaciones</p>
                 <p className="text-sm text-slate-400 mt-1">Las nuevas postulaciones apareceran aqui automaticamente.</p>
@@ -439,7 +439,7 @@ export function InstitutionDashboard({
               <div className="p-4 border-t border-slate-100 bg-slate-50/50">
                 <button
                   onClick={onViewAllApplications}
-                  className="w-full py-2.5 text-sm font-semibold text-[#0082F0] hover:text-[#006ACC] bg-white hover:bg-[#EFF8FF] rounded-xl border border-[#B9DEFE]/50 flex items-center justify-center gap-1 transition-all btn-spring"
+                  className="w-full py-2.5 text-sm font-semibold text-[#0D9488] hover:text-[#0F766E] bg-white hover:bg-[#F0FDFA] rounded-xl border border-[#99F6E4]/50 flex items-center justify-center gap-1 transition-all btn-spring"
                 >
                   Ver todas las postulaciones ({applications.length})
                   <ChevronRight className="w-4 h-4" />
@@ -460,18 +460,18 @@ export function InstitutionDashboard({
                 key={item.id}
                 onClick={() => handleTabChange(item.id)}
                 className={`flex flex-1 flex-col items-center gap-1 py-2 px-1 rounded-xl transition-all btn-spring ${
-                  active ? 'text-[#0082F0]' : 'text-slate-400 hover:text-slate-700'
+                  active ? 'text-[#0D9488]' : 'text-slate-400 hover:text-slate-700'
                 }`}
               >
-                <div className={`relative p-1.5 rounded-xl transition-all ${active ? 'bg-[#0082F0]/10' : ''}`}>
+                <div className={`relative p-1.5 rounded-xl transition-all ${active ? 'bg-[#0D9488]/10' : ''}`}>
                   <item.icon className="w-5 h-5" />
                   {item.badge !== undefined && item.badge > 0 && (
-                    <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-[#0082F0] text-white rounded-full flex items-center justify-center text-[9px] font-bold">
+                    <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-[#0D9488] text-white rounded-full flex items-center justify-center text-[9px] font-bold">
                       {item.badge}
                     </span>
                   )}
                 </div>
-                <span className={`text-[9px] font-semibold leading-tight ${active ? 'text-[#0082F0]' : ''}`}>{item.label}</span>
+                <span className={`text-[9px] font-semibold leading-tight ${active ? 'text-[#0D9488]' : ''}`}>{item.label}</span>
               </button>
             );
           })}
@@ -510,9 +510,9 @@ function ApplicationRow({
   const isUpdating = updatingId === application.id;
 
   return (
-    <div className="p-5 hover:bg-[#EFF8FF]/30 transition-colors duration-200 group">
+    <div className="p-5 hover:bg-[#F0FDFA]/30 transition-colors duration-200 group">
       <div className="flex items-start gap-4">
-        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#0082F0] to-[#0A2463] flex items-center justify-center flex-shrink-0 shadow-md group-hover:scale-105 transition-transform duration-200">
+        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#0D9488] to-[#134E4A] flex items-center justify-center flex-shrink-0 shadow-md group-hover:scale-105 transition-transform duration-200">
           <span className="text-white font-bold text-sm">
             {application.name.charAt(0)}{application.last_name?.charAt(0) || ''}
           </span>
@@ -526,15 +526,15 @@ function ApplicationRow({
               <div className="mt-2 space-y-1">
                 <div className="flex items-center gap-2 text-sm text-slate-500">
                   <Mail className="w-3.5 h-3.5 text-slate-400" />
-                  <a href={`mailto:${application.email}`} className="hover:text-[#0082F0] transition-colors">{application.email}</a>
+                  <a href={`mailto:${application.email}`} className="hover:text-[#0D9488] transition-colors">{application.email}</a>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-slate-500">
                   <Phone className="w-3.5 h-3.5 text-slate-400" />
-                  <a href={`tel:${application.phone}`} className="hover:text-[#0082F0] transition-colors">{application.phone}</a>
+                  <a href={`tel:${application.phone}`} className="hover:text-[#0D9488] transition-colors">{application.phone}</a>
                 </div>
               </div>
               <div className="mt-2 flex flex-wrap items-center gap-1.5">
-                <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-[#EFF8FF] rounded-lg text-xs font-medium text-[#0082F0]">
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-[#F0FDFA] rounded-lg text-xs font-medium text-[#0D9488]">
                   <GraduationCap className="w-3 h-3" />
                   {application.educational_level}
                 </span>
@@ -559,7 +559,7 @@ function ApplicationRow({
                   <Eye className="w-3.5 h-3.5" />
                   <span className="hidden sm:inline">Formulario</span>
                 </button>
-                <button onClick={() => onSendMessage(application.id)} className="flex items-center gap-1.5 px-3 py-2 bg-[#EFF8FF] hover:bg-[#DBEEFF] text-[#0082F0] text-xs font-medium rounded-lg transition-all btn-spring">
+                <button onClick={() => onSendMessage(application.id)} className="flex items-center gap-1.5 px-3 py-2 bg-[#F0FDFA] hover:bg-[#CCFBF1] text-[#0D9488] text-xs font-medium rounded-lg transition-all btn-spring">
                   <MessageSquare className="w-3.5 h-3.5" />
                   <span className="hidden sm:inline">Mensaje</span>
                 </button>
@@ -571,7 +571,7 @@ function ApplicationRow({
                   <UserX className="w-3.5 h-3.5" />
                   <span className="hidden sm:inline">Rechazar</span>
                 </button>
-                {isUpdating && <div className="w-4 h-4 border-2 border-[#0082F0]/30 border-t-[#0082F0] rounded-full animate-spin ml-1" />}
+                {isUpdating && <div className="w-4 h-4 border-2 border-[#0D9488]/30 border-t-[#0D9488] rounded-full animate-spin ml-1" />}
               </div>
             </div>
           </div>

@@ -1,10 +1,10 @@
 export const colors = {
   primary: {
-    DEFAULT: '#2563EB',
-    light: '#60A5FA',
-    dark: '#1D4ED8',
+    DEFAULT: '#0D9488',
+    light: '#2DD4BF',
+    dark: '#0F766E',
   },
-  secondary: '#60A5FA',
+  secondary: '#14B8A6',
   background: '#FFFFFF',
   card: '#F8FAFC',
   text: {

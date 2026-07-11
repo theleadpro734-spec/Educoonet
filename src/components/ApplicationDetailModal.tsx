@@ -43,7 +43,7 @@ function DocLink({ label, url }: { label: string; url?: string | null }) {
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="flex items-center gap-2 px-4 py-2.5 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-xl text-sm font-medium text-blue-700 transition-colors"
+      className="flex items-center gap-2 px-4 py-2.5 bg-brand-50 hover:bg-brand-100 border border-brand-200 rounded-xl text-sm font-medium text-brand-700 transition-colors"
     >
       <FileText className="w-4 h-4 flex-shrink-0" />
       <span className="flex-1 truncate">{label}</span>
@@ -97,8 +97,8 @@ export function ApplicationDetailModal({ application: app, onClose }: Applicatio
           {/* Datos del Estudiante */}
           <section>
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-7 h-7 bg-blue-100 rounded-lg flex items-center justify-center">
-                <User className="w-4 h-4 text-blue-600" />
+              <div className="w-7 h-7 bg-brand-100 rounded-lg flex items-center justify-center">
+                <User className="w-4 h-4 text-brand-600" />
               </div>
               <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wide">Datos del Estudiante</h3>
             </div>

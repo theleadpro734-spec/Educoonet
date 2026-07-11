@@ -26,10 +26,30 @@ export function InstitutionPanel({ onExit }: InstitutionPanelProps) {
   const [loading, setLoading] = useState(true);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
+  const [unreadMessages, setUnreadMessages] = useState(0);
 
   useEffect(() => {
     fetchData();
   }, [reloadKey]);
+
+  useEffect(() => {
+    const channel = supabase
+      .channel('institution_unread')
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'application_messages' },
+        () => {
+          supabase
+            .from('application_messages')
+            .select('*', { count: 'exact', head: true })
+            .eq('sender_type', 'student')
+            .eq('read_by_institution', false)
+            .then(({ count }) => setUnreadMessages(count || 0));
+        }
+      )
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
+  }, []);
 
   const fetchData = async () => {
     setLoading(true);
@@ -48,6 +68,14 @@ export function InstitutionPanel({ onExit }: InstitutionPanelProps) {
 
     if (instRes.data) setInstitution(instRes.data);
     if (appsRes.data) setApplications(appsRes.data);
+
+    const { count } = await supabase
+      .from('application_messages')
+      .select('*', { count: 'exact', head: true })
+      .eq('sender_type', 'student')
+      .eq('read_by_institution', false);
+    setUnreadMessages(count || 0);
+
     setLoading(false);
   };
 
@@ -118,6 +146,7 @@ export function InstitutionPanel({ onExit }: InstitutionPanelProps) {
         senderName={institution?.name || 'Institucion'}
         onBack={() => setView('dashboard')}
         onRefresh={handleRefresh}
+        key={`inst-msg-${reloadKey}`}
       />
     );
   }
@@ -136,6 +165,7 @@ export function InstitutionPanel({ onExit }: InstitutionPanelProps) {
       }}
       onExit={onExit}
       updatingId={updatingId}
+      unreadMessages={unreadMessages}
     />
   );
 }
@@ -290,19 +320,19 @@ function ApplicationsListView({
                           <div className="mt-2 space-y-1.5">
                             <div className="flex items-center gap-2 text-sm text-slate-500">
                               <span className="font-medium">Email:</span>
-                              <a href={`mailto:${app.email}`} className="text-blue-600 hover:underline">
+                              <a href={`mailto:${app.email}`} className="text-brand-600 hover:underline">
                                 {app.email}
                               </a>
                             </div>
                             <div className="flex items-center gap-2 text-sm text-slate-500">
                               <span className="font-medium">Telefono:</span>
-                              <a href={`tel:${app.phone}`} className="text-blue-600 hover:underline">
+                              <a href={`tel:${app.phone}`} className="text-brand-600 hover:underline">
                                 {app.phone}
                               </a>
                             </div>
                           </div>
                           <div className="mt-3 flex flex-wrap items-center gap-2">
-                            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 rounded-lg text-xs font-medium text-blue-700">
+                            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-brand-50 rounded-lg text-xs font-medium text-brand-700">
                               {app.educational_level}
                             </span>
                             {app.identity_document && (
@@ -435,7 +465,7 @@ function SettingsView({
                   <p className="font-medium text-slate-900">Nuevas postulaciones</p>
                   <p className="text-sm text-slate-500">Recibe alertas de nuevas solicitudes</p>
                 </div>
-                <div className="w-12 h-7 bg-blue-600 rounded-full relative">
+                <div className="w-12 h-7 bg-brand-600 rounded-full relative">
                   <div className="absolute right-1 top-1 w-5 h-5 bg-white rounded-full shadow" />
                 </div>
               </div>
@@ -444,7 +474,7 @@ function SettingsView({
                   <p className="font-medium text-slate-900">Cambios de estado</p>
                   <p className="text-sm text-slate-500">Notificaciones al cambiar estado</p>
                 </div>
-                <div className="w-12 h-7 bg-blue-600 rounded-full relative">
+                <div className="w-12 h-7 bg-brand-600 rounded-full relative">
                   <div className="absolute right-1 top-1 w-5 h-5 bg-white rounded-full shadow" />
                 </div>
               </div>

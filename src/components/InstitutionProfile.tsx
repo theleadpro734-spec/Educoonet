@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { supabase } from '../lib/supabase';
 import { INSTITUTION_ID } from '../lib/constants';
 import { Institution } from '../types';
@@ -17,6 +17,7 @@ import {
   Camera,
   Upload,
   ArrowLeft,
+  Loader2,
 } from 'lucide-react';
 
 interface InstitutionProfileProps {
@@ -29,6 +30,10 @@ export function InstitutionProfile({ onExit }: InstitutionProfileProps) {
   const [saving, setSaving] = useState(false);
   const [savedMsg, setSavedMsg] = useState(false);
   const [editMode, setEditMode] = useState(false);
+  const [uploadingCover, setUploadingCover] = useState(false);
+  const [uploadingLogo, setUploadingLogo] = useState(false);
+  const coverInputRef = useRef<HTMLInputElement>(null);
+  const logoInputRef = useRef<HTMLInputElement>(null);
 
   const [form, setForm] = useState({
     name: '',
@@ -118,6 +123,36 @@ export function InstitutionProfile({ onExit }: InstitutionProfileProps) {
     setEditMode(false);
   };
 
+  const uploadCover = async (file: File) => {
+    setUploadingCover(true);
+    const ext = file.name.split('.').pop();
+    const path = `covers/${INSTITUTION_ID}-${Date.now()}.${ext}`;
+    const { error } = await supabase.storage.from('covers').upload(path, file, { upsert: true });
+    if (!error) {
+      const { data: urlData } = supabase.storage.from('covers').getPublicUrl(path);
+      if (urlData?.publicUrl) {
+        await supabase.from('institutions').update({ cover_image: urlData.publicUrl }).eq('id', INSTITUTION_ID);
+        setInstitution((prev) => prev ? { ...prev, cover_image: urlData.publicUrl } : prev);
+      }
+    }
+    setUploadingCover(false);
+  };
+
+  const uploadLogo = async (file: File) => {
+    setUploadingLogo(true);
+    const ext = file.name.split('.').pop();
+    const path = `logos/${INSTITUTION_ID}-${Date.now()}.${ext}`;
+    const { error } = await supabase.storage.from('logos').upload(path, file, { upsert: true });
+    if (!error) {
+      const { data: urlData } = supabase.storage.from('logos').getPublicUrl(path);
+      if (urlData?.publicUrl) {
+        await supabase.from('institutions').update({ logo_url: urlData.publicUrl }).eq('id', INSTITUTION_ID);
+        setInstitution((prev) => prev ? { ...prev, logo_url: urlData.publicUrl } : prev);
+      }
+    }
+    setUploadingLogo(false);
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50">
@@ -180,11 +215,23 @@ export function InstitutionProfile({ onExit }: InstitutionProfileProps) {
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
+        <input
+          ref={coverInputRef}
+          type="file"
+          accept="image/*"
+          onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadCover(f); }}
+          className="hidden"
+        />
+
         {/* Change Cover Button */}
         {editMode && (
-          <button className="absolute bottom-4 right-4 flex items-center gap-2 px-4 py-2 bg-white/90 hover:bg-white text-slate-900 font-medium rounded-xl transition-colors shadow-lg">
-            <Camera className="w-4 h-4" />
-            Cambiar Portada
+          <button
+            onClick={() => coverInputRef.current?.click()}
+            disabled={uploadingCover}
+            className="absolute bottom-4 right-4 flex items-center gap-2 px-4 py-2 bg-white/90 hover:bg-white text-slate-900 font-medium rounded-xl transition-colors shadow-lg disabled:opacity-60"
+          >
+            {uploadingCover ? <Loader2 className="w-4 h-4 animate-spin" /> : <Camera className="w-4 h-4" />}
+            {uploadingCover ? 'Subiendo...' : 'Cambiar Portada'}
           </button>
         )}
       </div>
@@ -210,9 +257,20 @@ export function InstitutionProfile({ onExit }: InstitutionProfileProps) {
                     </span>
                   </div>
                 )}
+                <input
+                  ref={logoInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadLogo(f); }}
+                  className="hidden"
+                />
                 {editMode && (
-                  <button className="absolute bottom-0 right-0 p-2 bg-slate-900 text-white rounded-xl shadow-lg hover:bg-slate-800 transition-colors">
-                    <Upload className="w-4 h-4" />
+                  <button
+                    onClick={() => logoInputRef.current?.click()}
+                    disabled={uploadingLogo}
+                    className="absolute bottom-0 right-0 p-2 bg-slate-900 text-white rounded-xl shadow-lg hover:bg-slate-800 transition-colors disabled:opacity-60"
+                  >
+                    {uploadingLogo ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
                   </button>
                 )}
               </div>
@@ -225,14 +283,14 @@ export function InstitutionProfile({ onExit }: InstitutionProfileProps) {
                       type="text"
                       value={form.name}
                       onChange={(e) => setForm({ ...form, name: e.target.value })}
-                      className="text-2xl lg:text-3xl font-bold text-slate-900 w-full bg-slate-50 rounded-xl px-4 py-2 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                      className="text-2xl lg:text-3xl font-bold text-slate-900 w-full bg-slate-50 rounded-xl px-4 py-2 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
                     />
                     <input
                       type="text"
                       value={form.institution_type}
                       onChange={(e) => setForm({ ...form, institution_type: e.target.value })}
                       placeholder="Tipo de institucion"
-                      className="text-lg text-slate-500 w-full bg-slate-50 rounded-xl px-4 py-2 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                      className="text-lg text-slate-500 w-full bg-slate-50 rounded-xl px-4 py-2 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
                     />
                   </div>
                 ) : (
@@ -273,7 +331,7 @@ export function InstitutionProfile({ onExit }: InstitutionProfileProps) {
                   value={form.description}
                   onChange={(e) => setForm({ ...form, description: e.target.value })}
                   rows={4}
-                  className="w-full bg-slate-50 rounded-xl px-4 py-3 border border-slate-200 text-slate-700 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                  className="w-full bg-slate-50 rounded-xl px-4 py-3 border border-slate-200 text-slate-700 resize-none focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
                 />
               ) : (
                 <p className="text-slate-600 leading-relaxed">
@@ -286,7 +344,7 @@ export function InstitutionProfile({ onExit }: InstitutionProfileProps) {
             <div className="grid md:grid-cols-2 gap-4">
               <div className="bg-white rounded-2xl border border-slate-200 p-6">
                 <h3 className="text-base font-semibold text-slate-900 mb-3 flex items-center gap-2">
-                  <Target className="w-5 h-5 text-blue-600" />
+                  <Target className="w-5 h-5 text-brand-600" />
                   Mision
                 </h3>
                 {editMode ? (
@@ -294,7 +352,7 @@ export function InstitutionProfile({ onExit }: InstitutionProfileProps) {
                     value={form.mission}
                     onChange={(e) => setForm({ ...form, mission: e.target.value })}
                     rows={4}
-                    className="w-full bg-slate-50 rounded-xl px-3 py-2 border border-slate-200 text-sm text-slate-700 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                    className="w-full bg-slate-50 rounded-xl px-3 py-2 border border-slate-200 text-sm text-slate-700 resize-none focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
                   />
                 ) : institution?.mission ? (
                   <p className="text-sm text-slate-600 leading-relaxed">
@@ -317,7 +375,7 @@ export function InstitutionProfile({ onExit }: InstitutionProfileProps) {
                     value={form.vision}
                     onChange={(e) => setForm({ ...form, vision: e.target.value })}
                     rows={4}
-                    className="w-full bg-slate-50 rounded-xl px-3 py-2 border border-slate-200 text-sm text-slate-700 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                    className="w-full bg-slate-50 rounded-xl px-3 py-2 border border-slate-200 text-sm text-slate-700 resize-none focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
                   />
                 ) : institution?.vision ? (
                   <p className="text-sm text-slate-600 leading-relaxed">
@@ -341,8 +399,8 @@ export function InstitutionProfile({ onExit }: InstitutionProfileProps) {
               </h2>
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
-                    <Mail className="w-5 h-5 text-blue-600" />
+                  <div className="w-10 h-10 rounded-xl bg-brand-50 flex items-center justify-center flex-shrink-0">
+                    <Mail className="w-5 h-5 text-brand-600" />
                   </div>
                   <div className="flex-1 min-w-0">
                     {editMode ? (
@@ -350,7 +408,7 @@ export function InstitutionProfile({ onExit }: InstitutionProfileProps) {
                         type="email"
                         value={form.email}
                         onChange={(e) => setForm({ ...form, email: e.target.value })}
-                        className="w-full bg-slate-50 rounded-lg px-3 py-1.5 border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                        className="w-full bg-slate-50 rounded-lg px-3 py-1.5 border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
                       />
                     ) : (
                       <>
@@ -375,7 +433,7 @@ export function InstitutionProfile({ onExit }: InstitutionProfileProps) {
                         type="tel"
                         value={form.phone}
                         onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                        className="w-full bg-slate-50 rounded-lg px-3 py-1.5 border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                        className="w-full bg-slate-50 rounded-lg px-3 py-1.5 border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
                       />
                     ) : (
                       <>
@@ -400,7 +458,7 @@ export function InstitutionProfile({ onExit }: InstitutionProfileProps) {
                         type="text"
                         value={form.website}
                         onChange={(e) => setForm({ ...form, website: e.target.value })}
-                        className="w-full bg-slate-50 rounded-lg px-3 py-1.5 border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                        className="w-full bg-slate-50 rounded-lg px-3 py-1.5 border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
                       />
                     ) : (
                       <>
@@ -435,14 +493,14 @@ export function InstitutionProfile({ onExit }: InstitutionProfileProps) {
                           value={form.location}
                           onChange={(e) => setForm({ ...form, location: e.target.value })}
 placeholder="Carabobo, Venezuela"
-                          className="w-full bg-slate-50 rounded-lg px-3 py-1.5 border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                          className="w-full bg-slate-50 rounded-lg px-3 py-1.5 border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
                         />
                         <input
                           type="text"
                           value={form.address}
                           onChange={(e) => setForm({ ...form, address: e.target.value })}
 placeholder="Dirección, Carabobo, Venezuela"
-                          className="w-full bg-slate-50 rounded-lg px-3 py-1.5 border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                          className="w-full bg-slate-50 rounded-lg px-3 py-1.5 border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
                         />
                       </div>
                     ) : (
