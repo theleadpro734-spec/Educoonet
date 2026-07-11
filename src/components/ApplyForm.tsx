@@ -51,6 +51,7 @@ export function ApplyForm({
   const [error, setError] = useState('');
   const [currentStep, setCurrentStep] = useState(1);
   const [completed, setCompleted] = useState(false);
+  const [duplicateWarning, setDuplicateWarning] = useState(false);
 
   const [form, setForm] = useState<FormData>({
     name: prefillName || '',
@@ -98,7 +99,21 @@ export function ApplyForm({
     setSubmitting(true);
     setError('');
 
-    const { error: dbError } = await supabase.from('applications').insert({
+    const { data: existing } = await supabase
+      .from('applications')
+      .select('id, status')
+      .eq('institution_id', institutionId)
+      .eq('email', form.email.trim().toLowerCase())
+      .in('status', ['pendiente', 'aceptada'])
+      .maybeSingle();
+
+    if (existing) {
+      setSubmitting(false);
+      setError('Ya tienes una postulacion activa en esta institucion. Revisa el estado en tu panel.');
+      return;
+    }
+
+    const { data: insertedApp, error: dbError } = await supabase.from('applications').insert({
       institution_id: institutionId,
       status: 'pendiente',
       name: form.name,
@@ -121,13 +136,16 @@ export function ApplyForm({
       birth_certificate_url: form.birth_certificate_url || null,
       residence_letter_url: form.residence_letter_url || null,
       cedula_rep_url: form.cedula_rep_url || null,
-    });
+    }).select('id').single();
 
     setSubmitting(false);
 
-    if (dbError) {
+    if (dbError || !insertedApp) {
       setError('Error al enviar la postulacion. Intenta de nuevo.');
     } else {
+      await supabase.rpc('notify_new_application', {
+        p_application_id: insertedApp.id,
+      });
       setCompleted(true);
       setTimeout(onSuccess, 1500);
     }

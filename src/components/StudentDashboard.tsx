@@ -33,14 +33,16 @@ interface StudentDashboardProps {
   onMyApplications: () => void;
   onSettings: () => void;
   onMessages: () => void;
+  onNotifications: () => void;
   onExit: () => void;
   institution: Institution | null;
   applications: Application[];
   unreadMessages?: number;
+  unreadNotifications?: number;
   onAppMessages?: (id: string) => void;
 }
 
-type Tab = 'home' | 'explore' | 'applications' | 'messages' | 'settings';
+type Tab = 'home' | 'explore' | 'applications' | 'messages' | 'notifications' | 'settings';
 
 export function StudentDashboard({
   onApply,
@@ -48,10 +50,12 @@ export function StudentDashboard({
   onMyApplications,
   onSettings,
   onMessages,
+  onNotifications,
   onExit,
   institution,
   applications,
   unreadMessages = 0,
+  unreadNotifications = 0,
   onAppMessages,
 }: StudentDashboardProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -79,6 +83,7 @@ export function StudentDashboard({
     else if (tab === 'settings') onSettings();
     else if (tab === 'explore') onViewInstitution();
     else if (tab === 'messages') onMessages();
+    else if (tab === 'notifications') onNotifications();
   };
 
   const navItems = [
@@ -86,6 +91,7 @@ export function StudentDashboard({
     { id: 'explore'      as Tab, label: 'Explorar',      icon: Search },
     { id: 'applications' as Tab, label: 'Postulaciones', icon: FileText,      badge: applications.length },
     { id: 'messages'     as Tab, label: 'Mensajes',      icon: MessageSquare, badge: unreadMessages },
+    { id: 'notifications' as Tab, label: 'Notificaciones', icon: Bell,          badge: unreadNotifications },
     { id: 'settings'     as Tab, label: 'Ajustes',       icon: Settings },
   ];
 

@@ -40,12 +40,14 @@ interface InstitutionDashboardProps {
   onProfile: () => void;
   onSettings: () => void;
   onMessages: (applicationId?: string) => void;
+  onNotifications: () => void;
   onExit: () => void;
   updatingId: string | null;
   unreadMessages?: number;
+  unreadNotifications?: number;
 }
 
-type Tab = 'dashboard' | 'applications' | 'messages' | 'profile' | 'settings';
+type Tab = 'dashboard' | 'applications' | 'messages' | 'notifications' | 'profile' | 'settings';
 
 export function InstitutionDashboard({
   applications,
@@ -54,10 +56,12 @@ export function InstitutionDashboard({
   onUpdateStatus,
   onProfile,
   onMessages,
+  onNotifications,
   onSettings,
   onExit,
   updatingId,
   unreadMessages = 0,
+  unreadNotifications = 0,
 }: InstitutionDashboardProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<Tab>('dashboard');
@@ -91,12 +95,14 @@ export function InstitutionDashboard({
     else if (tab === 'profile')  onProfile();
     else if (tab === 'settings') onSettings();
     else if (tab === 'messages') onMessages();
+    else if (tab === 'notifications') onNotifications();
   };
 
   const navItems = [
     { id: 'dashboard'     as Tab, label: 'Dashboard',      icon: BarChart3 },
     { id: 'applications'  as Tab, label: 'Postulaciones',  icon: FileText,      badge: total },
     { id: 'messages'      as Tab, label: 'Mensajes',       icon: MessageSquare, badge: unreadMessages },
+    { id: 'notifications' as Tab, label: 'Notificaciones', icon: Bell,          badge: unreadNotifications },
     { id: 'profile'       as Tab, label: 'Perfil',         icon: Building2 },
     { id: 'settings'      as Tab, label: 'Ajustes',        icon: Settings },
   ];

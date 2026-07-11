@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import { Application } from '../types';
+import { supabase } from '../lib/supabase';
 import {
   X,
   User,
@@ -13,11 +15,16 @@ import {
   Clock,
   CheckCircle,
   XCircle,
+  MessageSquare,
+  AlertCircle,
 } from 'lucide-react';
 
 interface ApplicationDetailModalProps {
   application: Application;
   onClose: () => void;
+  onUpdateStatus?: (id: string, status: string) => void;
+  onMessage?: (applicationId: string) => void;
+  updating?: boolean;
 }
 
 const statusConfig = {
@@ -52,11 +59,38 @@ function DocLink({ label, url }: { label: string; url?: string | null }) {
   );
 }
 
-export function ApplicationDetailModal({ application: app, onClose }: ApplicationDetailModalProps) {
+export function ApplicationDetailModal({
+  application: app,
+  onClose,
+  onUpdateStatus,
+  onMessage,
+  updating = false,
+}: ApplicationDetailModalProps) {
+  const [confirmAction, setConfirmAction] = useState<'aceptada' | 'rechazada' | null>(null);
+  const [optionalMessage, setOptionalMessage] = useState('');
+
   const st = statusConfig[app.status] ?? statusConfig.pendiente;
   const StatusIcon = st.icon;
 
   const hasDocuments = app.cedula_url || app.birth_certificate_url || app.residence_letter_url || app.cedula_rep_url;
+
+  const handleConfirm = () => {
+    if (!confirmAction || !onUpdateStatus) return;
+    onUpdateStatus(app.id, confirmAction);
+    if (optionalMessage.trim() && onMessage) {
+      supabase.from('application_messages').insert({
+        application_id: app.id,
+        sender_type: 'institution',
+        sender_name: 'Institucion',
+        content: optionalMessage.trim(),
+        read_by_student: false,
+        read_by_institution: true,
+      });
+    }
+    setConfirmAction(null);
+    setOptionalMessage('');
+    onClose();
+  };
 
   return (
     <div
@@ -191,6 +225,95 @@ export function ApplicationDetailModal({ application: app, onClose }: Applicatio
             })}
           </div>
         </div>
+
+        {/* Action Bar */}
+        {onUpdateStatus && (
+          <div className="px-6 py-4 border-t border-slate-100 bg-slate-50">
+            {confirmAction ? (
+              <div className="space-y-3 animate-fade-in">
+                <div className="flex items-center gap-2 text-sm font-medium text-slate-700">
+                  <AlertCircle className={`w-4 h-4 ${confirmAction === 'aceptada' ? 'text-emerald-600' : 'text-red-600'}`} />
+                  Confirmar: {confirmAction === 'aceptada' ? 'Aceptar' : 'Rechazar'} postulacion de {app.name}
+                </div>
+                <textarea
+                  value={optionalMessage}
+                  onChange={(e) => setOptionalMessage(e.target.value)}
+                  placeholder={`Mensaje opcional para ${app.name}...`}
+                  rows={2}
+                  className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all resize-none"
+                />
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => { setConfirmAction(null); setOptionalMessage(''); }}
+                    className="px-5 py-2.5 bg-white hover:bg-slate-100 text-slate-700 font-medium rounded-xl border border-slate-200 transition-colors text-sm"
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    onClick={handleConfirm}
+                    disabled={updating}
+                    className={`flex-1 py-2.5 font-semibold rounded-xl text-white transition-colors text-sm flex items-center justify-center gap-2 disabled:opacity-50 ${
+                      confirmAction === 'aceptada'
+                        ? 'bg-emerald-600 hover:bg-emerald-700'
+                        : 'bg-red-600 hover:bg-red-700'
+                    }`}
+                  >
+                    {updating ? (
+                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    ) : (
+                      <>
+                        <CheckCircle className="w-4 h-4" />
+                        Confirmar {confirmAction === 'aceptada' ? 'aceptacion' : 'rechazo'}
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="flex flex-wrap gap-3">
+                {onMessage && (
+                  <button
+                    onClick={() => onMessage(app.id)}
+                    className="flex items-center gap-2 px-4 py-2.5 bg-white hover:bg-slate-100 text-slate-700 font-medium rounded-xl border border-slate-200 transition-colors text-sm"
+                  >
+                    <MessageSquare className="w-4 h-4" />
+                    Mensaje
+                  </button>
+                )}
+                {app.status !== 'aceptada' && (
+                  <button
+                    onClick={() => setConfirmAction('aceptada')}
+                    className="flex items-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl transition-colors text-sm shadow-lg shadow-emerald-600/20"
+                  >
+                    <CheckCircle className="w-4 h-4" />
+                    Aceptar
+                  </button>
+                )}
+                {app.status !== 'rechazada' && (
+                  <button
+                    onClick={() => setConfirmAction('rechazada')}
+                    className="flex items-center gap-2 px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-xl transition-colors text-sm shadow-lg shadow-red-600/20"
+                  >
+                    <XCircle className="w-4 h-4" />
+                    Rechazar
+                  </button>
+                )}
+                {app.status === 'aceptada' && (
+                  <span className="flex items-center gap-2 px-4 py-2.5 bg-emerald-50 text-emerald-700 font-medium rounded-xl text-sm">
+                    <CheckCircle className="w-4 h-4" />
+                    Postulacion aceptada
+                  </span>
+                )}
+                {app.status === 'rechazada' && (
+                  <span className="flex items-center gap-2 px-4 py-2.5 bg-red-50 text-red-700 font-medium rounded-xl text-sm">
+                    <XCircle className="w-4 h-4" />
+                    Postulacion rechazada
+                  </span>
+                )}
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

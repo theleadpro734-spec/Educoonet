@@ -146,6 +146,18 @@ export interface User {
   full_name?: string;
 }
 
+export interface Notification {
+  id: string;
+  user_email: string;
+  user_role: 'student' | 'institution' | 'admin';
+  type: 'new_application' | 'status_changed' | 'new_message';
+  title: string;
+  message: string;
+  related_id: string | null;
+  read: boolean;
+  created_at: string;
+}
+
 export interface ToastMessage {
   id: string;
   type: 'success' | 'error' | 'info' | 'warning';

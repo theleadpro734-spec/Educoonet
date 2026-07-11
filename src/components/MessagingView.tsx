@@ -161,16 +161,21 @@ export function MessagingView({
     if (!newMessage.trim() || !selectedApp) return;
 
     setSending(true);
-    const { error } = await supabase.from('application_messages').insert({
+    const { data: msgData, error } = await supabase.from('application_messages').insert({
       application_id: selectedApp.id,
       sender_type: mode,
       sender_name: senderName,
       content: newMessage.trim(),
       read_by_student: mode === 'student',
       read_by_institution: mode === 'institution',
-    });
+    }).select('id').single();
 
-    if (!error) {
+    if (!error && msgData) {
+      await supabase.rpc('notify_new_message', {
+        p_message_id: msgData.id,
+        p_application_id: selectedApp.id,
+        p_sender_type: mode,
+      });
       setNewMessage('');
       onRefresh?.();
     }

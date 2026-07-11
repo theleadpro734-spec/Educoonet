@@ -6,13 +6,14 @@ import { InstitutionDashboard } from './InstitutionDashboard';
 import { InstitutionProfile } from './InstitutionProfile';
 import { MessagingView } from './MessagingView';
 import { ApplicationDetailModal } from './ApplicationDetailModal';
+import { NotificationsView } from './NotificationsView';
 import { ArrowLeft, RefreshCw, Settings, Building2, Users, Bell, LogOut, Shield, HelpCircle, Eye } from 'lucide-react';
 
 interface InstitutionPanelProps {
   onExit: () => void;
 }
 
-type View = 'dashboard' | 'profile' | 'applications' | 'settings' | 'messages';
+type View = 'dashboard' | 'profile' | 'applications' | 'settings' | 'messages' | 'notifications';
 
 interface MessageState {
   selectedApplicationId?: string;
@@ -27,6 +28,7 @@ export function InstitutionPanel({ onExit }: InstitutionPanelProps) {
   const [updatingId, setUpdatingId] = useState<string | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
   const [unreadMessages, setUnreadMessages] = useState(0);
+  const [unreadNotifications, setUnreadNotifications] = useState(0);
 
   useEffect(() => {
     fetchData();
@@ -50,6 +52,29 @@ export function InstitutionPanel({ onExit }: InstitutionPanelProps) {
       .subscribe();
     return () => { supabase.removeChannel(channel); };
   }, []);
+
+  useEffect(() => {
+    const channel = supabase
+      .channel('institution_notifications')
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'notifications' },
+        () => fetchUnreadNotifications()
+      )
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
+  }, []);
+
+  const instEmail = institution?.email || 'admin@educonnet.com';
+
+  const fetchUnreadNotifications = async () => {
+    const { count } = await supabase
+      .from('notifications')
+      .select('*', { count: 'exact', head: true })
+      .eq('user_email', instEmail)
+      .eq('read', false);
+    setUnreadNotifications(count || 0);
+  };
 
   const fetchData = async () => {
     setLoading(true);
@@ -76,6 +101,14 @@ export function InstitutionPanel({ onExit }: InstitutionPanelProps) {
       .eq('read_by_institution', false);
     setUnreadMessages(count || 0);
 
+    const notifEmail = instRes.data?.email || 'admin@educonnet.com';
+    const { count: notifCount } = await supabase
+      .from('notifications')
+      .select('*', { count: 'exact', head: true })
+      .eq('user_email', notifEmail)
+      .eq('read', false);
+    setUnreadNotifications(notifCount || 0);
+
     setLoading(false);
   };
 
@@ -89,10 +122,14 @@ export function InstitutionPanel({ onExit }: InstitutionPanelProps) {
       .from('applications')
       .update({ status })
       .eq('id', id);
-    setUpdatingId(null);
     if (!error) {
+      await supabase.rpc('notify_status_change', {
+        p_application_id: id,
+        p_new_status: status,
+      });
       fetchData();
     }
+    setUpdatingId(null);
   };
 
   if (loading) {
@@ -151,6 +188,26 @@ export function InstitutionPanel({ onExit }: InstitutionPanelProps) {
     );
   }
 
+  if (view === 'notifications') {
+    return (
+      <NotificationsView
+        userEmail={instEmail}
+        onBack={() => setView('dashboard')}
+        onNavigate={(notif) => {
+          if (notif.type === 'new_application' && notif.related_id) {
+            const app = applications.find((a) => a.id === notif.related_id);
+            if (app) {
+              setMessageState({ selectedApplicationId: app.id });
+              setView('messages');
+              return;
+            }
+          }
+          setView('dashboard');
+        }}
+      />
+    );
+  }
+
   return (
     <InstitutionDashboard
       applications={applications}
@@ -163,9 +220,11 @@ export function InstitutionPanel({ onExit }: InstitutionPanelProps) {
         setMessageState({ selectedApplicationId: appId });
         setView('messages');
       }}
+      onNotifications={() => setView('notifications')}
       onExit={onExit}
       updatingId={updatingId}
       unreadMessages={unreadMessages}
+      unreadNotifications={unreadNotifications}
     />
   );
 }

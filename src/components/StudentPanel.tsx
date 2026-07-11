@@ -5,13 +5,14 @@ import { Institution, Application } from '../types';
 import { StudentDashboard } from './StudentDashboard';
 import { MessagingView } from './MessagingView';
 import { ApplyForm } from './ApplyForm';
+import { NotificationsView } from './NotificationsView';
 
 interface StudentPanelProps {
   onExit: () => void;
   studentEmail: string;
 }
 
-type View = 'dashboard' | 'apply' | 'messages';
+type View = 'dashboard' | 'apply' | 'messages' | 'notifications';
 
 export function StudentPanel({ onExit, studentEmail }: StudentPanelProps) {
   const [view, setView] = useState<View>('dashboard');
@@ -20,6 +21,7 @@ export function StudentPanel({ onExit, studentEmail }: StudentPanelProps) {
   const [loading, setLoading] = useState(true);
   const [selectedApplicationId, setSelectedApplicationId] = useState<string | undefined>(undefined);
   const [unreadMessages, setUnreadMessages] = useState(0);
+  const [unreadNotifications, setUnreadNotifications] = useState(0);
 
   const storedStudent = (() => {
     try {
@@ -45,6 +47,27 @@ export function StudentPanel({ onExit, studentEmail }: StudentPanelProps) {
       .subscribe();
     return () => { supabase.removeChannel(channel); };
   }, []);
+
+  useEffect(() => {
+    const channel = supabase
+      .channel('student_notifications')
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'notifications' },
+        () => fetchUnreadNotifications()
+      )
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
+  }, []);
+
+  const fetchUnreadNotifications = async () => {
+    const { count } = await supabase
+      .from('notifications')
+      .select('*', { count: 'exact', head: true })
+      .eq('user_email', studentEmail)
+      .eq('read', false);
+    setUnreadNotifications(count || 0);
+  };
 
   const fetchData = async () => {
     setLoading(true);
@@ -76,6 +99,8 @@ export function StudentPanel({ onExit, studentEmail }: StudentPanelProps) {
       setUnreadMessages(count || 0);
     }
 
+    await fetchUnreadNotifications();
+
     setLoading(false);
   };
 
@@ -106,6 +131,26 @@ export function StudentPanel({ onExit, studentEmail }: StudentPanelProps) {
     );
   }
 
+  if (view === 'notifications') {
+    return (
+      <NotificationsView
+        userEmail={studentEmail}
+        onBack={() => setView('dashboard')}
+        onNavigate={(notif) => {
+          if (notif.type === 'new_message' && notif.related_id) {
+            const app = applications.find((a) => a.id === notif.related_id);
+            if (app) {
+              setSelectedApplicationId(app.id);
+              setView('messages');
+              return;
+            }
+          }
+          setView('dashboard');
+        }}
+      />
+    );
+  }
+
   if (view === 'apply') {
     return (
       <ApplyForm
@@ -131,10 +176,12 @@ export function StudentPanel({ onExit, studentEmail }: StudentPanelProps) {
       onMyApplications={() => {}}
       onSettings={() => {}}
       onMessages={() => setView('messages')}
+      onNotifications={() => setView('notifications')}
       onExit={onExit}
       institution={institution}
       applications={applications}
       unreadMessages={unreadMessages}
+      unreadNotifications={unreadNotifications}
       onAppMessages={(id: string) => {
         setSelectedApplicationId(id);
         setView('messages');

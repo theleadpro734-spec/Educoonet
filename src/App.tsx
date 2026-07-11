@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { InstitutionPanel } from './components/InstitutionPanel';
 import { StudentPanel } from './components/StudentPanel';
+import { AdminPanel } from './components/AdminPanel';
 import { EduConnetLogo } from './components/EduConnetLogo';
 import { supabase } from './lib/supabase';
 import {
@@ -18,6 +19,7 @@ import {
   Search,
   Bell,
   Shield,
+  Settings,
   Menu,
   Zap,
   BarChart3,
@@ -32,7 +34,7 @@ import {
   Sun,
 } from 'lucide-react';
 
-type View = 'home' | 'institution' | 'student';
+type View = 'home' | 'institution' | 'student' | 'admin';
 
 function App() {
   const [view, setView] = useState<View>('home');
@@ -66,6 +68,10 @@ function App() {
 
   if (view === 'student') {
     return <StudentPanel onExit={() => setView('home')} studentEmail={studentEmail} />;
+  }
+
+  if (view === 'admin') {
+    return <AdminPanel onExit={() => setView('home')} />;
   }
 
   const enterInstitutionDemo = () => {
@@ -583,13 +589,14 @@ function App() {
           darkMode={darkMode}
           onEnterInstDemo={() => { setLoginOpen(false); enterInstitutionDemo(); }}
           onEnterStudentDemo={() => { setLoginOpen(false); enterStudentDemo(); }}
+          onEnterAdminDemo={() => { setLoginOpen(false); enterAdminDemo(); }}
         />
       )}
     </div>
   );
 }
 
-type LoginStep = 'select' | 'student' | 'institution';
+type LoginStep = 'select' | 'student' | 'institution' | 'admin';
 
 function LoginModal({
   onClose,
@@ -598,6 +605,7 @@ function LoginModal({
   darkMode,
   onEnterInstDemo,
   onEnterStudentDemo,
+  onEnterAdminDemo,
 }: {
   onClose: () => void;
   onSelectInstitution: () => void;
@@ -605,6 +613,7 @@ function LoginModal({
   darkMode: boolean;
   onEnterInstDemo: () => void;
   onEnterStudentDemo: () => void;
+  onEnterAdminDemo: () => void;
 }) {
   const [step, setStep] = useState<LoginStep>('select');
   const [email, setEmail] = useState('');
@@ -613,6 +622,8 @@ function LoginModal({
   const [instPassword, setInstPassword] = useState('');
   const [showPass, setShowPass] = useState(false);
   const [showInstPass, setShowInstPass] = useState(false);
+  const [adminUser, setAdminUser] = useState('');
+  const [adminPass, setAdminPass] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -652,6 +663,24 @@ function LoginModal({
     onSelectInstitution();
   };
 
+  const handleAdminLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+    const { data } = await supabase.rpc('verify_admin_login', {
+      p_username: adminUser.trim(),
+      p_password: adminPass,
+    });
+    setLoading(false);
+    if (!data || data.length === 0) {
+      setError('Credenciales de administrador incorrectas.');
+      return;
+    }
+    const admin = data[0];
+    localStorage.setItem('edu_admin', JSON.stringify(admin));
+    onEnterAdminDemo();
+  };
+
   const back = () => { setStep('select'); setError(''); };
 
   const inputClass = `w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 transition-all ${
@@ -680,10 +709,10 @@ function LoginModal({
             <EduConnetLogo size="lg" variant="dark" />
           </div>
           <h2 className="text-2xl font-bold text-white text-center">
-            {step === 'select' ? 'Iniciar Sesion' : step === 'student' ? 'Acceso Postulante' : 'Acceso Institucion'}
+            {step === 'select' ? 'Iniciar Sesion' : step === 'student' ? 'Acceso Postulante' : step === 'institution' ? 'Acceso Institucion' : 'Acceso Administrador'}
           </h2>
           <p className="text-[#99F6E4] text-center text-sm mt-1">
-            {step === 'select' ? 'Selecciona tu tipo de acceso' : 'Ingresa tus credenciales'}
+            {step === 'select' ? 'Selecciona tu tipo de acceso' : step === 'admin' ? 'Ingresa las credenciales de administrador' : 'Ingresa tus credenciales'}
           </p>
         </div>
 
@@ -718,24 +747,46 @@ function LoginModal({
                 <ChevronRight className={`w-5 h-5 group-hover:translate-x-1 transition-all ${darkMode ? 'text-slate-500' : 'text-slate-400 group-hover:text-slate-700'}`} />
               </button>
 
+              <button
+                onClick={() => setStep('admin')}
+                className={`group w-full flex items-center gap-4 p-5 border-2 rounded-2xl transition-all text-left ${darkMode ? 'border-[#334155] hover:border-slate-500 hover:bg-slate-700/40' : 'border-slate-200 hover:border-slate-700 hover:shadow-lg'}`}
+              >
+                <div className="w-14 h-14 bg-gradient-to-br from-slate-800 to-slate-950 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg">
+                  <Shield className="w-7 h-7 text-white" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className={`text-lg font-bold ${darkMode ? 'text-white' : 'text-slate-900'}`}>Soy Administrador</p>
+                  <p className={`text-sm mt-0.5 ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>Panel de gestion general de la plataforma</p>
+                </div>
+                <ChevronRight className={`w-5 h-5 group-hover:translate-x-1 transition-all ${darkMode ? 'text-slate-500' : 'text-slate-400 group-hover:text-slate-700'}`} />
+              </button>
+
               <div className={`pt-2 border-t ${darkMode ? 'border-[#334155]' : 'border-slate-100'}`}>
                 <p className={`text-xs text-center mb-2 ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>Acceso rapido demo</p>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-3 gap-2">
                   <button
                     type="button"
                     onClick={onEnterStudentDemo}
-                    className={`flex items-center justify-center gap-2 px-3 py-2.5 text-xs font-semibold rounded-xl transition-colors ${darkMode ? 'bg-[#0D9488]/20 hover:bg-[#0D9488]/30 text-[#5EEAD4]' : 'bg-[#F0FDFA] hover:bg-[#CCFBF1] text-[#0D9488]'}`}
+                    className={`flex items-center justify-center gap-1.5 px-2 py-2.5 text-xs font-semibold rounded-xl transition-colors ${darkMode ? 'bg-[#0D9488]/20 hover:bg-[#0D9488]/30 text-[#5EEAD4]' : 'bg-[#F0FDFA] hover:bg-[#CCFBF1] text-[#0D9488]'}`}
                   >
                     <GraduationCap className="w-3.5 h-3.5" />
-                    Demo Estudiante
+                    Estudiante
                   </button>
                   <button
                     type="button"
                     onClick={onEnterInstDemo}
-                    className={`flex items-center justify-center gap-2 px-3 py-2.5 text-xs font-semibold rounded-xl transition-colors ${darkMode ? 'bg-[#334155] hover:bg-[#475569] text-slate-300' : 'bg-slate-100 hover:bg-slate-200 text-slate-700'}`}
+                    className={`flex items-center justify-center gap-1.5 px-2 py-2.5 text-xs font-semibold rounded-xl transition-colors ${darkMode ? 'bg-[#334155] hover:bg-[#475569] text-slate-300' : 'bg-slate-100 hover:bg-slate-200 text-slate-700'}`}
                   >
                     <Building2 className="w-3.5 h-3.5" />
-                    Demo Liceo
+                    Liceo
+                  </button>
+                  <button
+                    type="button"
+                    onClick={onEnterAdminDemo}
+                    className={`flex items-center justify-center gap-1.5 px-2 py-2.5 text-xs font-semibold rounded-xl transition-colors ${darkMode ? 'bg-slate-700/50 hover:bg-slate-700 text-slate-300' : 'bg-slate-200 hover:bg-slate-300 text-slate-700'}`}
+                  >
+                    <Shield className="w-3.5 h-3.5" />
+                    Admin
                   </button>
                 </div>
               </div>
@@ -803,6 +854,37 @@ function LoginModal({
               )}
               <button type="submit" disabled={loading} className="w-full py-3 bg-[#134E4A] hover:bg-[#0D9488] disabled:opacity-50 text-white font-semibold rounded-xl transition-colors flex items-center justify-center gap-2">
                 {loading ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : 'Ingresar'}
+              </button>
+              <button type="button" onClick={back} className={`w-full text-sm transition-colors ${darkMode ? 'text-slate-500 hover:text-slate-300' : 'text-slate-500 hover:text-slate-700'}`}>
+                Volver
+              </button>
+            </form>
+          )}
+
+          {step === 'admin' && (
+            <form onSubmit={handleAdminLogin} className="space-y-4">
+              <div>
+                <label className={`block text-sm font-medium mb-1.5 ${darkMode ? 'text-slate-300' : 'text-slate-700'}`}>Usuario</label>
+                <div className="relative">
+                  <Shield className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                  <input type="text" value={adminUser} onChange={(e) => setAdminUser(e.target.value)} placeholder="admin" required className={`${inputClass} pl-10`} />
+                </div>
+              </div>
+              <div>
+                <label className={`block text-sm font-medium mb-1.5 ${darkMode ? 'text-slate-300' : 'text-slate-700'}`}>Contrasena</label>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                  <input type="password" value={adminPass} onChange={(e) => setAdminPass(e.target.value)} placeholder="••••••••" required className={`${inputClass} pl-10`} />
+                </div>
+              </div>
+              {error && (
+                <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-xl text-sm text-red-700">
+                  <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                  {error}
+                </div>
+              )}
+              <button type="submit" disabled={loading} className="w-full py-3 bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white font-semibold rounded-xl transition-colors flex items-center justify-center gap-2">
+                {loading ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : 'Ingresar como Admin'}
               </button>
               <button type="button" onClick={back} className={`w-full text-sm transition-colors ${darkMode ? 'text-slate-500 hover:text-slate-300' : 'text-slate-500 hover:text-slate-700'}`}>
                 Volver
