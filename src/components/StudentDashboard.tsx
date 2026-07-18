@@ -86,6 +86,11 @@ export function StudentDashboard({
     else if (tab === 'notifications') onNotifications();
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('edu_student');
+    onExit();
+  };
+
   const navItems = [
     { id: 'home'         as Tab, label: 'Inicio',        icon: Home },
     { id: 'explore'      as Tab, label: 'Explorar',      icon: Search },
@@ -181,7 +186,7 @@ export function StudentDashboard({
         {accountMenuOpen && (
           <div className="absolute bottom-full left-3 right-3 mb-2 bg-[#0F172A] border border-white/10 rounded-xl shadow-2xl py-1 z-10 animate-scale-in">
             <button
-              onClick={onExit}
+              onClick={handleLogout}
               className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-400 hover:bg-red-500/10 transition-colors rounded-lg"
             >
               <LogOut className="w-4 h-4" />

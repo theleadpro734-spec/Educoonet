@@ -564,7 +564,10 @@ function SettingsView({
               Termina tu sesion actual en el panel de institucion.
             </p>
             <button
-              onClick={onExit}
+              onClick={() => {
+                localStorage.removeItem('edu_institution');
+                onExit();
+              }}
               className="w-full py-3 bg-slate-900 hover:bg-slate-800 text-white font-medium rounded-xl transition-colors flex items-center justify-center gap-2"
             >
               <LogOut className="w-5 h-5" />
