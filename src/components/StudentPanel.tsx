@@ -31,6 +31,7 @@ export function StudentPanel({ onExit, studentEmail }: StudentPanelProps) {
   >(undefined);
   const [unreadMessages, setUnreadMessages] = useState(0);
   const [unreadNotifications, setUnreadNotifications] = useState(0);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const storedStudent = (() => {
     try {
@@ -90,7 +91,7 @@ export function StudentPanel({ onExit, studentEmail }: StudentPanelProps) {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [refreshKey]);
 
   useEffect(() => {
     const channel = supabase
@@ -98,12 +99,10 @@ export function StudentPanel({ onExit, studentEmail }: StudentPanelProps) {
       .on(
         'postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'application_messages' },
-        () => fetchData()
+        () => setRefreshKey((k) => k + 1)
       )
       .subscribe();
-    return () => {
-      supabase.removeChannel(channel);
-    };
+    return () => { supabase.removeChannel(channel); };
   }, []);
 
   useEffect(() => {
@@ -112,12 +111,10 @@ export function StudentPanel({ onExit, studentEmail }: StudentPanelProps) {
       .on(
         'postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'notifications' },
-        () => fetchUnreadNotifications()
+        () => setRefreshKey((k) => k + 1)
       )
       .subscribe();
-    return () => {
-      supabase.removeChannel(channel);
-    };
+    return () => { supabase.removeChannel(channel); };
   }, []);
 
   if (loading) {

@@ -39,6 +39,8 @@ export function MessagingView({
   const [unreadMap, setUnreadMap] = useState<Record<string, number>>({});
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
+  const onRefreshRef = useRef(onRefresh);
+  useEffect(() => { onRefreshRef.current = onRefresh; });
 
   useEffect(() => {
     if (selectedApplicationId) {
@@ -120,7 +122,7 @@ export function MessagingView({
               [newMsg.application_id]: (prev[newMsg.application_id] || 0) + 1,
             }));
           }
-          onRefresh?.();
+          onRefreshRef.current?.();
         }
       )
       .subscribe();
@@ -133,7 +135,7 @@ export function MessagingView({
         channelRef.current = null;
       }
     };
-  }, [selectedApp, mode, onRefresh]);
+  }, [selectedApp, mode]);
 
   // Fetch unread counts for all applications
   useEffect(() => {
@@ -177,7 +179,7 @@ export function MessagingView({
         p_sender_type: mode,
       });
       setNewMessage('');
-      onRefresh?.();
+      onRefreshRef.current?.();
     }
     setSending(false);
   };

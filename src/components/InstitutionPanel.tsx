@@ -40,14 +40,7 @@ export function InstitutionPanel({ onExit }: InstitutionPanelProps) {
       .on(
         'postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'application_messages' },
-        () => {
-          supabase
-            .from('application_messages')
-            .select('*', { count: 'exact', head: true })
-            .eq('sender_type', 'student')
-            .eq('read_by_institution', false)
-            .then(({ count }) => setUnreadMessages(count || 0));
-        }
+        () => setReloadKey((k) => k + 1)
       )
       .subscribe();
     return () => { supabase.removeChannel(channel); };
@@ -59,7 +52,7 @@ export function InstitutionPanel({ onExit }: InstitutionPanelProps) {
       .on(
         'postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'notifications' },
-        () => fetchUnreadNotifications()
+        () => setReloadKey((k) => k + 1)
       )
       .subscribe();
     return () => { supabase.removeChannel(channel); };
@@ -94,12 +87,18 @@ export function InstitutionPanel({ onExit }: InstitutionPanelProps) {
     if (instRes.data) setInstitution(instRes.data);
     if (appsRes.data) setApplications(appsRes.data);
 
-    const { count } = await supabase
-      .from('application_messages')
-      .select('*', { count: 'exact', head: true })
-      .eq('sender_type', 'student')
-      .eq('read_by_institution', false);
-    setUnreadMessages(count || 0);
+    const appIds = (appsRes.data || []).map((a: Application) => a.id);
+    if (appIds.length > 0) {
+      const { count } = await supabase
+        .from('application_messages')
+        .select('*', { count: 'exact', head: true })
+        .in('application_id', appIds)
+        .eq('sender_type', 'student')
+        .eq('read_by_institution', false);
+      setUnreadMessages(count || 0);
+    } else {
+      setUnreadMessages(0);
+    }
 
     const notifEmail = instRes.data?.email || 'admin@educonnet.com';
     const { count: notifCount } = await supabase
