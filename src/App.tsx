@@ -216,27 +216,6 @@ function App() {
                 </a>
               </div>
 
-              {/* Demo access */}
-              <div className="mt-8 pt-6 border-t border-white/15">
-                <p className="text-[#5EEAD4] text-xs font-semibold uppercase tracking-wider mb-4 text-center lg:text-left">Acceso directo para demo</p>
-                <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
-                  <button
-                    onClick={enterInstitutionDemo}
-                    className="flex items-center justify-center gap-2.5 px-6 py-3 bg-[#134E4A]/60 hover:bg-[#134E4A]/80 text-white font-semibold rounded-xl border border-white/15 transition-all shadow-lg hover:-translate-y-0.5 backdrop-blur-sm"
-                  >
-                    <Building2 className="w-4 h-4 text-[#5EEAD4]" />
-                    Panel Institucion
-                  </button>
-                  <button
-                    onClick={enterStudentDemo}
-                    className="flex items-center justify-center gap-2.5 px-6 py-3 bg-[#14B8A6]/20 hover:bg-[#14B8A6]/30 text-white font-semibold rounded-xl border border-[#14B8A6]/30 transition-all shadow-lg hover:-translate-y-0.5 backdrop-blur-sm"
-                  >
-                    <GraduationCap className="w-4 h-4 text-[#5EEAD4]" />
-                    Panel Postulante
-                  </button>
-                </div>
-              </div>
-
               {/* Trust badges */}
               <div className="mt-8 flex flex-wrap items-center gap-6 justify-center lg:justify-start">
                 {['Gratis para postulantes', 'Respuesta en 24-48h', '100% seguro'].map((t) => (
@@ -513,12 +492,7 @@ function App() {
               Iniciar Sesion
               <ArrowRight className="w-5 h-5" />
             </button>
-            <button
-              onClick={enterStudentDemo}
-              className="flex items-center justify-center gap-2 px-8 py-4 bg-white/10 text-white border border-white/25 font-semibold rounded-2xl hover:bg-white/20 transition-all text-lg"
-            >
-              Ver Demo
-            </button>
+
           </div>
         </div>
       </section>
