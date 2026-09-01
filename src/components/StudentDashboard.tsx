@@ -40,6 +40,7 @@ interface StudentDashboardProps {
   unreadMessages?: number;
   unreadNotifications?: number;
   onAppMessages?: (id: string) => void;
+  studentName?: string;
 }
 
 type Tab = 'home' | 'explore' | 'applications' | 'messages' | 'notifications' | 'settings';
@@ -57,18 +58,14 @@ export function StudentDashboard({
   unreadMessages = 0,
   unreadNotifications = 0,
   onAppMessages,
+  studentName = 'Postulante',
 }: StudentDashboardProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<Tab>('home');
   const [searchQuery, setSearchQuery] = useState('');
   const [accountMenuOpen, setAccountMenuOpen] = useState(false);
 
-  const storedStudent = (() => {
-    try { return JSON.parse(localStorage.getItem('edu_student') || '{}'); }
-    catch { return {}; }
-  })();
-  const studentName = [storedStudent.name, storedStudent.last_name].filter(Boolean).join(' ') || 'Postulante';
-  const studentInitials = [storedStudent.name?.[0], storedStudent.last_name?.[0]].filter(Boolean).join('').toUpperCase() || 'P';
+  const studentInitials = studentName.charAt(0).toUpperCase() || 'P';
 
   const pending  = applications.filter((a) => a.status === 'pendiente').length;
   const accepted = applications.filter((a) => a.status === 'aceptada').length;
@@ -87,7 +84,6 @@ export function StudentDashboard({
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('edu_student');
     onExit();
   };
 

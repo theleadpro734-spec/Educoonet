@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
-import { INSTITUTION_ID } from '../lib/constants';
+import { useAuth } from '../lib/auth';
 import { Institution, Application } from '../types';
 import { InstitutionDashboard } from './InstitutionDashboard';
 import { InstitutionProfile } from './InstitutionProfile';
@@ -20,9 +20,9 @@ interface MessageState {
 }
 
 export function InstitutionPanel({ onExit }: InstitutionPanelProps) {
+  const { institution, user, signOut } = useAuth();
   const [view, setView] = useState<View>('dashboard');
   const [messageState, setMessageState] = useState<MessageState>({});
-  const [institution, setInstitution] = useState<Institution | null>(null);
   const [applications, setApplications] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
@@ -30,9 +30,11 @@ export function InstitutionPanel({ onExit }: InstitutionPanelProps) {
   const [unreadMessages, setUnreadMessages] = useState(0);
   const [unreadNotifications, setUnreadNotifications] = useState(0);
 
+  const institutionId = institution?.id;
+
   useEffect(() => {
     fetchData();
-  }, [reloadKey]);
+  }, [reloadKey, institutionId]);
 
   useEffect(() => {
     const channel = supabase
@@ -58,33 +60,17 @@ export function InstitutionPanel({ onExit }: InstitutionPanelProps) {
     return () => { supabase.removeChannel(channel); };
   }, []);
 
-  const instEmail = institution?.email || 'admin@educonnet.com';
-
-  const fetchUnreadNotifications = async () => {
-    const { count } = await supabase
-      .from('notifications')
-      .select('*', { count: 'exact', head: true })
-      .eq('user_email', instEmail)
-      .eq('read', false);
-    setUnreadNotifications(count || 0);
-  };
-
   const fetchData = async () => {
+    if (!institutionId) { setLoading(false); return; }
     setLoading(true);
-    const [instRes, appsRes] = await Promise.all([
-      supabase
-        .from('institutions')
-        .select('*')
-        .eq('id', INSTITUTION_ID)
-        .single(),
+    const [appsRes] = await Promise.all([
       supabase
         .from('applications')
         .select('*')
-        .eq('institution_id', INSTITUTION_ID)
+        .eq('institution_id', institutionId)
         .order('created_at', { ascending: false }),
     ]);
 
-    if (instRes.data) setInstitution(instRes.data);
     if (appsRes.data) setApplications(appsRes.data);
 
     const appIds = (appsRes.data || []).map((a: Application) => a.id);
@@ -100,13 +86,14 @@ export function InstitutionPanel({ onExit }: InstitutionPanelProps) {
       setUnreadMessages(0);
     }
 
-    const notifEmail = instRes.data?.email || 'admin@educonnet.com';
-    const { count: notifCount } = await supabase
-      .from('notifications')
-      .select('*', { count: 'exact', head: true })
-      .eq('user_email', notifEmail)
-      .eq('read', false);
-    setUnreadNotifications(notifCount || 0);
+    if (user?.id) {
+      const { count: notifCount } = await supabase
+        .from('notifications')
+        .select('*', { count: 'exact', head: true })
+        .eq('user_id', user.id)
+        .eq('read', false);
+      setUnreadNotifications(notifCount || 0);
+    }
 
     setLoading(false);
   };
@@ -131,11 +118,11 @@ export function InstitutionPanel({ onExit }: InstitutionPanelProps) {
     setUpdatingId(null);
   };
 
-  if (loading) {
+  if (loading || !institution) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50">
         <div className="text-center">
-          <div className="w-12 h-12 border-3 border-slate-200 border-t-slate-900 rounded-full animate-spin mx-auto" />
+          <div className="w-12 h-12 border-[3px] border-slate-200 border-t-slate-900 rounded-full animate-spin mx-auto" />
           <p className="mt-4 text-slate-500">Cargando panel...</p>
         </div>
       </div>
@@ -158,7 +145,7 @@ export function InstitutionPanel({ onExit }: InstitutionPanelProps) {
         onUpdateStatus={updateStatus}
         updatingId={updatingId}
         onRefresh={handleRefresh}
-        institutionName={institution?.name || ''}
+        institutionName={institution.name}
       />
     );
   }
@@ -167,8 +154,8 @@ export function InstitutionPanel({ onExit }: InstitutionPanelProps) {
     return (
       <SettingsView
         onBack={() => setView('dashboard')}
-        onExit={onExit}
-        institutionName={institution?.name || ''}
+        onExit={async () => { await signOut(); onExit(); }}
+        institutionName={institution.name}
       />
     );
   }
@@ -179,7 +166,7 @@ export function InstitutionPanel({ onExit }: InstitutionPanelProps) {
         mode="institution"
         applications={applications}
         selectedApplicationId={messageState.selectedApplicationId}
-        senderName={institution?.name || 'Institucion'}
+        senderName={institution.name}
         onBack={() => setView('dashboard')}
         onRefresh={handleRefresh}
         key={`inst-msg-${reloadKey}`}
@@ -190,7 +177,6 @@ export function InstitutionPanel({ onExit }: InstitutionPanelProps) {
   if (view === 'notifications') {
     return (
       <NotificationsView
-        userEmail={instEmail}
         onBack={() => setView('dashboard')}
         onNavigate={(notif) => {
           if (notif.type === 'new_application' && notif.related_id) {
@@ -210,7 +196,7 @@ export function InstitutionPanel({ onExit }: InstitutionPanelProps) {
   return (
     <InstitutionDashboard
       applications={applications}
-      institutionName={institution?.name || ''}
+      institutionName={institution.name}
       onViewAllApplications={() => setView('applications')}
       onUpdateStatus={updateStatus}
       onProfile={() => setView('profile')}
@@ -220,7 +206,7 @@ export function InstitutionPanel({ onExit }: InstitutionPanelProps) {
         setView('messages');
       }}
       onNotifications={() => setView('notifications')}
-      onExit={onExit}
+      onExit={async () => { await signOut(); onExit(); }}
       updatingId={updatingId}
       unreadMessages={unreadMessages}
       unreadNotifications={unreadNotifications}
@@ -544,7 +530,7 @@ function SettingsView({
               <Shield className="w-5 h-5 text-slate-400" />
               Seguridad
             </h2>
-            <p className="text-sm text-slate-500">La sesion es segura y los datos estan protegidos.</p>
+            <p className="text-sm text-slate-500">La sesion es segura y los datos estan protegidos por autenticacion de Supabase.</p>
           </div>
 
           <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
@@ -563,21 +549,12 @@ function SettingsView({
               Termina tu sesion actual en el panel de institucion.
             </p>
             <button
-              onClick={() => {
-                localStorage.removeItem('edu_institution');
-                onExit();
-              }}
+              onClick={onExit}
               className="w-full py-3 bg-slate-900 hover:bg-slate-800 text-white font-medium rounded-xl transition-colors flex items-center justify-center gap-2"
             >
               <LogOut className="w-5 h-5" />
               Salir del Panel
             </button>
-          </div>
-
-          <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl">
-            <p className="text-sm text-slate-600">
-              <strong>Modo prueba:</strong> Estás usando la plataforma en modo de demostracion. Los datos pueden ser reiniciados en cualquier momento.
-            </p>
           </div>
         </div>
       </main>

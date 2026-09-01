@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react';
 import { InstitutionPanel } from './components/InstitutionPanel';
 import { StudentPanel } from './components/StudentPanel';
 import { AdminPanel } from './components/AdminPanel';
+import { InstitutionAccessPage } from './components/InstitutionAccessPage';
 import { EduConnetLogo } from './components/EduConnetLogo';
-import { supabase } from './lib/supabase';
+import { useAuth } from './lib/auth';
 import {
   Building2,
   GraduationCap,
@@ -19,29 +20,29 @@ import {
   Search,
   Bell,
   Shield,
-  Settings,
   Menu,
   Zap,
   BarChart3,
   MessageSquare,
-  Eye,
-  EyeOff,
-  Lock,
-  KeyRound,
-  AtSign,
-  AlertCircle,
   Moon,
   Sun,
+  ArrowLeft,
 } from 'lucide-react';
 
 type View = 'home' | 'institution' | 'student' | 'admin';
 
 function App() {
+  const [route, setRoute] = useState(window.location.pathname);
+  const { loading, isInstitution, isRepresentative, institution, signOut } = useAuth();
   const [view, setView] = useState<View>('home');
-  const [loginOpen, setLoginOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [studentEmail, setStudentEmail] = useState('');
   const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    const onPop = () => setRoute(window.location.pathname);
+    window.addEventListener('popstate', onPop);
+    return () => window.removeEventListener('popstate', onPop);
+  }, []);
 
   useEffect(() => {
     if (darkMode) {
@@ -54,46 +55,48 @@ function App() {
   }, [darkMode]);
 
   useEffect(() => {
-    if (loginOpen || mobileMenuOpen) {
+    if (mobileMenuOpen) {
       document.body.classList.add('modal-open');
     } else {
       document.body.classList.remove('modal-open');
     }
     return () => document.body.classList.remove('modal-open');
-  }, [loginOpen, mobileMenuOpen]);
+  }, [mobileMenuOpen]);
 
-  if (view === 'institution') {
-    return <InstitutionPanel onExit={() => setView('home')} />;
+  // Institution access route
+  if (route === '/instituciones/acceso') {
+    return <InstitutionAccessPage />;
+  }
+
+  // Auto-route: if logged in as institution, show institution panel
+  useEffect(() => {
+    if (!loading && isInstitution && view === 'home') {
+      setView('institution');
+    }
+  }, [loading, isInstitution, view]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+        <div className="text-center">
+          <div className="w-12 h-12 border-[3px] border-slate-200 border-t-[#0D9488] rounded-full animate-spin mx-auto" />
+          <p className="mt-4 text-slate-500">Cargando EduConnet...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (view === 'institution' && isInstitution) {
+    return <InstitutionPanel onExit={async () => { await signOut(); setView('home'); }} />;
   }
 
   if (view === 'student') {
-    return <StudentPanel onExit={() => setView('home')} studentEmail={studentEmail} />;
+    return <StudentPanel onExit={() => setView('home')} />;
   }
 
   if (view === 'admin') {
     return <AdminPanel onExit={() => setView('home')} />;
   }
-
-  const enterInstitutionDemo = () => {
-    localStorage.setItem('edu_institution', JSON.stringify({
-      id: 'demo-inst-1',
-      name: 'Liceo Demo',
-      dea_code: 'LICEO2025',
-      institution_id: 'demo-inst-1',
-    }));
-    setView('institution');
-  };
-
-  const enterStudentDemo = () => {
-    localStorage.setItem('edu_student', JSON.stringify({
-      id: 'demo-student-1',
-      name: 'Postulante',
-      last_name: 'Demo',
-      email: 'postulante@demo.ve',
-    }));
-    setStudentEmail('postulante@demo.ve');
-    setView('student');
-  };
 
   return (
     <div className={`min-h-screen ${darkMode ? 'bg-[#0F172A] text-white' : 'bg-[#FEFEFF] text-slate-900'} transition-colors duration-300`}>
@@ -120,10 +123,10 @@ function App() {
                 {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
               </button>
               <button
-                onClick={() => setLoginOpen(true)}
+                onClick={() => setView('student')}
                 className="hidden sm:flex items-center gap-2 px-5 py-2.5 bg-[#0D9488] hover:bg-[#0F766E] text-white font-semibold rounded-xl transition-all shadow-lg shadow-[#0D9488]/25 hover:-translate-y-0.5"
               >
-                Iniciar Sesion
+                Comenzar Ahora
                 <ArrowRight className="w-4 h-4" />
               </button>
               <button
@@ -159,10 +162,10 @@ function App() {
             ))}
           </nav>
           <button
-            onClick={() => { setMobileMenuOpen(false); setLoginOpen(true); }}
+            onClick={() => { setMobileMenuOpen(false); setView('student'); }}
             className="w-full py-3.5 bg-[#0D9488] hover:bg-[#0F766E] text-white font-semibold rounded-xl shadow-lg shadow-[#0D9488]/25"
           >
-            Iniciar Sesion
+            Comenzar Ahora
           </button>
         </div>
       </div>
@@ -173,12 +176,10 @@ function App() {
           ? 'bg-gradient-to-br from-[#0F172A] via-[#134E4A] to-[#1E293B]'
           : 'bg-gradient-to-br from-[#134E4A] via-[#0D9488] to-[#14B8A6]'
         }`} />
-        {/* Soft grid pattern */}
         <div className="absolute inset-0 opacity-[0.04]" style={{
           backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)',
           backgroundSize: '40px 40px',
         }} />
-        {/* Accent orbs */}
         <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-[#14B8A6]/20 rounded-full blur-3xl" />
         <div className="absolute bottom-0 left-1/4 w-64 h-64 bg-[#5EEAD4]/15 rounded-full blur-2xl" />
         <div className="absolute -bottom-1 left-0 right-0 h-24 bg-gradient-to-t from-[#FEFEFF] to-transparent" style={{ display: darkMode ? 'none' : 'block' }} />
@@ -202,7 +203,7 @@ function App() {
 
               <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <button
-                  onClick={() => setLoginOpen(true)}
+                  onClick={() => setView('student')}
                   className="flex items-center justify-center gap-2 px-8 py-4 bg-white text-[#0D9488] font-bold rounded-2xl hover:bg-[#F0FDFA] transition-all shadow-2xl shadow-[#134E4A]/30 hover:-translate-y-1 text-lg"
                 >
                   Comenzar Ahora
@@ -216,7 +217,6 @@ function App() {
                 </a>
               </div>
 
-              {/* Trust badges */}
               <div className="mt-8 flex flex-wrap items-center gap-6 justify-center lg:justify-start">
                 {['Gratis para postulantes', 'Respuesta en 24-48h', '100% seguro'].map((t) => (
                   <div key={t} className="flex items-center gap-2 text-[#99F6E4]">
@@ -486,13 +486,19 @@ function App() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
-              onClick={() => setLoginOpen(true)}
+              onClick={() => setView('student')}
               className="flex items-center justify-center gap-2 px-8 py-4 bg-white text-[#0D9488] font-bold rounded-2xl hover:bg-[#F0FDFA] transition-all shadow-2xl text-lg hover:-translate-y-1"
             >
-              Iniciar Sesion
+              Comenzar Ahora
               <ArrowRight className="w-5 h-5" />
             </button>
-
+            <a
+              href="/instituciones/acceso"
+              className="flex items-center justify-center gap-2 px-8 py-4 bg-white/10 backdrop-blur-sm text-white border border-white/25 font-semibold rounded-2xl hover:bg-white/20 transition-all text-lg"
+            >
+              <Building2 className="w-5 h-5" />
+              Acceso Instituciones
+            </a>
           </div>
         </div>
       </section>
@@ -553,320 +559,6 @@ function App() {
           </div>
         </div>
       </footer>
-
-      {/* Login Modal */}
-      {loginOpen && (
-        <LoginModal
-          onClose={() => setLoginOpen(false)}
-          onSelectInstitution={() => { setLoginOpen(false); setView('institution'); }}
-          onSelectStudent={(email) => { setStudentEmail(email); setLoginOpen(false); setView('student'); }}
-          darkMode={darkMode}
-          onEnterInstDemo={() => { setLoginOpen(false); enterInstitutionDemo(); }}
-          onEnterStudentDemo={() => { setLoginOpen(false); enterStudentDemo(); }}
-          onEnterAdminDemo={() => { setLoginOpen(false); enterAdminDemo(); }}
-        />
-      )}
-    </div>
-  );
-}
-
-type LoginStep = 'select' | 'student' | 'institution' | 'admin';
-
-function LoginModal({
-  onClose,
-  onSelectInstitution,
-  onSelectStudent,
-  darkMode,
-  onEnterInstDemo,
-  onEnterStudentDemo,
-  onEnterAdminDemo,
-}: {
-  onClose: () => void;
-  onSelectInstitution: () => void;
-  onSelectStudent: (email: string) => void;
-  darkMode: boolean;
-  onEnterInstDemo: () => void;
-  onEnterStudentDemo: () => void;
-  onEnterAdminDemo: () => void;
-}) {
-  const [step, setStep] = useState<LoginStep>('select');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [deaCode, setDeaCode] = useState('');
-  const [instPassword, setInstPassword] = useState('');
-  const [showPass, setShowPass] = useState(false);
-  const [showInstPass, setShowInstPass] = useState(false);
-  const [adminUser, setAdminUser] = useState('');
-  const [adminPass, setAdminPass] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-
-  const handleStudentLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
-    const { data } = await supabase.rpc('verify_student_password', {
-      p_email: email.trim().toLowerCase(),
-      p_password: password,
-    });
-    setLoading(false);
-    if (!data || data.length === 0) {
-      setError('Correo o contrasena incorrectos.');
-      return;
-    }
-    const student = data[0];
-    localStorage.setItem('edu_student', JSON.stringify(student));
-    onSelectStudent(student.email);
-  };
-
-  const handleInstitutionLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
-    const { data } = await supabase.rpc('verify_institution_password', {
-      p_dea_code: deaCode.trim(),
-      p_password: instPassword,
-    });
-    setLoading(false);
-    if (!data || data.length === 0) {
-      setError('Codigo DEA o contrasena incorrectos.');
-      return;
-    }
-    const institution = data[0];
-    localStorage.setItem('edu_institution', JSON.stringify(institution));
-    onSelectInstitution();
-  };
-
-  const handleAdminLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
-    const { data } = await supabase.rpc('verify_admin_login', {
-      p_username: adminUser.trim(),
-      p_password: adminPass,
-    });
-    setLoading(false);
-    if (!data || data.length === 0) {
-      setError('Credenciales de administrador incorrectas.');
-      return;
-    }
-    const admin = data[0];
-    localStorage.setItem('edu_admin', JSON.stringify(admin));
-    onEnterAdminDemo();
-  };
-
-  const back = () => { setStep('select'); setError(''); };
-
-  const inputClass = `w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 transition-all ${
-    darkMode
-      ? 'bg-[#0F172A] border-[#334155] text-white placeholder:text-slate-500 focus:ring-[#0D9488]/20 focus:border-[#0D9488]'
-      : 'bg-white border-slate-200 text-slate-900 placeholder:text-slate-400 focus:ring-[#0D9488]/20 focus:border-[#0D9488]'
-  }`;
-
-  return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
-      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
-    >
-      <div className="absolute inset-0 bg-[#134E4A]/60 backdrop-blur-md" />
-
-      <div className={`relative rounded-3xl shadow-2xl w-full max-w-md overflow-hidden ${darkMode ? 'bg-[#1E293B]' : 'bg-white'}`}>
-        {/* Header */}
-        <div className="bg-gradient-to-br from-[#0D9488] to-[#134E4A] px-8 pt-8 pb-6">
-          <button
-            onClick={onClose}
-            className="absolute top-4 right-4 p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-colors"
-          >
-            <X className="w-5 h-5" />
-          </button>
-          <div className="flex items-center justify-center mb-4">
-            <EduConnetLogo size="lg" variant="dark" />
-          </div>
-          <h2 className="text-2xl font-bold text-white text-center">
-            {step === 'select' ? 'Iniciar Sesion' : step === 'student' ? 'Acceso Postulante' : step === 'institution' ? 'Acceso Institucion' : 'Acceso Administrador'}
-          </h2>
-          <p className="text-[#99F6E4] text-center text-sm mt-1">
-            {step === 'select' ? 'Selecciona tu tipo de acceso' : step === 'admin' ? 'Ingresa las credenciales de administrador' : 'Ingresa tus credenciales'}
-          </p>
-        </div>
-
-        <div className="p-6">
-          {step === 'select' && (
-            <div className="space-y-3">
-              <button
-                onClick={() => setStep('student')}
-                className={`group w-full flex items-center gap-4 p-5 border-2 rounded-2xl transition-all text-left ${darkMode ? 'border-[#334155] hover:border-[#0D9488] hover:bg-[#0D9488]/10' : 'border-slate-200 hover:border-[#0D9488] hover:shadow-lg hover:shadow-[#0D9488]/10'}`}
-              >
-                <div className="w-14 h-14 bg-gradient-to-br from-[#14B8A6] to-[#0D9488] rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-[#0D9488]/25">
-                  <GraduationCap className="w-7 h-7 text-white" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className={`text-lg font-bold ${darkMode ? 'text-white' : 'text-slate-900'}`}>Soy Postulante</p>
-                  <p className={`text-sm mt-0.5 ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>Explora instituciones y gestiona tus postulaciones</p>
-                </div>
-                <ChevronRight className={`w-5 h-5 group-hover:translate-x-1 transition-all ${darkMode ? 'text-slate-500 group-hover:text-[#0D9488]' : 'text-slate-400 group-hover:text-[#0D9488]'}`} />
-              </button>
-
-              <button
-                onClick={() => setStep('institution')}
-                className={`group w-full flex items-center gap-4 p-5 border-2 rounded-2xl transition-all text-left ${darkMode ? 'border-[#334155] hover:border-[#134E4A] hover:bg-[#134E4A]/40' : 'border-slate-200 hover:border-[#134E4A] hover:shadow-lg hover:shadow-slate-500/10'}`}
-              >
-                <div className="w-14 h-14 bg-gradient-to-br from-slate-700 to-[#134E4A] rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg">
-                  <Building2 className="w-7 h-7 text-white" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className={`text-lg font-bold ${darkMode ? 'text-white' : 'text-slate-900'}`}>Soy Institucion</p>
-                  <p className={`text-sm mt-0.5 ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>Gestiona postulaciones y el perfil de tu institucion</p>
-                </div>
-                <ChevronRight className={`w-5 h-5 group-hover:translate-x-1 transition-all ${darkMode ? 'text-slate-500' : 'text-slate-400 group-hover:text-slate-700'}`} />
-              </button>
-
-              <button
-                onClick={() => setStep('admin')}
-                className={`group w-full flex items-center gap-4 p-5 border-2 rounded-2xl transition-all text-left ${darkMode ? 'border-[#334155] hover:border-slate-500 hover:bg-slate-700/40' : 'border-slate-200 hover:border-slate-700 hover:shadow-lg'}`}
-              >
-                <div className="w-14 h-14 bg-gradient-to-br from-slate-800 to-slate-950 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg">
-                  <Shield className="w-7 h-7 text-white" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className={`text-lg font-bold ${darkMode ? 'text-white' : 'text-slate-900'}`}>Soy Administrador</p>
-                  <p className={`text-sm mt-0.5 ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>Panel de gestion general de la plataforma</p>
-                </div>
-                <ChevronRight className={`w-5 h-5 group-hover:translate-x-1 transition-all ${darkMode ? 'text-slate-500' : 'text-slate-400 group-hover:text-slate-700'}`} />
-              </button>
-
-              <div className={`pt-2 border-t ${darkMode ? 'border-[#334155]' : 'border-slate-100'}`}>
-                <p className={`text-xs text-center mb-2 ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>Acceso rapido demo</p>
-                <div className="grid grid-cols-3 gap-2">
-                  <button
-                    type="button"
-                    onClick={onEnterStudentDemo}
-                    className={`flex items-center justify-center gap-1.5 px-2 py-2.5 text-xs font-semibold rounded-xl transition-colors ${darkMode ? 'bg-[#0D9488]/20 hover:bg-[#0D9488]/30 text-[#5EEAD4]' : 'bg-[#F0FDFA] hover:bg-[#CCFBF1] text-[#0D9488]'}`}
-                  >
-                    <GraduationCap className="w-3.5 h-3.5" />
-                    Estudiante
-                  </button>
-                  <button
-                    type="button"
-                    onClick={onEnterInstDemo}
-                    className={`flex items-center justify-center gap-1.5 px-2 py-2.5 text-xs font-semibold rounded-xl transition-colors ${darkMode ? 'bg-[#334155] hover:bg-[#475569] text-slate-300' : 'bg-slate-100 hover:bg-slate-200 text-slate-700'}`}
-                  >
-                    <Building2 className="w-3.5 h-3.5" />
-                    Liceo
-                  </button>
-                  <button
-                    type="button"
-                    onClick={onEnterAdminDemo}
-                    className={`flex items-center justify-center gap-1.5 px-2 py-2.5 text-xs font-semibold rounded-xl transition-colors ${darkMode ? 'bg-slate-700/50 hover:bg-slate-700 text-slate-300' : 'bg-slate-200 hover:bg-slate-300 text-slate-700'}`}
-                  >
-                    <Shield className="w-3.5 h-3.5" />
-                    Admin
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {step === 'student' && (
-            <form onSubmit={handleStudentLogin} className="space-y-4">
-              <div>
-                <label className={`block text-sm font-medium mb-1.5 ${darkMode ? 'text-slate-300' : 'text-slate-700'}`}>Correo electronico</label>
-                <div className="relative">
-                  <AtSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                  <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="correo@ejemplo.com" required className={`${inputClass} pl-10`} />
-                </div>
-              </div>
-              <div>
-                <label className={`block text-sm font-medium mb-1.5 ${darkMode ? 'text-slate-300' : 'text-slate-700'}`}>Contrasena</label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                  <input type={showPass ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" required className={`${inputClass} pl-10 pr-10`} />
-                  <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
-                    {showPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                  </button>
-                </div>
-              </div>
-              {error && (
-                <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-xl text-sm text-red-700">
-                  <AlertCircle className="w-4 h-4 flex-shrink-0" />
-                  {error}
-                </div>
-              )}
-              <button type="submit" disabled={loading} className="w-full py-3 bg-[#0D9488] hover:bg-[#0F766E] disabled:opacity-50 text-white font-semibold rounded-xl transition-colors flex items-center justify-center gap-2">
-                {loading ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : 'Ingresar'}
-              </button>
-              <button type="button" onClick={back} className={`w-full text-sm transition-colors ${darkMode ? 'text-slate-500 hover:text-slate-300' : 'text-slate-500 hover:text-slate-700'}`}>
-                Volver
-              </button>
-            </form>
-          )}
-
-          {step === 'institution' && (
-            <form onSubmit={handleInstitutionLogin} className="space-y-4">
-              <div>
-                <label className={`block text-sm font-medium mb-1.5 ${darkMode ? 'text-slate-300' : 'text-slate-700'}`}>Codigo DEA</label>
-                <div className="relative">
-                  <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                  <input type="text" value={deaCode} onChange={(e) => setDeaCode(e.target.value)} placeholder="DEA-XXXX-XXXX" required className={`${inputClass} pl-10 font-mono`} />
-                </div>
-              </div>
-              <div>
-                <label className={`block text-sm font-medium mb-1.5 ${darkMode ? 'text-slate-300' : 'text-slate-700'}`}>Contrasena</label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                  <input type={showInstPass ? 'text' : 'password'} value={instPassword} onChange={(e) => setInstPassword(e.target.value)} placeholder="••••••••" required className={`${inputClass} pl-10 pr-10`} />
-                  <button type="button" onClick={() => setShowInstPass(!showInstPass)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
-                    {showInstPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                  </button>
-                </div>
-              </div>
-              {error && (
-                <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-xl text-sm text-red-700">
-                  <AlertCircle className="w-4 h-4 flex-shrink-0" />
-                  {error}
-                </div>
-              )}
-              <button type="submit" disabled={loading} className="w-full py-3 bg-[#134E4A] hover:bg-[#0D9488] disabled:opacity-50 text-white font-semibold rounded-xl transition-colors flex items-center justify-center gap-2">
-                {loading ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : 'Ingresar'}
-              </button>
-              <button type="button" onClick={back} className={`w-full text-sm transition-colors ${darkMode ? 'text-slate-500 hover:text-slate-300' : 'text-slate-500 hover:text-slate-700'}`}>
-                Volver
-              </button>
-            </form>
-          )}
-
-          {step === 'admin' && (
-            <form onSubmit={handleAdminLogin} className="space-y-4">
-              <div>
-                <label className={`block text-sm font-medium mb-1.5 ${darkMode ? 'text-slate-300' : 'text-slate-700'}`}>Usuario</label>
-                <div className="relative">
-                  <Shield className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                  <input type="text" value={adminUser} onChange={(e) => setAdminUser(e.target.value)} placeholder="admin" required className={`${inputClass} pl-10`} />
-                </div>
-              </div>
-              <div>
-                <label className={`block text-sm font-medium mb-1.5 ${darkMode ? 'text-slate-300' : 'text-slate-700'}`}>Contrasena</label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                  <input type="password" value={adminPass} onChange={(e) => setAdminPass(e.target.value)} placeholder="••••••••" required className={`${inputClass} pl-10`} />
-                </div>
-              </div>
-              {error && (
-                <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-xl text-sm text-red-700">
-                  <AlertCircle className="w-4 h-4 flex-shrink-0" />
-                  {error}
-                </div>
-              )}
-              <button type="submit" disabled={loading} className="w-full py-3 bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white font-semibold rounded-xl transition-colors flex items-center justify-center gap-2">
-                {loading ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : 'Ingresar como Admin'}
-              </button>
-              <button type="button" onClick={back} className={`w-full text-sm transition-colors ${darkMode ? 'text-slate-500 hover:text-slate-300' : 'text-slate-500 hover:text-slate-700'}`}>
-                Volver
-              </button>
-            </form>
-          )}
-        </div>
-      </div>
     </div>
   );
 }

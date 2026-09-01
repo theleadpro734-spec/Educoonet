@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
+import { useAuth } from '../lib/auth';
 import { Notification } from '../types';
 import {
   ArrowLeft,
@@ -13,7 +14,6 @@ import {
 } from 'lucide-react';
 
 interface NotificationsViewProps {
-  userEmail: string;
   onBack: () => void;
   onNavigate?: (notification: Notification) => void;
 }
@@ -39,22 +39,25 @@ const typeConfig = {
   },
 };
 
-export function NotificationsView({ userEmail, onBack, onNavigate }: NotificationsViewProps) {
+export function NotificationsView({ onBack, onNavigate }: NotificationsViewProps) {
+  const { user } = useAuth();
+  const userId = user?.id;
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<'all' | 'unread'>('all');
 
   const fetchNotifications = useCallback(async () => {
+    if (!userId) { setLoading(false); return; }
     setLoading(true);
     const { data } = await supabase
       .from('notifications')
       .select('*')
-      .eq('user_email', userEmail)
+      .eq('user_id', userId)
       .order('created_at', { ascending: false });
 
     if (data) setNotifications(data as Notification[]);
     setLoading(false);
-  }, [userEmail]);
+  }, [userId]);
 
   useEffect(() => {
     fetchNotifications();
@@ -68,7 +71,7 @@ export function NotificationsView({ userEmail, onBack, onNavigate }: Notificatio
         { event: 'INSERT', schema: 'public', table: 'notifications' },
         (payload) => {
           const newNotif = payload.new as Notification;
-          if (newNotif.user_email === userEmail) {
+          if (newNotif.user_id === userId) {
             setNotifications((prev) =>
               prev.some((n) => n.id === newNotif.id) ? prev : [newNotif, ...prev]
             );
@@ -78,7 +81,7 @@ export function NotificationsView({ userEmail, onBack, onNavigate }: Notificatio
       .subscribe();
 
     return () => { supabase.removeChannel(channel); };
-  }, [userEmail]);
+  }, [userId]);
 
   const markAsRead = async (id: string) => {
     await supabase.from('notifications').update({ read: true }).eq('id', id);

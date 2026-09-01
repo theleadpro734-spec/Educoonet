@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react';
 import { supabase } from '../lib/supabase';
+import { useAuth } from '../lib/auth';
 import { FileUpload } from './FileUpload';
 import { ArrowLeft, FileText, User, MapPin, Heart, Upload, CheckCircle, AlertCircle } from 'lucide-react';
 
@@ -70,6 +71,7 @@ export function ApplyForm({
   onBack,
   onSuccess,
 }: ApplyFormProps) {
+  const { user } = useAuth();
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [currentStep, setCurrentStep] = useState(1);
@@ -157,7 +159,7 @@ export function ApplyForm({
       .from('applications')
       .select('id, status')
       .eq('institution_id', institutionId)
-      .eq('email', form.email.trim().toLowerCase())
+      .eq('user_id', user?.id)
       .in('status', ['pendiente', 'aceptada'])
       .maybeSingle();
 
