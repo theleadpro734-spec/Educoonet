@@ -45,7 +45,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return;
     }
     const isAnon = userData.user.is_anonymous === true;
-    if (isAnon) {
+    const hasInstitutionRole = userData.user.app_metadata?.role === 'institution';
+    if (isAnon || !hasInstitutionRole) {
       setInstitution(null);
       return;
     }
@@ -132,7 +133,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (error) {
       return { error: error.message };
     }
-    const { data: instData, error: instError } = await supabase.rpc('get_institution_for_user');
+    const hasInstitutionRole = data.user.app_metadata?.role === 'institution';
+    const { data: instData, error: instError } = hasInstitutionRole
+      ? await supabase.rpc('get_institution_for_user')
+      : { data: null, error: new Error('La cuenta no tiene el rol de institucion.') };
     if (instError || !instData || instData.length === 0) {
       await supabase.auth.signOut();
       return { error: 'Esta cuenta no tiene una institucion asociada.' };

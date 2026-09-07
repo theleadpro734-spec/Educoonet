@@ -63,17 +63,16 @@ function App() {
     return () => document.body.classList.remove('modal-open');
   }, [mobileMenuOpen]);
 
-  // Institution access route
-  if (route === '/instituciones/acceso') {
-    return <InstitutionAccessPage />;
-  }
-
   // Auto-route: if logged in as institution, show institution panel
   useEffect(() => {
     if (!loading && isInstitution && view === 'home') {
       setView('institution');
     }
   }, [loading, isInstitution, view]);
+
+  if (route === '/instituciones/acceso') {
+    return <InstitutionAccessPage />;
+  }
 
   if (loading) {
     return (
@@ -484,7 +483,7 @@ function App() {
           <p className="text-xl text-[#99F6E4] mb-10 max-w-2xl mx-auto leading-relaxed">
             Unete a miles de postulantes e instituciones que ya confian en EduConnet.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex justify-center">
             <button
               onClick={() => setView('student')}
               className="flex items-center justify-center gap-2 px-8 py-4 bg-white text-[#0D9488] font-bold rounded-2xl hover:bg-[#F0FDFA] transition-all shadow-2xl text-lg hover:-translate-y-1"
@@ -492,13 +491,6 @@ function App() {
               Comenzar Ahora
               <ArrowRight className="w-5 h-5" />
             </button>
-            <a
-              href="/instituciones/acceso"
-              className="flex items-center justify-center gap-2 px-8 py-4 bg-white/10 backdrop-blur-sm text-white border border-white/25 font-semibold rounded-2xl hover:bg-white/20 transition-all text-lg"
-            >
-              <Building2 className="w-5 h-5" />
-              Acceso Instituciones
-            </a>
           </div>
         </div>
       </section>
