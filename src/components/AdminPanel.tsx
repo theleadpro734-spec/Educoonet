@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
 import { EduConnetLogo } from './EduConnetLogo';
 import {
-  ArrowLeft,
   BarChart3,
   Building2,
   Users,
@@ -10,19 +9,14 @@ import {
   MessageSquare,
   Settings,
   Menu,
-  X,
   LogOut,
   CheckCircle,
   XCircle,
   Clock,
   TrendingUp,
   Award,
-  Bell,
   Search,
   ChevronRight,
-  Eye,
-  EyeOff,
-  Trash2,
   ToggleLeft,
   ToggleRight,
 } from 'lucide-react';

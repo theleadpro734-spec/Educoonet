@@ -8,7 +8,6 @@ import { useAuth } from './lib/auth';
 import {
   Building2,
   GraduationCap,
-  ChevronRight,
   X,
   Users,
   Award,
@@ -26,14 +25,13 @@ import {
   MessageSquare,
   Moon,
   Sun,
-  ArrowLeft,
 } from 'lucide-react';
 
 type View = 'home' | 'institution' | 'student' | 'admin';
 
 function App() {
   const [route, setRoute] = useState(window.location.pathname);
-  const { loading, isInstitution, isRepresentative, institution, signOut } = useAuth();
+  const { loading, isInstitution, signOut } = useAuth();
   const [view, setView] = useState<View>('home');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
