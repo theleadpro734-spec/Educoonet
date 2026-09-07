@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../lib/auth';
-import { Institution, Application } from '../types';
+import { Application } from '../types';
 import { InstitutionDashboard } from './InstitutionDashboard';
 import { InstitutionProfile } from './InstitutionProfile';
 import { MessagingView } from './MessagingView';
 import { ApplicationDetailModal } from './ApplicationDetailModal';
 import { NotificationsView } from './NotificationsView';
-import { ArrowLeft, RefreshCw, Settings, Building2, Users, Bell, LogOut, Shield, HelpCircle, Eye } from 'lucide-react';
+import { ArrowLeft, RefreshCw, Building2, Users, Bell, LogOut, Shield, HelpCircle, Eye } from 'lucide-react';
 
 interface InstitutionPanelProps {
   onExit: () => void;

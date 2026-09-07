@@ -178,7 +178,6 @@ export function StudentPanel({ onExit }: StudentPanelProps) {
     return (
       <ApplicationsListView
         applications={applications}
-        institutionName={institution?.name || ''}
         onBack={() => setView('dashboard')}
         onApply={() => setView('apply')}
         onMessages={(id) => {
@@ -241,13 +240,11 @@ export function StudentPanel({ onExit }: StudentPanelProps) {
 
 function ApplicationsListView({
   applications,
-  institutionName,
   onBack,
   onApply,
   onMessages,
 }: {
   applications: Application[];
-  institutionName: string;
   onBack: () => void;
   onApply: () => void;
   onMessages: (id: string) => void;

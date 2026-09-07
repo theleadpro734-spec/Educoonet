@@ -149,6 +149,7 @@ export interface User {
 export interface Notification {
   id: string;
   user_email: string;
+  user_id: string | null;
   user_role: 'student' | 'institution' | 'admin';
   type: 'new_application' | 'status_changed' | 'new_message';
   title: string;

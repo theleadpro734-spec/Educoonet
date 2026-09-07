@@ -29,7 +29,6 @@ import {
   MessageSquare,
   ChevronDown,
   Eye,
-  Sparkles,
 } from 'lucide-react';
 
 interface InstitutionDashboardProps {

@@ -3,7 +3,6 @@ import { supabase } from '../lib/supabase';
 import { INSTITUTION_ID } from '../lib/constants';
 import { Institution } from '../types';
 import {
-  Building2,
   MapPin,
   Mail,
   Phone,
@@ -13,7 +12,6 @@ import {
   Eye,
   Edit3,
   Save,
-  X,
   Camera,
   Upload,
   ArrowLeft,

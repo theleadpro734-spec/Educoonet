@@ -5,7 +5,6 @@ import {
   X,
   User,
   Mail,
-  Phone,
   MapPin,
   Calendar,
   Heart,
