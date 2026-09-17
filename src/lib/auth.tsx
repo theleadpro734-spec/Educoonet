@@ -61,14 +61,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     let mounted = true;
 
+    const timeout = setTimeout(() => {
+      if (mounted) setLoading(false);
+    }, 5000);
+
     supabase.auth.getSession().then(({ data }) => {
       if (!mounted) return;
       setSession(data.session);
       if (data.session) {
-        refreshInstitution().finally(() => setLoading(false));
+        refreshInstitution().finally(() => { if (mounted) setLoading(false); });
       } else {
-        ensureAnonymous().finally(() => setLoading(false));
+        ensureAnonymous()
+          .catch(() => {})
+          .finally(() => { if (mounted) setLoading(false); });
       }
+    }).catch(() => {
+      if (mounted) setLoading(false);
     });
 
     const { data: listener } = supabase.auth.onAuthStateChange((_event, newSession) => {
@@ -78,13 +86,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           await refreshInstitution();
         } else {
           setInstitution(null);
-          await ensureAnonymous();
+          await ensureAnonymous().catch(() => {});
         }
       })();
     });
 
     return () => {
       mounted = false;
+      clearTimeout(timeout);
       listener.subscription.unsubscribe();
     };
   }, [ensureAnonymous, refreshInstitution]);
