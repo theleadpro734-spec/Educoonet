@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { InstitutionPanel } from './components/InstitutionPanel';
 import { StudentPanel } from './components/StudentPanel';
 import { AdminPanel } from './components/AdminPanel';
@@ -25,9 +25,19 @@ import {
   MessageSquare,
   Moon,
   Sun,
+  Home,
+  Lock,
 } from 'lucide-react';
 
 type View = 'home' | 'institution' | 'student' | 'admin';
+
+const NAV_LINKS = [
+  { label: 'Inicio', href: '#inicio', section: 'inicio' },
+  { label: 'Como funciona', href: '#como-funciona', section: 'como-funciona' },
+  { label: 'Beneficios', href: '#beneficios', section: 'beneficios' },
+  { label: 'Instituciones', href: '#instituciones', section: 'instituciones' },
+  { label: 'Contacto', href: '#contacto', section: 'contacto' },
+] as const;
 
 function App() {
   const [route, setRoute] = useState(window.location.pathname);
@@ -35,6 +45,7 @@ function App() {
   const [view, setView] = useState<View>('home');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
+  const [activeSection, setActiveSection] = useState('inicio');
 
   useEffect(() => {
     const onPop = () => setRoute(window.location.pathname);
@@ -61,12 +72,31 @@ function App() {
     return () => document.body.classList.remove('modal-open');
   }, [mobileMenuOpen]);
 
-  // Auto-route: if logged in as institution, show institution panel
   useEffect(() => {
     if (!loading && isInstitution && view === 'home') {
       setView('institution');
     }
   }, [loading, isInstitution, view]);
+
+  const scrollToSection = useCallback((href: string) => {
+    const el = document.querySelector(href);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, []);
+
+  useEffect(() => {
+    const sections = NAV_LINKS.map((l) => document.getElementById(l.section)).filter(Boolean) as HTMLElement[];
+    if (sections.length === 0) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) setActiveSection(entry.target.id);
+        });
+      },
+      { rootMargin: '-80px 0px -70% 0px' }
+    );
+    sections.forEach((s) => observer.observe(s));
+    return () => observer.disconnect();
+  }, [view]);
 
   if (route === '/instituciones/acceso') {
     return <InstitutionAccessPage />;
@@ -96,26 +126,46 @@ function App() {
   }
 
   return (
-    <div className={`min-h-screen ${darkMode ? 'bg-[#0F172A] text-white' : 'bg-[#FEFEFF] text-slate-900'} transition-colors duration-300`}>
+    <div className={`min-h-screen ${darkMode ? 'bg-[#0F172A] text-white' : 'bg-[#FEFEFF] text-slate-900'} transition-colors duration-300 pb-16 lg:pb-0`}>
 
       {/* Navigation */}
       <nav className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-xl border-b transition-colors duration-300 ${darkMode ? 'bg-[#1E293B]/95 border-[#334155]' : 'bg-white/95 border-slate-100'} shadow-sm`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 lg:h-20">
-            <EduConnetLogo size="md" variant={darkMode ? 'dark' : 'light'} />
+            <button onClick={() => { scrollToSection('#inicio'); }} className="flex-shrink-0">
+              <EduConnetLogo size="md" variant={darkMode ? 'dark' : 'light'} />
+            </button>
 
-            <div className="hidden lg:flex items-center gap-8">
-              {[['Como funciona', '#como-funciona'], ['Beneficios', '#beneficios'], ['Instituciones', '#instituciones'], ['Contacto', '#contacto']].map(([label, href]) => (
-                <a key={label} href={href} className={`font-medium transition-colors text-sm ${darkMode ? 'text-slate-300 hover:text-[#5EEAD4]' : 'text-slate-600 hover:text-[#0D9488]'}`}>
-                  {label}
+            <div className="hidden lg:flex items-center gap-1">
+              {NAV_LINKS.map((item) => (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  onClick={(e) => { e.preventDefault(); scrollToSection(item.href); }}
+                  className={`px-4 py-2 rounded-lg font-medium transition-all text-sm ${
+                    activeSection === item.section
+                      ? darkMode ? 'text-[#5EEAD4] bg-[#0D9488]/15' : 'text-[#0D9488] bg-[#F0FDFA]'
+                      : darkMode ? 'text-slate-300 hover:text-[#5EEAD4]' : 'text-slate-600 hover:text-[#0D9488]'
+                  }`}
+                >
+                  {item.label}
                 </a>
               ))}
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <a
+                href="/instituciones/acceso"
+                onClick={(e) => { e.preventDefault(); window.history.pushState({}, '', '/instituciones/acceso'); window.dispatchEvent(new PopStateEvent('popstate')); }}
+                className={`hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl font-medium transition-all text-sm ${darkMode ? 'text-slate-300 hover:text-[#5EEAD4] hover:bg-[#334155]' : 'text-slate-600 hover:text-[#0D9488] hover:bg-[#F0FDFA]'}`}
+              >
+                <Lock className="w-4 h-4" />
+                Instituciones
+              </a>
               <button
                 onClick={() => setDarkMode(!darkMode)}
                 className={`p-2.5 rounded-xl transition-colors ${darkMode ? 'bg-[#334155] text-[#5EEAD4] hover:bg-[#475569]' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
+                aria-label="Cambiar tema"
               >
                 {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
               </button>
@@ -129,6 +179,7 @@ function App() {
               <button
                 onClick={() => setMobileMenuOpen(true)}
                 className={`lg:hidden p-2 rounded-xl transition-colors ${darkMode ? 'hover:bg-[#334155]' : 'hover:bg-slate-100'}`}
+                aria-label="Abrir menu"
               >
                 <Menu className="w-6 h-6" />
               </button>
@@ -145,18 +196,29 @@ function App() {
         <div className="flex flex-col h-full p-6">
           <div className="flex items-center justify-between mb-8">
             <EduConnetLogo size="md" variant={darkMode ? 'dark' : 'light'} />
-            <button onClick={() => setMobileMenuOpen(false)} className={`p-2 rounded-xl ${darkMode ? 'hover:bg-[#334155]' : 'hover:bg-slate-100'}`}>
+            <button onClick={() => setMobileMenuOpen(false)} className={`p-2 rounded-xl ${darkMode ? 'hover:bg-[#334155]' : 'hover:bg-slate-100'}`} aria-label="Cerrar menu">
               <X className="w-5 h-5" />
             </button>
           </div>
-          <nav className="flex flex-col gap-2 flex-1">
-            {['Como funciona', 'Beneficios', 'Instituciones', 'Contacto'].map((item) => (
-              <a key={item} href={`#${item.toLowerCase().replace(' ', '-')}`}
-                onClick={() => setMobileMenuOpen(false)}
-                className={`px-4 py-3 rounded-xl font-medium transition-colors ${darkMode ? 'text-slate-300 hover:text-white hover:bg-[#334155]' : 'text-slate-700 hover:text-[#0D9488] hover:bg-[#F0FDFA]'}`}>
-                {item}
+          <nav className="flex flex-col gap-1 flex-1">
+            {NAV_LINKS.map((item) => (
+              <a
+                key={item.label}
+                href={item.href}
+                onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); scrollToSection(item.href); }}
+                className={`px-4 py-3 rounded-xl font-medium transition-colors ${activeSection === item.section ? (darkMode ? 'text-[#5EEAD4] bg-[#0D9488]/15' : 'text-[#0D9488] bg-[#F0FDFA]') : (darkMode ? 'text-slate-300 hover:text-white hover:bg-[#334155]' : 'text-slate-700 hover:text-[#0D9488] hover:bg-[#F0FDFA]')}`}
+              >
+                {item.label}
               </a>
             ))}
+            <a
+              href="/instituciones/acceso"
+              onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); window.history.pushState({}, '', '/instituciones/acceso'); window.dispatchEvent(new PopStateEvent('popstate')); }}
+              className={`px-4 py-3 rounded-xl font-medium transition-colors flex items-center gap-2 ${darkMode ? 'text-slate-300 hover:text-white hover:bg-[#334155]' : 'text-slate-700 hover:text-[#0D9488] hover:bg-[#F0FDFA]'}`}
+            >
+              <Lock className="w-4 h-4" />
+              Acceso Instituciones
+            </a>
           </nav>
           <button
             onClick={() => { setMobileMenuOpen(false); setView('student'); }}
@@ -168,7 +230,7 @@ function App() {
       </div>
 
       {/* Hero Section */}
-      <section className="relative pt-16 lg:pt-20 overflow-hidden">
+      <section id="inicio" className="relative pt-16 lg:pt-20 overflow-hidden">
         <div className={`absolute inset-0 ${darkMode
           ? 'bg-gradient-to-br from-[#0F172A] via-[#134E4A] to-[#1E293B]'
           : 'bg-gradient-to-br from-[#134E4A] via-[#0D9488] to-[#14B8A6]'
@@ -529,17 +591,19 @@ function App() {
             <div>
               <h4 className="font-semibold text-white mb-4">Plataforma</h4>
               <ul className="space-y-2">
-                {['Como funciona', 'Instituciones', 'Postulantes', 'Precios'].map((l) => (
-                  <li key={l}><a href="#" className="text-slate-400 hover:text-[#5EEAD4] transition-colors text-sm">{l}</a></li>
-                ))}
+                <li><a href="#como-funciona" onClick={(e) => { e.preventDefault(); scrollToSection('#como-funciona'); }} className="text-slate-400 hover:text-[#5EEAD4] transition-colors text-sm">Como funciona</a></li>
+                <li><a href="#instituciones" onClick={(e) => { e.preventDefault(); scrollToSection('#instituciones'); }} className="text-slate-400 hover:text-[#5EEAD4] transition-colors text-sm">Instituciones</a></li>
+                <li><button onClick={() => setView('student')} className="text-slate-400 hover:text-[#5EEAD4] transition-colors text-sm">Postulantes</button></li>
+                <li><a href="#beneficios" onClick={(e) => { e.preventDefault(); scrollToSection('#beneficios'); }} className="text-slate-400 hover:text-[#5EEAD4] transition-colors text-sm">Beneficios</a></li>
               </ul>
             </div>
             <div>
               <h4 className="font-semibold text-white mb-4">Soporte</h4>
               <ul className="space-y-2">
-                {['Centro de Ayuda', 'Privacidad', 'Terminos de Uso', 'Contacto'].map((l) => (
-                  <li key={l}><a href="#" className="text-slate-400 hover:text-[#5EEAD4] transition-colors text-sm">{l}</a></li>
-                ))}
+                <li><a href="#contacto" onClick={(e) => { e.preventDefault(); scrollToSection('#contacto'); }} className="text-slate-400 hover:text-[#5EEAD4] transition-colors text-sm">Contacto</a></li>
+                <li><a href="/instituciones/acceso" onClick={(e) => { e.preventDefault(); window.history.pushState({}, '', '/instituciones/acceso'); window.dispatchEvent(new PopStateEvent('popstate')); }} className="text-slate-400 hover:text-[#5EEAD4] transition-colors text-sm">Acceso Instituciones</a></li>
+                <li><button onClick={() => setView('student')} className="text-slate-400 hover:text-[#5EEAD4] transition-colors text-sm">Comenzar Ahora</button></li>
+                <li><a href="#inicio" onClick={(e) => { e.preventDefault(); scrollToSection('#inicio'); }} className="text-slate-400 hover:text-[#5EEAD4] transition-colors text-sm">Volver arriba</a></li>
               </ul>
             </div>
           </div>
@@ -549,6 +613,48 @@ function App() {
           </div>
         </div>
       </footer>
+
+      {/* Mobile Bottom Navigation */}
+      <div className={`fixed bottom-0 left-0 right-0 z-40 lg:hidden ${darkMode ? 'bg-[#1E293B]/95 border-t border-[#334155]' : 'bg-white/95 border-t border-slate-200'} backdrop-blur-xl`} style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
+        <div className="flex items-center justify-around px-2 py-2">
+          <button
+            onClick={() => scrollToSection('#inicio')}
+            className={`flex flex-col items-center gap-1 px-3 py-1.5 rounded-lg transition-colors ${activeSection === 'inicio' ? 'text-[#0D9488]' : darkMode ? 'text-slate-400' : 'text-slate-500'}`}
+          >
+            <Home className="w-5 h-5" />
+            <span className="text-[10px] font-medium">Inicio</span>
+          </button>
+          <button
+            onClick={() => scrollToSection('#como-funciona')}
+            className={`flex flex-col items-center gap-1 px-3 py-1.5 rounded-lg transition-colors ${activeSection === 'como-funciona' ? 'text-[#0D9488]' : darkMode ? 'text-slate-400' : 'text-slate-500'}`}
+          >
+            <Search className="w-5 h-5" />
+            <span className="text-[10px] font-medium">Como</span>
+          </button>
+          <button
+            onClick={() => setView('student')}
+            className="flex flex-col items-center gap-1 px-4 py-1.5 bg-[#0D9488] rounded-xl text-white shadow-lg shadow-[#0D9488]/25 -mt-3"
+          >
+            <GraduationCap className="w-6 h-6" />
+            <span className="text-[10px] font-semibold">Postular</span>
+          </button>
+          <button
+            onClick={() => scrollToSection('#instituciones')}
+            className={`flex flex-col items-center gap-1 px-3 py-1.5 rounded-lg transition-colors ${activeSection === 'instituciones' ? 'text-[#0D9488]' : darkMode ? 'text-slate-400' : 'text-slate-500'}`}
+          >
+            <Building2 className="w-5 h-5" />
+            <span className="text-[10px] font-medium">Instituciones</span>
+          </button>
+          <a
+            href="/instituciones/acceso"
+            onClick={(e) => { e.preventDefault(); window.history.pushState({}, '', '/instituciones/acceso'); window.dispatchEvent(new PopStateEvent('popstate')); }}
+            className={`flex flex-col items-center gap-1 px-3 py-1.5 rounded-lg transition-colors ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}
+          >
+            <Lock className="w-5 h-5" />
+            <span className="text-[10px] font-medium">Acceso</span>
+          </a>
+        </div>
+      </div>
     </div>
   );
 }
