@@ -3,6 +3,7 @@ import { InstitutionPanel } from './components/InstitutionPanel';
 import { StudentPanel } from './components/StudentPanel';
 import { AdminPanel } from './components/AdminPanel';
 import { InstitutionAccessPage } from './components/InstitutionAccessPage';
+import { OnboardingTutorial } from './components/OnboardingTutorial';
 import { EduConnetLogo } from './components/EduConnetLogo';
 import { useAuth } from './lib/auth';
 import {
@@ -46,6 +47,25 @@ function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   const [activeSection, setActiveSection] = useState('inicio');
+
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || (window.navigator as Navigator & { standalone?: boolean }).standalone === true;
+  const urlParams = new URLSearchParams(window.location.search);
+  const isPwaLaunch = isStandalone || urlParams.get('source') === 'pwa';
+  const [showTutorial, setShowTutorial] = useState(() => {
+    if (!isPwaLaunch) return false;
+    return localStorage.getItem('educonnet_tutorial_done') !== 'true';
+  });
+
+  const dismissTutorial = useCallback(() => {
+    localStorage.setItem('educonnet_tutorial_done', 'true');
+    setShowTutorial(false);
+  }, []);
+
+  useEffect(() => {
+    if (isPwaLaunch && view === 'home' && !showTutorial) {
+      setView('student');
+    }
+  }, [isPwaLaunch, view, showTutorial]);
 
   useEffect(() => {
     const onPop = () => setRoute(window.location.pathname);
@@ -100,6 +120,10 @@ function App() {
 
   if (route === '/instituciones/acceso') {
     return <InstitutionAccessPage />;
+  }
+
+  if (showTutorial) {
+    return <OnboardingTutorial onComplete={dismissTutorial} />;
   }
 
   if (loading) {

@@ -2,7 +2,7 @@
   "name": "EduConnet - Tu Futuro Educativo Comienza Aqui",
   "short_name": "EduConnet",
   "description": "Conecta instituciones educativas de excelencia con postulantes talentosos. Simplifica el proceso de admision y encuentra tu oportunidad.",
-  "start_url": "/",
+  "start_url": "/?source=pwa",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait-primary",
