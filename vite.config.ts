@@ -6,8 +6,8 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      registerType: 'prompt',
-      includeAssets: ['icon.svg', 'icon-maskable.svg', 'logo.png'],
+      registerType: 'autoUpdate',
+      includeAssets: ['icon.svg', 'icon-maskable.svg', 'logo.png', 'icon-192.png', 'icon-512.png', 'maskable-512.png'],
       manifest: {
         name: 'EduConnet - Tu Futuro Educativo Comienza Aqui',
         short_name: 'EduConnet',
@@ -15,6 +15,7 @@ export default defineConfig({
         start_url: '/?source=pwa',
         scope: '/',
         display: 'standalone',
+        display_override: ['standalone', 'fullscreen', 'minimal-ui'],
         orientation: 'portrait-primary',
         background_color: '#FEFEFF',
         theme_color: '#0D9488',
@@ -23,27 +24,27 @@ export default defineConfig({
         categories: ['education', 'productivity', 'utilities'],
         icons: [
           {
-            src: '/icon.svg',
-            sizes: 'any',
-            type: 'image/svg+xml',
-            purpose: 'any',
-          },
-          {
-            src: '/icon-maskable.svg',
-            sizes: 'any',
-            type: 'image/svg+xml',
-            purpose: 'maskable',
-          },
-          {
-            src: '/logo.png',
+            src: '/icon-192.png',
             sizes: '192x192',
             type: 'image/png',
             purpose: 'any',
           },
           {
-            src: '/logo.png',
+            src: '/icon-512.png',
             sizes: '512x512',
             type: 'image/png',
+            purpose: 'any',
+          },
+          {
+            src: '/maskable-512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'maskable',
+          },
+          {
+            src: '/icon.svg',
+            sizes: 'any',
+            type: 'image/svg+xml',
             purpose: 'any',
           },
         ],
@@ -53,22 +54,23 @@ export default defineConfig({
             short_name: 'Postular',
             description: 'Inicia tu proceso de postulacion',
             url: '/?source=pwa&view=student',
-            icons: [{ src: '/icon.svg', sizes: '96x96', type: 'image/svg+xml' }],
+            icons: [{ src: '/icon-192.png', sizes: '96x96', type: 'image/png' }],
           },
           {
             name: 'Acceso Instituciones',
             short_name: 'Instituciones',
             description: 'Panel de acceso para instituciones educativas',
             url: '/instituciones/acceso',
-            icons: [{ src: '/icon.svg', sizes: '96x96', type: 'image/svg+xml' }],
+            icons: [{ src: '/icon-192.png', sizes: '96x96', type: 'image/png' }],
           },
         ],
       },
       workboxConfig: {
-        globPatterns: ['**/*.{js,css,html,svg,png,ico}'],
+        globPatterns: ['**/*.{js,css,html,svg,png,ico,webmanifest}'],
         cleanupOutdatedCaches: true,
         clientsClaim: true,
-        skipWaiting: false,
+        skipWaiting: true,
+        maximumFileSizeToCacheInBytes: 6000000,
       },
       devOptions: {
         enabled: true,

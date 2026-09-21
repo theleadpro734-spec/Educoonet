@@ -1,1 +1,8 @@
-/*    /index.html   200
+/sw.js        /sw.js        200
+/workbox-*.js /workbox-*.js 200
+/manifest.webmanifest  /manifest.webmanifest  200
+/assets/*     /assets/*     200
+/icon.svg     /icon.svg     200
+/icon-maskable.svg  /icon-maskable.svg  200
+/logo.png     /logo.png     200
+/*            /index.html   200

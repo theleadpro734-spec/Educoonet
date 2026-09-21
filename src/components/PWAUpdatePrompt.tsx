@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useRegisterSW } from 'virtual:pwa-register/react';
-import { RefreshCw, X, Download } from 'lucide-react';
+import { RefreshCw, X, Download, CheckCircle2, Loader2 } from 'lucide-react';
+
+const UPDATE_INTERVAL = 60 * 60 * 1000;
 
 export function PWAUpdatePrompt() {
   const {
@@ -8,8 +10,12 @@ export function PWAUpdatePrompt() {
     offlineReady: [offlineReady, setOfflineReady],
     updateServiceWorker,
   } = useRegisterSW({
-    onRegisteredSW(url) {
-      console.log('SW registered', url);
+    onRegisteredSW(_url, registration) {
+      if (registration) {
+        setInterval(() => {
+          registration.update().catch(() => {});
+        }, UPDATE_INTERVAL);
+      }
     },
     onRegisterError(error) {
       console.error('SW registration error', error);
@@ -17,6 +23,7 @@ export function PWAUpdatePrompt() {
   });
 
   const [dismissed, setDismissed] = useState(false);
+  const [updating, setUpdating] = useState(false);
 
   const close = useCallback(() => {
     setDismissed(true);
@@ -25,6 +32,7 @@ export function PWAUpdatePrompt() {
   }, [setNeedRefresh, setOfflineReady]);
 
   const update = useCallback(() => {
+    setUpdating(true);
     updateServiceWorker(true);
   }, [updateServiceWorker]);
 
@@ -40,32 +48,43 @@ export function PWAUpdatePrompt() {
         <div className="pointer-events-auto max-w-md w-full bg-white rounded-2xl shadow-2xl border border-slate-200 p-4 animate-slide-up">
           <div className="flex items-start gap-3">
             <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#14B8A6] to-[#0D9488] flex items-center justify-center flex-shrink-0">
-              <Download className="w-5 h-5 text-white" />
+              {updating ? (
+                <Loader2 className="w-5 h-5 text-white animate-spin" />
+              ) : (
+                <Download className="w-5 h-5 text-white" />
+              )}
             </div>
             <div className="flex-1 min-w-0">
               <h3 className="font-bold text-slate-900 text-sm">Nueva version disponible</h3>
               <p className="text-slate-500 text-xs mt-0.5 leading-relaxed">
-                Hemos mejorado EduConnet. Actualiza para tener la ultima version con mejoras y correcciones.
+                {updating
+                  ? 'Actualizando... La app se reiniciara automaticamente en un momento.'
+                  : 'Hemos mejorado EduConnet. Actualiza para tener la ultima version con mejoras y correcciones.'}
               </p>
               <div className="flex items-center gap-2 mt-3">
                 <button
                   onClick={update}
-                  className="flex items-center gap-1.5 px-4 py-2 bg-[#0D9488] hover:bg-[#0F766E] text-white text-sm font-semibold rounded-xl transition-all btn-spring"
+                  disabled={updating}
+                  className="flex items-center gap-1.5 px-4 py-2 bg-[#0D9488] hover:bg-[#0F766E] text-white text-sm font-semibold rounded-xl transition-all btn-spring disabled:opacity-60 disabled:cursor-not-allowed"
                 >
-                  <RefreshCw className="w-4 h-4" />
-                  Actualizar ahora
+                  <RefreshCw className={`w-4 h-4 ${updating ? 'animate-spin' : ''}`} />
+                  {updating ? 'Actualizando...' : 'Actualizar ahora'}
                 </button>
-                <button
-                  onClick={close}
-                  className="px-3 py-2 text-slate-400 hover:text-slate-600 text-sm font-medium rounded-xl transition-colors"
-                >
-                  Mas tarde
-                </button>
+                {!updating && (
+                  <button
+                    onClick={close}
+                    className="px-3 py-2 text-slate-400 hover:text-slate-600 text-sm font-medium rounded-xl transition-colors"
+                  >
+                    Mas tarde
+                  </button>
+                )}
               </div>
             </div>
-            <button onClick={close} className="p-1 text-slate-300 hover:text-slate-500 transition-colors">
-              <X className="w-4 h-4" />
-            </button>
+            {!updating && (
+              <button onClick={close} className="p-1 text-slate-300 hover:text-slate-500 transition-colors">
+                <X className="w-4 h-4" />
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -78,7 +97,7 @@ export function PWAUpdatePrompt() {
         <div className="pointer-events-auto max-w-md w-full bg-white rounded-2xl shadow-2xl border border-slate-200 p-4 animate-slide-up">
           <div className="flex items-start gap-3">
             <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#14B8A6] to-[#0D9488] flex items-center justify-center flex-shrink-0">
-              <Download className="w-5 h-5 text-white" />
+              <CheckCircle2 className="w-5 h-5 text-white" />
             </div>
             <div className="flex-1 min-w-0">
               <h3 className="font-bold text-slate-900 text-sm">App lista para usar sin conexion</h3>
