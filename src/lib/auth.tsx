@@ -32,9 +32,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [institution, setInstitution] = useState<InstitutionInfo | null>(null);
 
   const ensureAnonymous = useCallback(async () => {
-    const { data } = await supabase.auth.getUser();
-    if (!data.user) {
-      await supabase.auth.signInAnonymously();
+    try {
+      const { data } = await supabase.auth.getUser();
+      if (!data.user) {
+        const { error } = await supabase.auth.signInAnonymously();
+        if (error) {
+          console.warn('Anonymous sign-in unavailable, continuing without session');
+        }
+      }
+    } catch {
+      console.warn('Auth check failed, continuing without session');
     }
   }, []);
 
