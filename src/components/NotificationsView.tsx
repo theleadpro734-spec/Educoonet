@@ -39,13 +39,19 @@ const typeConfig = {
 };
 
 export function NotificationsView({ onBack, onNavigate }: NotificationsViewProps) {
-  const { user } = useAuth();
+  const { user, isLocalUser } = useAuth();
   const userId = user?.id;
+  const isLocal = isLocalUser;
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<'all' | 'unread'>('all');
 
   const fetchNotifications = useCallback(async () => {
+    if (isLocal) {
+      setNotifications([]);
+      setLoading(false);
+      return;
+    }
     if (!userId) { setLoading(false); return; }
     setLoading(true);
     const { data } = await supabase
@@ -56,7 +62,7 @@ export function NotificationsView({ onBack, onNavigate }: NotificationsViewProps
 
     if (data) setNotifications(data as Notification[]);
     setLoading(false);
-  }, [userId]);
+  }, [userId, isLocal]);
 
   useEffect(() => {
     fetchNotifications();

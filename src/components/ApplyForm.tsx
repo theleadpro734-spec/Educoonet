@@ -71,7 +71,7 @@ export function ApplyForm({
   onBack,
   onSuccess,
 }: ApplyFormProps) {
-  const { user } = useAuth();
+  const { user, isLocalUser } = useAuth();
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [currentStep, setCurrentStep] = useState(1);
@@ -155,13 +155,25 @@ export function ApplyForm({
 
     setSubmitting(true);
 
-    const { data: existing } = await supabase
-      .from('applications')
-      .select('id, status')
-      .eq('institution_id', institutionId)
-      .eq('user_id', user?.id)
-      .in('status', ['pendiente', 'aceptada'])
-      .maybeSingle();
+    let existingCheck;
+    if (isLocalUser && form.email) {
+      existingCheck = await supabase
+        .from('applications')
+        .select('id, status')
+        .eq('institution_id', institutionId)
+        .eq('email', form.email.trim().toLowerCase())
+        .in('status', ['pendiente', 'aceptada'])
+        .maybeSingle();
+    } else {
+      existingCheck = await supabase
+        .from('applications')
+        .select('id, status')
+        .eq('institution_id', institutionId)
+        .eq('user_id', user?.id)
+        .in('status', ['pendiente', 'aceptada'])
+        .maybeSingle();
+    }
+    const { data: existing } = existingCheck;
 
     if (existing) {
       setSubmitting(false);

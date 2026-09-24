@@ -9,11 +9,28 @@ export interface InstitutionInfo {
   owner_id: string;
 }
 
+const LOCAL_USER_KEY = 'educonnet_local_user';
+const LOCAL_USER_EMAIL_KEY = 'educonnet_local_email';
+
+function getOrCreateLocalUser(): { id: string; email: string } {
+  const existing = localStorage.getItem(LOCAL_USER_KEY);
+  if (existing) {
+    const email = localStorage.getItem(LOCAL_USER_EMAIL_KEY) || '';
+    return { id: existing, email };
+  }
+  const id = crypto.randomUUID();
+  localStorage.setItem(LOCAL_USER_KEY, id);
+  const email = `guest-${id.slice(0, 8)}@educonnet.local`;
+  localStorage.setItem(LOCAL_USER_EMAIL_KEY, email);
+  return { id, email };
+}
+
 interface AuthContextValue {
   session: Session | null;
-  user: User | null;
+  user: (User & { is_local?: boolean }) | null;
   loading: boolean;
   isAnonymous: boolean;
+  isLocalUser: boolean;
   isRepresentative: boolean;
   isInstitution: boolean;
   institution: InstitutionInfo | null;
@@ -30,6 +47,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const [institution, setInstitution] = useState<InstitutionInfo | null>(null);
+  const [localUser, setLocalUser] = useState<{ id: string; email: string } | null>(null);
 
   const ensureAnonymous = useCallback(async () => {
     try {
@@ -37,11 +55,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (!data.user) {
         const { error } = await supabase.auth.signInAnonymously();
         if (error) {
-          console.warn('Anonymous sign-in unavailable, continuing without session');
+          const local = getOrCreateLocalUser();
+          setLocalUser(local);
         }
       }
     } catch {
-      console.warn('Auth check failed, continuing without session');
+      const local = getOrCreateLocalUser();
+      setLocalUser(local);
     }
   }, []);
 
@@ -83,13 +103,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           .finally(() => { if (mounted) setLoading(false); });
       }
     }).catch(() => {
-      if (mounted) setLoading(false);
+      if (mounted) {
+        const local = getOrCreateLocalUser();
+        setLocalUser(local);
+        setLoading(false);
+      }
     });
 
     const { data: listener } = supabase.auth.onAuthStateChange((_event, newSession) => {
       (async () => {
         setSession(newSession);
         if (newSession) {
+          setLocalUser(null);
           await refreshInstitution();
         } else {
           setInstitution(null);
@@ -108,8 +133,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signOut = useCallback(async () => {
     await supabase.auth.signOut();
     setInstitution(null);
-    await ensureAnonymous();
-  }, [ensureAnonymous]);
+    localStorage.removeItem(LOCAL_USER_KEY);
+    localStorage.removeItem(LOCAL_USER_EMAIL_KEY);
+    const local = getOrCreateLocalUser();
+    setLocalUser(local);
+  }, []);
 
   const linkToEmail = useCallback(async (email: string, password: string): Promise<{ error: string | null }> => {
     const { data: userData } = await supabase.auth.getUser();
@@ -157,13 +185,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       await supabase.auth.signOut();
       return { error: 'Esta cuenta no tiene una institucion asociada.' };
     }
+    setLocalUser(null);
     setInstitution(instData[0] as InstitutionInfo);
     return { error: null };
   }, []);
 
-  const user = session?.user ?? null;
-  const isAnonymous = user?.is_anonymous === true;
-  const isRepresentative = isAnonymous || (user !== null && !institution);
+  const rawUser = session?.user ?? null;
+  const isLocalUser = localUser !== null && !rawUser;
+  const localUserObj: (User & { is_local?: boolean }) | null = localUser
+    ? {
+        id: localUser.id,
+        email: localUser.email,
+        aud: 'authenticated',
+        role: 'authenticated',
+        app_metadata: {},
+        user_metadata: {},
+        identities: [],
+        created_at: new Date().toISOString(),
+        is_local: true,
+      }
+    : null;
+  const user = rawUser ?? localUserObj;
+
+  const isAnonymous = rawUser?.is_anonymous === true;
+  const isRepresentative = isAnonymous || isLocalUser || (rawUser !== null && !institution);
   const isInstitution = institution !== null;
 
   return (
@@ -173,6 +218,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         user,
         loading,
         isAnonymous,
+        isLocalUser,
         isRepresentative,
         isInstitution,
         institution,

@@ -23,7 +23,7 @@ type View =
   | 'settings';
 
 export function StudentPanel({ onExit }: StudentPanelProps) {
-  const { user, isAnonymous, signOut } = useAuth();
+  const { user, isAnonymous, isLocalUser, signOut } = useAuth();
   const [view, setView] = useState<View>('dashboard');
   const [institution, setInstitution] = useState<Institution | null>(null);
   const [applications, setApplications] = useState<Application[]>([]);
@@ -36,8 +36,10 @@ export function StudentPanel({ onExit }: StudentPanelProps) {
 
   const userId = user?.id;
   const studentEmail = user?.email || '';
+  const isLocal = isLocalUser;
 
   const fetchUnreadNotifications = async () => {
+    if (isLocal) { setUnreadNotifications(0); return; }
     if (!userId) return;
     const { count } = await supabase
       .from('notifications')
@@ -56,11 +58,17 @@ export function StudentPanel({ onExit }: StudentPanelProps) {
         .select('*')
         .eq('id', INSTITUTION_ID)
         .maybeSingle(),
-      supabase
-        .from('applications')
-        .select('*, institutions(name)')
-        .eq('user_id', userId)
-        .order('created_at', { ascending: false }),
+      isLocal
+        ? supabase
+            .from('applications')
+            .select('*, institutions(name)')
+            .eq('email', studentEmail)
+            .order('created_at', { ascending: false })
+        : supabase
+            .from('applications')
+            .select('*, institutions(name)')
+            .eq('user_id', userId)
+            .order('created_at', { ascending: false }),
     ]);
 
     if (instRes.data) setInstitution(instRes.data);
@@ -113,7 +121,7 @@ export function StudentPanel({ onExit }: StudentPanelProps) {
 
   const studentName = user?.user_metadata?.full_name || 'Postulante';
 
-  if (loading || !userId) {
+  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50">
         <div className="text-center">
@@ -204,6 +212,7 @@ export function StudentPanel({ onExit }: StudentPanelProps) {
         studentName={studentName}
         studentEmail={studentEmail}
         isAnonymous={isAnonymous}
+        isLocal={isLocal}
         onBack={() => setView('dashboard')}
         onExit={async () => { await signOut(); onExit(); }}
         onLinkAccount={() => setShowLinkModal(true)}
@@ -418,6 +427,7 @@ function StudentSettingsView({
   studentName,
   studentEmail,
   isAnonymous,
+  isLocal,
   onBack,
   onExit,
   onLinkAccount,
@@ -425,6 +435,7 @@ function StudentSettingsView({
   studentName: string;
   studentEmail: string;
   isAnonymous: boolean;
+  isLocal: boolean;
   onBack: () => void;
   onExit: () => void;
   onLinkAccount: () => void;
@@ -453,13 +464,13 @@ function StudentSettingsView({
               <h2 className="text-lg font-semibold text-slate-900 truncate">{studentName}</h2>
               <p className="text-sm text-slate-500 truncate">{studentEmail || 'Sesion anonima'}</p>
               <p className="text-xs text-[#0D9488] font-medium mt-1">
-                {isAnonymous ? 'Postulante (sin cuenta vinculada)' : 'Postulante'}
+                {isAnonymous || isLocal ? 'Postulante (sin cuenta vinculada)' : 'Postulante'}
               </p>
             </div>
           </div>
         </div>
 
-        {isAnonymous && (
+        {(isAnonymous || isLocal) && (
           <div className="bg-gradient-to-br from-[#0D9488] to-[#134E4A] rounded-2xl p-6 shadow-lg">
             <div className="flex items-start gap-3 mb-4">
               <div className="w-10 h-10 bg-white/15 rounded-xl flex items-center justify-center flex-shrink-0">
@@ -468,7 +479,7 @@ function StudentSettingsView({
               <div>
                 <h3 className="font-semibold text-white">Guarda tu cuenta</h3>
                 <p className="text-sm text-[#99F6E4] mt-1">
-                  Estás usando una sesion anonima. Vincula tu correo o Google para no perder tus postulaciones al cambiar de dispositivo.
+                  Estás usando una sesion de invitado. Vincula tu correo o Google para no perder tus postulaciones al cambiar de dispositivo.
                 </p>
               </div>
             </div>
