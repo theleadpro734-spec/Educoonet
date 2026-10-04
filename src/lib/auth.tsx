@@ -11,16 +11,26 @@ export interface InstitutionInfo {
 
 const LOCAL_USER_KEY = 'educonnet_local_user';
 const LOCAL_USER_EMAIL_KEY = 'educonnet_local_email';
+const LOCAL_STUDENT_EMAIL_KEY = 'educonnet_student_email';
+
+export function setStudentEmail(email: string) {
+  localStorage.setItem(LOCAL_STUDENT_EMAIL_KEY, email.trim().toLowerCase());
+}
+
+export function getStudentEmail(): string | null {
+  return localStorage.getItem(LOCAL_STUDENT_EMAIL_KEY);
+}
 
 function getOrCreateLocalUser(): { id: string; email: string } {
   const existing = localStorage.getItem(LOCAL_USER_KEY);
+  const studentEmail = localStorage.getItem(LOCAL_STUDENT_EMAIL_KEY);
   if (existing) {
-    const email = localStorage.getItem(LOCAL_USER_EMAIL_KEY) || '';
+    const email = studentEmail || localStorage.getItem(LOCAL_USER_EMAIL_KEY) || '';
     return { id: existing, email };
   }
   const id = crypto.randomUUID();
   localStorage.setItem(LOCAL_USER_KEY, id);
-  const email = `guest-${id.slice(0, 8)}@educonnet.local`;
+  const email = studentEmail || `guest-${id.slice(0, 8)}@educonnet.local`;
   localStorage.setItem(LOCAL_USER_EMAIL_KEY, email);
   return { id, email };
 }

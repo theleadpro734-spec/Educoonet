@@ -7,7 +7,7 @@ import { InstitutionProfile } from './InstitutionProfile';
 import { MessagingView } from './MessagingView';
 import { ApplicationDetailModal } from './ApplicationDetailModal';
 import { NotificationsView } from './NotificationsView';
-import { ArrowLeft, RefreshCw, Building2, Users, Bell, LogOut, Shield, HelpCircle, Eye } from 'lucide-react';
+import { ArrowLeft, RefreshCw, Building2, Users, Bell, LogOut, Shield, HelpCircle, Eye, MessageSquare } from 'lucide-react';
 
 interface InstitutionPanelProps {
   onExit: () => void;
@@ -146,6 +146,10 @@ export function InstitutionPanel({ onExit }: InstitutionPanelProps) {
         updatingId={updatingId}
         onRefresh={handleRefresh}
         institutionName={institution.name}
+        onMessage={(appId) => {
+          setMessageState({ selectedApplicationId: appId });
+          setView('messages');
+        }}
       />
     );
   }
@@ -221,6 +225,7 @@ function ApplicationsListView({
   updatingId,
   onRefresh,
   institutionName,
+  onMessage,
 }: {
   onBack: () => void;
   applications: Application[];
@@ -228,6 +233,7 @@ function ApplicationsListView({
   updatingId: string | null;
   onRefresh: () => void;
   institutionName: string;
+  onMessage: (appId: string) => void;
 }) {
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [detailApp, setDetailApp] = useState<Application | null>(null);
@@ -411,31 +417,17 @@ function ApplicationsListView({
                           <div className="flex items-center gap-2 flex-wrap">
                             <button
                               onClick={() => setDetailApp(app)}
-                              className="flex items-center gap-1.5 px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-medium rounded-lg transition-colors"
+                              className="flex items-center gap-1.5 px-3 py-2 bg-slate-900 hover:bg-slate-800 text-white text-sm font-medium rounded-lg transition-colors"
                             >
                               <Eye className="w-4 h-4" />
-                              Ver Formulario
+                              Ver Detalle
                             </button>
                             <button
-                              onClick={() => onUpdateStatus(app.id, 'aceptada')}
-                              disabled={isUpdating}
-                              className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-lg transition-colors disabled:opacity-50 shadow-sm"
+                              onClick={() => onMessage(app.id)}
+                              className="flex items-center gap-1.5 px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-medium rounded-lg transition-colors"
                             >
-                              Aceptar
-                            </button>
-                            <button
-                              onClick={() => onUpdateStatus(app.id, 'rechazada')}
-                              disabled={isUpdating}
-                              className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors disabled:opacity-50 shadow-sm"
-                            >
-                              Rechazar
-                            </button>
-                            <button
-                              onClick={() => onUpdateStatus(app.id, 'pendiente')}
-                              disabled={isUpdating}
-                              className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-medium rounded-lg transition-colors disabled:opacity-50"
-                            >
-                              Pendiente
+                              <MessageSquare className="w-4 h-4" />
+                              Mensaje
                             </button>
                           </div>
                         </div>
@@ -453,6 +445,9 @@ function ApplicationsListView({
         <ApplicationDetailModal
           application={detailApp}
           onClose={() => setDetailApp(null)}
+          onUpdateStatus={onUpdateStatus}
+          onMessage={onMessage}
+          updating={updatingId === detailApp.id}
         />
       )}
     </div>

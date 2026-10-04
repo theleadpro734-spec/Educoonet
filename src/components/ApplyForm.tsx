@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { supabase } from '../lib/supabase';
-import { useAuth } from '../lib/auth';
+import { useAuth, setStudentEmail } from '../lib/auth';
 import { FileUpload } from './FileUpload';
 import { ArrowLeft, FileText, User, MapPin, Heart, Upload, CheckCircle, AlertCircle } from 'lucide-react';
 
@@ -218,6 +218,8 @@ export function ApplyForm({
       setError(friendly);
       return;
     }
+
+    setStudentEmail(form.email);
 
     await supabase.rpc('notify_new_application', { p_application_id: insertedApp.id });
 
