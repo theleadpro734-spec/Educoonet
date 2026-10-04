@@ -4,16 +4,17 @@ import { StudentPanel } from './components/StudentPanel';
 import { AdminPanel } from './components/AdminPanel';
 import { InstitutionAccessPage } from './components/InstitutionAccessPage';
 import { OnboardingTutorial } from './components/OnboardingTutorial';
+import { LandingPage } from './components/LandingPage';
 import { EduConnetLogo } from './components/EduConnetLogo';
 import { useAuth } from './lib/auth';
-import { X, Building2, GraduationCap, ArrowRight, FlaskConical } from 'lucide-react';
+import { X, GraduationCap, ArrowRight, FlaskConical } from 'lucide-react';
 
-type View = 'institution' | 'student' | 'admin' | 'role-select';
+type View = 'institution' | 'student' | 'admin' | 'role-select' | 'landing';
 
 function App() {
   const [route, setRoute] = useState(window.location.pathname);
   const { loading, isInstitution, signOut } = useAuth();
-  const [view, setView] = useState<View>('role-select');
+  const [view, setView] = useState<View>('landing');
   const [showBetaBanner, setShowBetaBanner] = useState(
     () => localStorage.getItem('educonnet_beta_dismissed') !== 'true'
   );
@@ -50,6 +51,7 @@ function App() {
     }
   }, [loading, isInstitution]);
 
+  // Secret institution access via URL
   if (route === '/instituciones/acceso') {
     return <InstitutionAccessPage />;
   }
@@ -73,7 +75,7 @@ function App() {
     return (
       <div>
         {showBetaBanner && <BetaBanner onDismiss={dismissBetaBanner} />}
-        <InstitutionPanel onExit={async () => { await signOut(); setView('role-select'); }} />
+        <InstitutionPanel onExit={async () => { await signOut(); setView('landing'); }} />
       </div>
     );
   }
@@ -82,7 +84,7 @@ function App() {
     return (
       <div>
         {showBetaBanner && <BetaBanner onDismiss={dismissBetaBanner} />}
-        <StudentPanel onExit={() => setView('role-select')} />
+        <StudentPanel onExit={() => setView('landing')} />
       </div>
     );
   }
@@ -91,73 +93,65 @@ function App() {
     return (
       <div>
         {showBetaBanner && <BetaBanner onDismiss={dismissBetaBanner} />}
-        <AdminPanel onExit={() => setView('role-select')} />
+        <AdminPanel onExit={() => setView('landing')} />
+      </div>
+    );
+  }
+
+  if (view === 'role-select') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-[#134E4A] via-[#0D9488] to-[#14B8A6] flex items-center justify-center p-4">
+        {showBetaBanner && <BetaBanner onDismiss={dismissBetaBanner} />}
+
+        <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-[#14B8A6]/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-1/4 w-64 h-64 bg-[#5EEAD4]/15 rounded-full blur-2xl pointer-events-none" />
+
+        <div className="relative w-full max-w-md animate-scale-in">
+          <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-8 shadow-2xl">
+            <div className="flex flex-col items-center text-center mb-8">
+              <div className="mb-5">
+                <EduConnetLogo size="lg" variant="dark" />
+              </div>
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#5EEAD4]/20 border border-[#5EEAD4]/30 rounded-full mb-4">
+                <FlaskConical className="w-3.5 h-3.5 text-[#5EEAD4]" />
+                <span className="text-xs font-semibold text-[#99F6E4]">Version Beta</span>
+              </div>
+              <h1 className="text-2xl font-bold text-white mb-2">Selecciona tu rol</h1>
+              <p className="text-[#99F6E4] text-sm leading-relaxed max-w-xs">
+                Elige como quieres continuar en EduConnet.
+              </p>
+            </div>
+
+            <div className="space-y-3">
+              <button
+                onClick={() => setView('student')}
+                className="w-full flex items-center gap-4 p-5 bg-white hover:bg-[#F0FDFA] text-[#0D9488] font-bold rounded-2xl transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 group"
+              >
+                <div className="w-12 h-12 bg-gradient-to-br from-[#14B8A6] to-[#0D9488] rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
+                  <GraduationCap className="w-6 h-6 text-white" />
+                </div>
+                <div className="flex-1 text-left">
+                  <p className="text-base font-bold">Soy Postulante</p>
+                  <p className="text-xs text-slate-500 font-normal">Postula a instituciones</p>
+                </div>
+                <ArrowRight className="w-5 h-5 text-[#0D9488] group-hover:translate-x-1 transition-transform" />
+              </button>
+
+              <button
+                onClick={() => setView('landing')}
+                className="w-full py-3 text-white/70 hover:text-white text-sm font-medium transition-colors"
+              >
+                Volver al inicio
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#134E4A] via-[#0D9488] to-[#14B8A6] flex items-center justify-center p-4">
-      {showBetaBanner && <BetaBanner onDismiss={dismissBetaBanner} />}
-
-      <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-[#14B8A6]/20 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 left-1/4 w-64 h-64 bg-[#5EEAD4]/15 rounded-full blur-2xl pointer-events-none" />
-
-      <div className="relative w-full max-w-md animate-scale-in">
-        <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-8 shadow-2xl">
-          <div className="flex flex-col items-center text-center mb-8">
-            <div className="mb-5">
-              <EduConnetLogo size="lg" variant="dark" />
-            </div>
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#5EEAD4]/20 border border-[#5EEAD4]/30 rounded-full mb-4">
-              <FlaskConical className="w-3.5 h-3.5 text-[#5EEAD4]" />
-              <span className="text-xs font-semibold text-[#99F6E4]">Version Beta</span>
-            </div>
-            <h1 className="text-2xl font-bold text-white mb-2">Bienvenido a EduConnet</h1>
-            <p className="text-[#99F6E4] text-sm leading-relaxed max-w-xs">
-              Conecta instituciones educativas de excelencia con postulantes talentosos.
-            </p>
-          </div>
-
-          <div className="space-y-3">
-            <button
-              onClick={() => setView('student')}
-              className="w-full flex items-center gap-4 p-5 bg-white hover:bg-[#F0FDFA] text-[#0D9488] font-bold rounded-2xl transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 group"
-            >
-              <div className="w-12 h-12 bg-gradient-to-br from-[#14B8A6] to-[#0D9488] rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
-                <GraduationCap className="w-6 h-6 text-white" />
-              </div>
-              <div className="flex-1 text-left">
-                <p className="text-base font-bold">Soy Postulante</p>
-                <p className="text-xs text-slate-500 font-normal">Explora y postula a instituciones</p>
-              </div>
-              <ArrowRight className="w-5 h-5 text-[#0D9488] group-hover:translate-x-1 transition-transform" />
-            </button>
-
-            <button
-              onClick={() => {
-                window.history.pushState({}, '', '/instituciones/acceso');
-                window.dispatchEvent(new PopStateEvent('popstate'));
-              }}
-              className="w-full flex items-center gap-4 p-5 bg-white/10 hover:bg-white/15 text-white font-bold rounded-2xl transition-all border border-white/20 hover:border-white/30 group"
-            >
-              <div className="w-12 h-12 bg-white/15 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
-                <Building2 className="w-6 h-6 text-white" />
-              </div>
-              <div className="flex-1 text-left">
-                <p className="text-base font-bold">Soy Institucion</p>
-                <p className="text-xs text-[#99F6E4] font-normal">Gestiona postulaciones recibidas</p>
-              </div>
-              <ArrowRight className="w-5 h-5 text-white group-hover:translate-x-1 transition-transform" />
-            </button>
-          </div>
-
-          <p className="text-center text-[#5EEAD4]/60 text-xs mt-6">
-            Al continuar aceptas usar una version en desarrollo.
-          </p>
-        </div>
-      </div>
-    </div>
+    <LandingPage onEnterStudent={() => setView('student')} />
   );
 }
 
