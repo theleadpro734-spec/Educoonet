@@ -94,6 +94,7 @@ export interface Application {
   name: string;
   last_name: string | null;
   email: string;
+  contact_email: string | null;
   phone: string;
   address: string | null;
   educational_level: string;

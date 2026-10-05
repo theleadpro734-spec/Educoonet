@@ -64,7 +64,7 @@ function App() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50">
         <div className="text-center">
-          <div className="w-12 h-12 border-[3px] border-slate-200 border-t-[#0D9488] rounded-full animate-spin mx-auto" />
+          <div className="w-12 h-12 border-[3px] border-slate-200 border-t-[#2563EB] rounded-full animate-spin mx-auto" />
           <p className="mt-4 text-slate-500">Cargando EduConnet...</p>
         </div>
       </div>
@@ -100,11 +100,11 @@ function App() {
 
   if (view === 'role-select') {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#134E4A] via-[#0D9488] to-[#14B8A6] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-[#1E3A8A] via-[#2563EB] to-[#3B82F6] flex items-center justify-center p-4">
         {showBetaBanner && <BetaBanner onDismiss={dismissBetaBanner} />}
 
-        <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-[#14B8A6]/20 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-1/4 w-64 h-64 bg-[#5EEAD4]/15 rounded-full blur-2xl pointer-events-none" />
+        <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-[#3B82F6]/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-1/4 w-64 h-64 bg-[#93C5FD]/15 rounded-full blur-2xl pointer-events-none" />
 
         <div className="relative w-full max-w-md animate-scale-in">
           <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-8 shadow-2xl">
@@ -112,12 +112,12 @@ function App() {
               <div className="mb-5">
                 <EduConnetLogo size="lg" variant="dark" />
               </div>
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#5EEAD4]/20 border border-[#5EEAD4]/30 rounded-full mb-4">
-                <FlaskConical className="w-3.5 h-3.5 text-[#5EEAD4]" />
-                <span className="text-xs font-semibold text-[#99F6E4]">Version Beta</span>
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#93C5FD]/20 border border-[#93C5FD]/30 rounded-full mb-4">
+                <FlaskConical className="w-3.5 h-3.5 text-[#93C5FD]" />
+                <span className="text-xs font-semibold text-[#BFDBFE]">Version Beta</span>
               </div>
               <h1 className="text-2xl font-bold text-white mb-2">Selecciona tu rol</h1>
-              <p className="text-[#99F6E4] text-sm leading-relaxed max-w-xs">
+              <p className="text-[#BFDBFE] text-sm leading-relaxed max-w-xs">
                 Elige como quieres continuar en EduConnet.
               </p>
             </div>
@@ -125,16 +125,16 @@ function App() {
             <div className="space-y-3">
               <button
                 onClick={() => setView('student')}
-                className="w-full flex items-center gap-4 p-5 bg-white hover:bg-[#F0FDFA] text-[#0D9488] font-bold rounded-2xl transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 group"
+                className="w-full flex items-center gap-4 p-5 bg-white hover:bg-[#EFF6FF] text-[#2563EB] font-bold rounded-2xl transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 group"
               >
-                <div className="w-12 h-12 bg-gradient-to-br from-[#14B8A6] to-[#0D9488] rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
+                <div className="w-12 h-12 bg-gradient-to-br from-[#3B82F6] to-[#2563EB] rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
                   <GraduationCap className="w-6 h-6 text-white" />
                 </div>
                 <div className="flex-1 text-left">
                   <p className="text-base font-bold">Soy Postulante</p>
                   <p className="text-xs text-slate-500 font-normal">Postula a instituciones</p>
                 </div>
-                <ArrowRight className="w-5 h-5 text-[#0D9488] group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="w-5 h-5 text-[#2563EB] group-hover:translate-x-1 transition-transform" />
               </button>
 
               <button

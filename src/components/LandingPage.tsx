@@ -34,14 +34,14 @@ export function LandingPage({ onEnterStudent }: LandingPageProps) {
               <EduConnetLogo size="sm" variant="light" />
             </div>
             <div className="hidden md:flex items-center gap-8">
-              <a href="#features" className="text-sm font-medium text-slate-600 hover:text-[#0D9488] transition-colors">Funcionalidades</a>
-              <a href="#how" className="text-sm font-medium text-slate-600 hover:text-[#0D9488] transition-colors">Como funciona</a>
-              <a href="#about" className="text-sm font-medium text-slate-600 hover:text-[#0D9488] transition-colors">Acerca de</a>
+              <a href="#features" className="text-sm font-medium text-slate-600 hover:text-[#2563EB] transition-colors">Funcionalidades</a>
+              <a href="#how" className="text-sm font-medium text-slate-600 hover:text-[#2563EB] transition-colors">Como funciona</a>
+              <a href="#about" className="text-sm font-medium text-slate-600 hover:text-[#2563EB] transition-colors">Acerca de</a>
             </div>
             <div className="hidden md:flex items-center gap-3">
               <button
                 onClick={onEnterStudent}
-                className="px-5 py-2.5 bg-[#0D9488] hover:bg-[#0F766E] text-white text-sm font-semibold rounded-xl transition-all shadow-lg shadow-[#0D9488]/20 hover:shadow-xl hover:-translate-y-0.5"
+                className="px-5 py-2.5 bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-sm font-semibold rounded-xl transition-all shadow-lg shadow-[#2563EB]/20 hover:shadow-xl hover:-translate-y-0.5"
               >
                 Comenzar ahora
               </button>
@@ -56,12 +56,12 @@ export function LandingPage({ onEnterStudent }: LandingPageProps) {
         </div>
         {menuOpen && (
           <div className="md:hidden bg-white border-t border-slate-100 px-4 py-4 space-y-3 animate-fade-in">
-            <a href="#features" onClick={() => setMenuOpen(false)} className="block text-sm font-medium text-slate-600 hover:text-[#0D9488]">Funcionalidades</a>
-            <a href="#how" onClick={() => setMenuOpen(false)} className="block text-sm font-medium text-slate-600 hover:text-[#0D9488]">Como funciona</a>
-            <a href="#about" onClick={() => setMenuOpen(false)} className="block text-sm font-medium text-slate-600 hover:text-[#0D9488]">Acerca de</a>
+            <a href="#features" onClick={() => setMenuOpen(false)} className="block text-sm font-medium text-slate-600 hover:text-[#2563EB]">Funcionalidades</a>
+            <a href="#how" onClick={() => setMenuOpen(false)} className="block text-sm font-medium text-slate-600 hover:text-[#2563EB]">Como funciona</a>
+            <a href="#about" onClick={() => setMenuOpen(false)} className="block text-sm font-medium text-slate-600 hover:text-[#2563EB]">Acerca de</a>
             <button
               onClick={() => { setMenuOpen(false); onEnterStudent(); }}
-              className="w-full px-5 py-2.5 bg-[#0D9488] text-white text-sm font-semibold rounded-xl"
+              className="w-full px-5 py-2.5 bg-[#2563EB] text-white text-sm font-semibold rounded-xl"
             >
               Comenzar ahora
             </button>
@@ -71,19 +71,19 @@ export function LandingPage({ onEnterStudent }: LandingPageProps) {
 
       {/* Hero */}
       <section className="relative pt-32 pb-20 overflow-hidden">
-        <div className="absolute top-1/4 right-1/4 w-[500px] h-[500px] bg-[#14B8A6]/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-1/4 w-72 h-72 bg-[#5EEAD4]/8 rounded-full blur-2xl pointer-events-none" />
+        <div className="absolute top-1/4 right-1/4 w-[500px] h-[500px] bg-[#3B82F6]/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-1/4 w-72 h-72 bg-[#93C5FD]/8 rounded-full blur-2xl pointer-events-none" />
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="animate-fade-in">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#F0FDFA] border border-[#99F6E4]/40 rounded-full mb-6">
-                <Sparkles className="w-3.5 h-3.5 text-[#0D9488]" />
-                <span className="text-xs font-semibold text-[#0F766E]">Plataforma educativa digital</span>
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#EFF6FF] border border-[#BFDBFE]/40 rounded-full mb-6">
+                <Sparkles className="w-3.5 h-3.5 text-[#2563EB]" />
+                <span className="text-xs font-semibold text-[#1D4ED8]">Plataforma educativa digital</span>
               </div>
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 leading-[1.1] tracking-tight">
                 Conecta talento con{' '}
-                <span className="text-[#0D9488]">instituciones</span> de excelencia
+                <span className="text-[#2563EB]">instituciones</span> de excelencia
               </h1>
               <p className="mt-6 text-lg text-slate-600 leading-relaxed max-w-xl">
                 EduConnet digitaliza el proceso de admision. Postula a instituciones educativas, gestiona tus documentos y recibe respuestas en tiempo real, todo desde un solo lugar.
@@ -91,7 +91,7 @@ export function LandingPage({ onEnterStudent }: LandingPageProps) {
               <div className="mt-8 flex flex-col sm:flex-row gap-4">
                 <button
                   onClick={onEnterStudent}
-                  className="px-7 py-3.5 bg-[#0D9488] hover:bg-[#0F766E] text-white font-semibold rounded-2xl transition-all shadow-xl shadow-[#0D9488]/25 hover:shadow-2xl hover:-translate-y-0.5 flex items-center justify-center gap-2 group"
+                  className="px-7 py-3.5 bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-semibold rounded-2xl transition-all shadow-xl shadow-[#2563EB]/25 hover:shadow-2xl hover:-translate-y-0.5 flex items-center justify-center gap-2 group"
                 >
                   Soy Postulante
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -105,11 +105,11 @@ export function LandingPage({ onEnterStudent }: LandingPageProps) {
               </div>
               <div className="mt-10 flex items-center gap-6 text-sm text-slate-500">
                 <div className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-[#0D9488]" />
+                  <CheckCircle className="w-4 h-4 text-[#2563EB]" />
                   Sin costos ocultos
                 </div>
                 <div className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-[#0D9488]" />
+                  <CheckCircle className="w-4 h-4 text-[#2563EB]" />
                   100% digital
                 </div>
               </div>
@@ -118,7 +118,7 @@ export function LandingPage({ onEnterStudent }: LandingPageProps) {
             {/* Hero visual */}
             <div className="relative animate-slide-up" style={{ animationDelay: '0.15s' }}>
               <div className="relative">
-                <div className="bg-gradient-to-br from-[#134E4A] via-[#0D9488] to-[#14B8A6] rounded-3xl p-8 shadow-2xl">
+                <div className="bg-gradient-to-br from-[#1E3A8A] via-[#2563EB] to-[#3B82F6] rounded-3xl p-8 shadow-2xl">
                   <div className="bg-white/10 backdrop-blur-xl rounded-2xl p-6 border border-white/20">
                     <div className="flex items-center justify-between mb-6">
                       <div className="flex items-center gap-3">
@@ -127,7 +127,7 @@ export function LandingPage({ onEnterStudent }: LandingPageProps) {
                         </div>
                         <div>
                           <p className="text-white font-semibold text-sm">Liceo Romero Garcia</p>
-                          <p className="text-[#99F6E4] text-xs">Inscripcion abierta</p>
+                          <p className="text-[#BFDBFE] text-xs">Inscripcion abierta</p>
                         </div>
                       </div>
                       <span className="px-3 py-1 bg-emerald-400/20 text-emerald-300 text-xs font-bold rounded-lg">Activo</span>
@@ -144,7 +144,7 @@ export function LandingPage({ onEnterStudent }: LandingPageProps) {
                             <item.icon className="w-4 h-4 text-white" />
                           </div>
                           <p className="text-white text-sm font-medium flex-1">{item.label}</p>
-                          <span className="text-[#5EEAD4] text-xs font-semibold">{item.status}</span>
+                          <span className="text-[#93C5FD] text-xs font-semibold">{item.status}</span>
                         </div>
                       ))}
                     </div>
@@ -163,7 +163,7 @@ export function LandingPage({ onEnterStudent }: LandingPageProps) {
                     </div>
                   </div>
                   <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                    <div className="h-full w-full bg-gradient-to-r from-[#14B8A6] to-emerald-400 rounded-full" />
+                    <div className="h-full w-full bg-gradient-to-r from-[#3B82F6] to-emerald-400 rounded-full" />
                   </div>
                 </div>
               </div>
@@ -183,8 +183,8 @@ export function LandingPage({ onEnterStudent }: LandingPageProps) {
               { icon: Clock, value: '3-5 dias', label: 'Tiempo de respuesta' },
             ].map((s) => (
               <div key={s.label} className="text-center">
-                <div className="w-12 h-12 mx-auto bg-[#0D9488]/20 rounded-2xl flex items-center justify-center mb-3">
-                  <s.icon className="w-6 h-6 text-[#5EEAD4]" />
+                <div className="w-12 h-12 mx-auto bg-[#2563EB]/20 rounded-2xl flex items-center justify-center mb-3">
+                  <s.icon className="w-6 h-6 text-[#93C5FD]" />
                 </div>
                 <p className="text-2xl lg:text-3xl font-bold text-white">{s.value}</p>
                 <p className="text-sm text-slate-400 mt-1">{s.label}</p>
@@ -206,7 +206,7 @@ export function LandingPage({ onEnterStudent }: LandingPageProps) {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              { icon: FileText, title: 'Postulacion digital', desc: 'Completa tu formulario con datos personales, documentos y representantes en un proceso guiado paso a paso.', color: 'bg-[#0D9488]' },
+              { icon: FileText, title: 'Postulacion digital', desc: 'Completa tu formulario con datos personales, documentos y representantes en un proceso guiado paso a paso.', color: 'bg-[#2563EB]' },
               { icon: MessageSquare, title: 'Mensajeria directa', desc: 'Comunica con la institucion en tiempo real. Resuelve dudas y recibe actualizaciones sin intermediarios.', color: 'bg-blue-600' },
               { icon: Bell, title: 'Notificaciones en vivo', desc: 'Entero al instante cuando cambie el estado de tu postulacion o recibas un nuevo mensaje.', color: 'bg-emerald-600' },
               { icon: ShieldCheck, title: 'Datos seguros', desc: 'Tu informacion esta protegida con encriptacion de nivel bancario y politicas de acceso estrictas.', color: 'bg-slate-700' },
@@ -247,10 +247,10 @@ export function LandingPage({ onEnterStudent }: LandingPageProps) {
             ].map((s, i) => (
               <div key={s.step} className="relative">
                 {i < 2 && (
-                  <div className="hidden md:block absolute top-12 left-full w-full h-0.5 bg-gradient-to-r from-[#0D9488]/30 to-transparent" />
+                  <div className="hidden md:block absolute top-12 left-full w-full h-0.5 bg-gradient-to-r from-[#2563EB]/30 to-transparent" />
                 )}
                 <div className="bg-white rounded-2xl p-8 border border-slate-200/60 shadow-sm">
-                  <div className="w-12 h-12 bg-gradient-to-br from-[#0D9488] to-[#134E4A] rounded-2xl flex items-center justify-center mb-5 shadow-lg">
+                  <div className="w-12 h-12 bg-gradient-to-br from-[#2563EB] to-[#1E3A8A] rounded-2xl flex items-center justify-center mb-5 shadow-lg">
                     <span className="text-white font-bold text-lg">{s.step}</span>
                   </div>
                   <h3 className="text-lg font-bold text-slate-900 mb-2">{s.title}</h3>
@@ -263,7 +263,7 @@ export function LandingPage({ onEnterStudent }: LandingPageProps) {
           <div className="text-center mt-12">
             <button
               onClick={onEnterStudent}
-              className="px-8 py-4 bg-[#0D9488] hover:bg-[#0F766E] text-white font-semibold rounded-2xl transition-all shadow-xl shadow-[#0D9488]/25 hover:shadow-2xl hover:-translate-y-0.5 inline-flex items-center gap-2 group"
+              className="px-8 py-4 bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-semibold rounded-2xl transition-all shadow-xl shadow-[#2563EB]/25 hover:shadow-2xl hover:-translate-y-0.5 inline-flex items-center gap-2 group"
             >
               Iniciar mi postulacion
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -275,9 +275,9 @@ export function LandingPage({ onEnterStudent }: LandingPageProps) {
       {/* About */}
       <section id="about" className="py-20 lg:py-28">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#F0FDFA] border border-[#99F6E4]/40 rounded-full mb-6">
-            <Building2 className="w-3.5 h-3.5 text-[#0D9488]" />
-            <span className="text-xs font-semibold text-[#0F766E]">Institucion partner</span>
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#EFF6FF] border border-[#BFDBFE]/40 rounded-full mb-6">
+            <Building2 className="w-3.5 h-3.5 text-[#2563EB]" />
+            <span className="text-xs font-semibold text-[#1D4ED8]">Institucion partner</span>
           </div>
           <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-6">Liceo Romero Garcia</h2>
           <p className="text-lg text-slate-600 leading-relaxed">
@@ -291,8 +291,8 @@ export function LandingPage({ onEnterStudent }: LandingPageProps) {
               { icon: CheckCircle, label: 'Respuestas rapidas' },
             ].map((item) => (
               <div key={item.label} className="flex flex-col items-center gap-3 p-6 bg-slate-50 rounded-2xl border border-slate-200/60">
-                <div className="w-12 h-12 bg-[#0D9488]/10 rounded-xl flex items-center justify-center">
-                  <item.icon className="w-6 h-6 text-[#0D9488]" />
+                <div className="w-12 h-12 bg-[#2563EB]/10 rounded-xl flex items-center justify-center">
+                  <item.icon className="w-6 h-6 text-[#2563EB]" />
                 </div>
                 <p className="text-sm font-semibold text-slate-700">{item.label}</p>
               </div>
@@ -302,18 +302,18 @@ export function LandingPage({ onEnterStudent }: LandingPageProps) {
       </section>
 
       {/* CTA */}
-      <section className="py-20 bg-gradient-to-br from-[#134E4A] via-[#0D9488] to-[#14B8A6] relative overflow-hidden">
-        <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-[#5EEAD4]/10 rounded-full blur-3xl pointer-events-none" />
+      <section className="py-20 bg-gradient-to-br from-[#1E3A8A] via-[#2563EB] to-[#3B82F6] relative overflow-hidden">
+        <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-[#93C5FD]/10 rounded-full blur-3xl pointer-events-none" />
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">
             Comienza tu postulacion hoy
           </h2>
-          <p className="text-lg text-[#99F6E4] mb-8 max-w-2xl mx-auto">
+          <p className="text-lg text-[#BFDBFE] mb-8 max-w-2xl mx-auto">
             Unete a la plataforma que esta transformando el proceso de admision educativa.
           </p>
           <button
             onClick={onEnterStudent}
-            className="px-8 py-4 bg-white text-[#0D9488] font-bold rounded-2xl transition-all shadow-2xl hover:-translate-y-0.5 inline-flex items-center gap-2 group"
+            className="px-8 py-4 bg-white text-[#2563EB] font-bold rounded-2xl transition-all shadow-2xl hover:-translate-y-0.5 inline-flex items-center gap-2 group"
           >
             Entrar como postulante
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />

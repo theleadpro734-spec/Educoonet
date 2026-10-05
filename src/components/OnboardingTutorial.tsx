@@ -18,25 +18,25 @@ const STEPS = [
     icon: Search,
     title: 'Explora instituciones',
     description: 'Navega por el catalogo de instituciones educativas disponibles. Filtra por tipo de programa y encuentra la que mejor se adapte a tus objetivos.',
-    color: 'from-[#14B8A6] to-[#0D9488]',
+    color: 'from-[#3B82F6] to-[#2563EB]',
   },
   {
     icon: FileText,
     title: 'Envia tu postulacion',
     description: 'Completa el formulario con tus datos academicos y personales. Adjunta los documentos requeridos y envia tu postulacion en menos de 5 minutos.',
-    color: 'from-[#0D9488] to-[#0F766E]',
+    color: 'from-[#2563EB] to-[#1D4ED8]',
   },
   {
     icon: Bell,
     title: 'Recibe notificaciones',
     description: 'Te avisaremos en tiempo real cuando una institucion revise tu postulacion. Recibiras una respuesta en 24 a 48 horas habiles.',
-    color: 'from-[#0F766E] to-[#134E4A]',
+    color: 'from-[#1D4ED8] to-[#1E3A8A]',
   },
   {
     icon: MessageSquare,
     title: 'Chatea con instituciones',
     description: 'Comunicate directamente con las instituciones desde la plataforma. Resuelve dudas y coordina los siguientes pasos del proceso.',
-    color: 'from-[#14B8A6] to-[#0F766E]',
+    color: 'from-[#3B82F6] to-[#1D4ED8]',
   },
 ];
 
@@ -55,7 +55,7 @@ export function OnboardingTutorial({ onComplete }: OnboardingTutorialProps) {
 
   return (
     <div className="fixed inset-0 z-[100] bg-[#0F172A] flex flex-col">
-      <div className="absolute inset-0 bg-gradient-to-br from-[#134E4A] via-[#0D9488] to-[#0F172A]" />
+      <div className="absolute inset-0 bg-gradient-to-br from-[#1E3A8A] via-[#2563EB] to-[#0F172A]" />
       <div className="absolute inset-0 opacity-[0.04]" style={{
         backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)',
         backgroundSize: '40px 40px',
@@ -80,9 +80,9 @@ export function OnboardingTutorial({ onComplete }: OnboardingTutorialProps) {
               key={i}
               className={`h-2 rounded-full transition-all duration-300 ${
                 i === step
-                  ? 'w-8 bg-[#5EEAD4]'
+                  ? 'w-8 bg-[#93C5FD]'
                   : i < step
-                  ? 'w-2 bg-[#5EEAD4]/60'
+                  ? 'w-2 bg-[#93C5FD]/60'
                   : 'w-2 bg-white/20'
               }`}
             />
@@ -90,14 +90,14 @@ export function OnboardingTutorial({ onComplete }: OnboardingTutorialProps) {
         </div>
 
         {/* Step icon */}
-        <div className={`w-28 h-28 rounded-3xl bg-gradient-to-br ${current.color} flex items-center justify-center mb-8 shadow-2xl animate-scale-in`} style={{ boxShadow: '0 16px 48px rgba(13,148,136,0.4)' }}>
+        <div className={`w-28 h-28 rounded-3xl bg-gradient-to-br ${current.color} flex items-center justify-center mb-8 shadow-2xl animate-scale-in`} style={{ boxShadow: '0 16px 48px rgba(37,99,235,0.4)' }}>
           <current.icon className="w-14 h-14 text-white" strokeWidth={1.5} />
         </div>
 
         {/* Step content */}
         <div key={step} className="text-center animate-fade-in">
           <h2 className="text-2xl font-bold text-white mb-4">{current.title}</h2>
-          <p className="text-[#99F6E4] leading-relaxed text-base">{current.description}</p>
+          <p className="text-[#BFDBFE] leading-relaxed text-base">{current.description}</p>
         </div>
       </div>
 
@@ -105,7 +105,7 @@ export function OnboardingTutorial({ onComplete }: OnboardingTutorialProps) {
       <div className="relative px-6 pb-10 max-w-md mx-auto w-full" style={{ paddingBottom: 'max(2.5rem, env(safe-area-inset-bottom))' }}>
         <button
           onClick={handleNext}
-          className="w-full py-4 bg-white text-[#0D9488] font-bold rounded-2xl transition-all shadow-2xl hover:bg-[#F0FDFA] hover:-translate-y-0.5 flex items-center justify-center gap-2 text-lg btn-spring"
+          className="w-full py-4 bg-white text-[#2563EB] font-bold rounded-2xl transition-all shadow-2xl hover:bg-[#EFF6FF] hover:-translate-y-0.5 flex items-center justify-center gap-2 text-lg btn-spring"
         >
           {isLast ? (
             <>
@@ -121,7 +121,7 @@ export function OnboardingTutorial({ onComplete }: OnboardingTutorialProps) {
         </button>
 
         {isLast && (
-          <div className="mt-6 flex items-center justify-center gap-2 text-[#5EEAD4]">
+          <div className="mt-6 flex items-center justify-center gap-2 text-[#93C5FD]">
             <GraduationCap className="w-5 h-5" />
             <p className="text-sm font-medium">Estas listo para empezar tu proceso</p>
           </div>

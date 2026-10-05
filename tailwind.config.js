@@ -6,16 +6,16 @@ export default {
     extend: {
       colors: {
         brand: {
-          50:  '#F0FDFA',
-          100: '#CCFBF1',
-          200: '#99F6E4',
-          300: '#5EEAD4',
-          400: '#2DD4BF',
-          500: '#14B8A6',
-          600: '#0D9488',
-          700: '#0F766E',
-          800: '#115E59',
-          900: '#134E4A',
+          50:  '#EFF6FF',
+          100: '#DBEAFE',
+          200: '#BFDBFE',
+          300: '#93C5FD',
+          400: '#60A5FA',
+          500: '#3B82F6',
+          600: '#2563EB',
+          700: '#1D4ED8',
+          800: '#1E40AF',
+          900: '#1E3A8A',
         },
         ink: {
           bg:      '#0F172A',
@@ -36,10 +36,10 @@ export default {
         sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
       },
       boxShadow: {
-        soft: '0 2px 8px rgba(13, 148, 136, 0.06)',
+        soft: '0 2px 8px rgba(37, 99, 235, 0.06)',
         card: '0 4px 24px rgba(15, 23, 42, 0.06)',
         'card-hover': '0 12px 40px rgba(15, 23, 42, 0.10)',
-        glow: '0 0 30px rgba(13, 148, 136, 0.20)',
+        glow: '0 0 30px rgba(37, 99, 235, 0.20)',
       },
       animation: {
         'fade-in':  'fadeIn 0.5s ease-out',

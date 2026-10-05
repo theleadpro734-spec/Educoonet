@@ -133,11 +133,11 @@ export function FileUpload({
           onDragOver={(e) => e.preventDefault()}
           className="w-full flex flex-col items-center justify-center gap-2 p-5 border-2 border-dashed rounded-xl transition-all text-left"
           style={{
-            borderColor: required ? '#99F6E4' : '#cbd5e1',
+            borderColor: required ? '#BFDBFE' : '#cbd5e1',
           }}
         >
-          <div className="w-10 h-10 bg-[#F0FDFA] rounded-xl flex items-center justify-center">
-            <Upload className="w-5 h-5 text-[#0D9488]" />
+          <div className="w-10 h-10 bg-[#EFF6FF] rounded-xl flex items-center justify-center">
+            <Upload className="w-5 h-5 text-[#2563EB]" />
           </div>
           <span className="text-sm font-medium text-slate-700">
             {label}
@@ -148,9 +148,9 @@ export function FileUpload({
       )}
 
       {uploading && (
-        <div className="w-full flex flex-col items-center justify-center gap-2 p-5 border-2 border-[#99F6E4] rounded-xl bg-[#F0FDFA]/50">
-          <Loader2 className="w-6 h-6 text-[#0D9488] animate-spin" />
-          <span className="text-sm text-[#0F766E] font-medium">Subiendo...</span>
+        <div className="w-full flex flex-col items-center justify-center gap-2 p-5 border-2 border-[#BFDBFE] rounded-xl bg-[#EFF6FF]/50">
+          <Loader2 className="w-6 h-6 text-[#2563EB] animate-spin" />
+          <span className="text-sm text-[#1D4ED8] font-medium">Subiendo...</span>
         </div>
       )}
 

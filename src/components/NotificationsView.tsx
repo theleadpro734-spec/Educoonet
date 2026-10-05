@@ -41,6 +41,7 @@ const typeConfig = {
 export function NotificationsView({ onBack, onNavigate }: NotificationsViewProps) {
   const { user, isLocalUser } = useAuth();
   const userId = user?.id;
+  const userEmail = user?.email;
   const isLocal = isLocalUser;
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(true);
@@ -48,7 +49,14 @@ export function NotificationsView({ onBack, onNavigate }: NotificationsViewProps
 
   const fetchNotifications = useCallback(async () => {
     if (isLocal) {
-      setNotifications([]);
+      if (!userEmail) { setLoading(false); return; }
+      setLoading(true);
+      const { data } = await supabase
+        .from('notifications')
+        .select('*')
+        .eq('user_email', userEmail)
+        .order('created_at', { ascending: false });
+      if (data) setNotifications(data as Notification[]);
       setLoading(false);
       return;
     }
@@ -62,7 +70,7 @@ export function NotificationsView({ onBack, onNavigate }: NotificationsViewProps
 
     if (data) setNotifications(data as Notification[]);
     setLoading(false);
-  }, [userId, isLocal]);
+  }, [userId, userEmail, isLocal]);
 
   useEffect(() => {
     fetchNotifications();
@@ -76,7 +84,10 @@ export function NotificationsView({ onBack, onNavigate }: NotificationsViewProps
         { event: 'INSERT', schema: 'public', table: 'notifications' },
         (payload) => {
           const newNotif = payload.new as Notification;
-          if (newNotif.user_id === userId) {
+          const matches = isLocal
+            ? newNotif.user_email === userEmail
+            : newNotif.user_id === userId;
+          if (matches) {
             setNotifications((prev) =>
               prev.some((n) => n.id === newNotif.id) ? prev : [newNotif, ...prev]
             );
@@ -86,7 +97,7 @@ export function NotificationsView({ onBack, onNavigate }: NotificationsViewProps
       .subscribe();
 
     return () => { supabase.removeChannel(channel); };
-  }, [userId]);
+  }, [userId, userEmail, isLocal]);
 
   const markAsRead = async (id: string) => {
     await supabase.from('notifications').update({ read: true }).eq('id', id);
