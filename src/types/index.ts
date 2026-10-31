@@ -39,6 +39,7 @@ export interface Program {
   cost: number | null;
   level: string | null;
   created_at: string;
+  created_by: string | null;
 }
 
 export interface GalleryItem {
@@ -49,6 +50,7 @@ export interface GalleryItem {
   category: string;
   sort_order: number;
   created_at: string;
+  created_by: string | null;
 }
 
 export interface InstitutionSettings {
@@ -71,6 +73,7 @@ export interface Opportunity {
   deadline: string;
   status: 'activa' | 'cerrada' | 'borrador';
   created_at: string;
+  created_by: string | null;
   programs?: Program;
   institutions?: Institution;
 }
@@ -84,6 +87,7 @@ export interface ApplicationMessage {
   read_by_student: boolean;
   read_by_institution: boolean;
   created_at: string;
+  created_by: string | null;
 }
 
 export interface Application {
@@ -111,6 +115,7 @@ export interface Application {
   cedula_rep_url: string | null;
   representative_name: string | null;
   representative_cedula: string | null;
+  representative_id: string | null;
   identity_document: string | null;
   cv_url: string | null;
   certificates_url: string | null;
