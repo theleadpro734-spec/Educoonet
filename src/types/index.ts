@@ -171,3 +171,56 @@ export interface ToastMessage {
   title: string;
   message?: string;
 }
+
+export interface AdminAccount {
+  id: string;
+  username: string;
+  name: string;
+}
+
+export interface AdminActivityLog {
+  id: string;
+  admin_id: string;
+  admin_name: string;
+  action: string;
+  target_type: 'institution' | 'student' | 'application';
+  target_id: string | null;
+  details: string | null;
+  created_at: string;
+}
+
+export interface AdminInstitution {
+  id: string;
+  name: string;
+  email: string | null;
+  phone: string | null;
+  location: string;
+  institution_type: string | null;
+  is_published: boolean;
+  is_suspended: boolean;
+  suspended_at: string | null;
+  created_at: string;
+}
+
+export interface AdminStudent {
+  id: string;
+  name: string;
+  last_name: string | null;
+  email: string;
+  cedula: string | null;
+  is_suspended: boolean;
+  suspended_at: string | null;
+  created_at: string;
+}
+
+export interface AdminApplication {
+  id: string;
+  name: string;
+  last_name: string | null;
+  email: string;
+  status: string;
+  educational_level: string;
+  created_at: string;
+  institution_id: string;
+  institutions?: { name: string };
+}

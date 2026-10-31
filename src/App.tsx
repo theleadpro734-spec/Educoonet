@@ -2,12 +2,15 @@ import { useState, useEffect } from 'react';
 import { InstitutionPanel } from './components/InstitutionPanel';
 import { StudentPanel } from './components/StudentPanel';
 import { AdminPanel } from './components/AdminPanel';
+import { TeamAdminLogin } from './components/TeamAdminLogin';
 import { InstitutionAccessPage } from './components/InstitutionAccessPage';
 import { OnboardingTutorial } from './components/OnboardingTutorial';
 import { LandingPage } from './components/LandingPage';
 import { EduConnetLogo } from './components/EduConnetLogo';
+import { supabase } from './lib/supabase';
 import { useAuth } from './lib/auth';
 import { X, GraduationCap, ArrowRight, FlaskConical } from 'lucide-react';
+import { AdminAccount } from './types';
 
 type View = 'institution' | 'student' | 'admin' | 'role-select' | 'landing';
 
@@ -15,6 +18,8 @@ function App() {
   const [route, setRoute] = useState(window.location.pathname);
   const { loading, isInstitution, signOut } = useAuth();
   const [view, setView] = useState<View>('landing');
+  const [adminUser, setAdminUser] = useState<AdminAccount | null>(null);
+  const [adminChecked, setAdminChecked] = useState(false);
   const [showBetaBanner, setShowBetaBanner] = useState(
     () => localStorage.getItem('educonnet_beta_dismissed') !== 'true'
   );
@@ -51,9 +56,63 @@ function App() {
     }
   }, [loading, isInstitution]);
 
+  // Verify admin session server-side when the /equipo-admin route is accessed
+  useEffect(() => {
+    if (route !== '/equipo-admin' || adminChecked) return;
+    const stored = localStorage.getItem('edu_admin');
+    if (!stored) {
+      setAdminChecked(true);
+      return;
+    }
+    supabase
+      .rpc('verify_admin_session')
+      .then(({ data }: { data: AdminAccount[] | null }) => {
+        if (data && data.length > 0) {
+          setAdminUser(data[0]);
+        } else {
+          localStorage.removeItem('edu_admin');
+        }
+      })
+      .catch(() => localStorage.removeItem('edu_admin'))
+      .finally(() => setAdminChecked(true));
+  }, [route, adminChecked]);
+
+  const handleAdminLogin = (admin: AdminAccount) => {
+    setAdminUser(admin);
+    setAdminChecked(true);
+  };
+
+  const handleAdminExit = () => {
+    localStorage.removeItem('edu_admin');
+    setAdminUser(null);
+    setAdminChecked(false);
+    window.history.pushState({}, '', '/');
+    window.dispatchEvent(new PopStateEvent('popstate'));
+  };
+
   // Secret institution access via URL
   if (route === '/instituciones/acceso') {
     return <InstitutionAccessPage />;
+  }
+
+  // Private team admin panel via URL — not in public navigation
+  if (route === '/equipo-admin') {
+    if (!adminChecked) {
+      return (
+        <div className="min-h-screen flex items-center justify-center bg-slate-50">
+          <div className="text-center">
+            <div className="w-12 h-12 border-[3px] border-slate-200 border-t-slate-900 rounded-full animate-spin mx-auto" />
+            <p className="mt-4 text-slate-500">Verificando acceso...</p>
+          </div>
+        </div>
+      );
+    }
+    if (!adminUser) {
+      return <TeamAdminLogin onSuccess={handleAdminLogin} />;
+    }
+    return (
+      <AdminPanel admin={adminUser} onExit={handleAdminExit} />
+    );
   }
 
   if (showTutorial) {
@@ -85,15 +144,6 @@ function App() {
       <div>
         {showBetaBanner && <BetaBanner onDismiss={dismissBetaBanner} />}
         <StudentPanel onExit={() => setView('landing')} />
-      </div>
-    );
-  }
-
-  if (view === 'admin') {
-    return (
-      <div>
-        {showBetaBanner && <BetaBanner onDismiss={dismissBetaBanner} />}
-        <AdminPanel onExit={() => setView('landing')} />
       </div>
     );
   }
