@@ -230,10 +230,41 @@ export interface Quota {
   institution_id: string;
   grade_or_group: string;
   academic_period: string;
+  grade_id: string | null;
+  period_id: string | null;
+  grade_name: string | null;
+  grade_level: string | null;
+  period_name: string | null;
+  period_start_date: string | null;
+  period_end_date: string | null;
   total: number;
   assigned: number;
   available: number;
   notes: string | null;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Grade {
+  id: string;
+  institution_id: string;
+  name: string;
+  level: string | null;
+  sort_order: number;
+  is_active: boolean;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface AcademicPeriod {
+  id: string;
+  institution_id: string;
+  name: string;
+  start_date: string | null;
+  end_date: string | null;
+  is_active: boolean;
   created_by: string | null;
   created_at: string;
   updated_at: string;
