@@ -24,6 +24,7 @@ import {
   Filter,
   LogOut,
   UserCheck,
+  Layers,
 
   AlertCircle,
   MessageSquare,
@@ -37,6 +38,7 @@ interface InstitutionDashboardProps {
   onViewAllApplications: () => void;
   onUpdateStatus: (id: string, status: string) => void;
   onProfile: () => void;
+  onQuotas: () => void;
   onSettings: () => void;
   onMessages: (applicationId?: string) => void;
   onNotifications: () => void;
@@ -46,7 +48,7 @@ interface InstitutionDashboardProps {
   unreadNotifications?: number;
 }
 
-type Tab = 'dashboard' | 'applications' | 'messages' | 'notifications' | 'profile' | 'settings';
+type Tab = 'dashboard' | 'applications' | 'quotas' | 'messages' | 'notifications' | 'profile' | 'settings';
 
 export function InstitutionDashboard({
   applications,
@@ -54,6 +56,7 @@ export function InstitutionDashboard({
   onViewAllApplications,
   onUpdateStatus,
   onProfile,
+  onQuotas,
   onMessages,
   onNotifications,
   onSettings,
@@ -91,6 +94,7 @@ export function InstitutionDashboard({
     setSidebarOpen(false);
     setAccountMenuOpen(false);
     if (tab === 'applications')  onViewAllApplications();
+    else if (tab === 'quotas')     onQuotas();
     else if (tab === 'profile')  onProfile();
     else if (tab === 'settings') onSettings();
     else if (tab === 'messages') onMessages();
@@ -100,6 +104,7 @@ export function InstitutionDashboard({
   const navItems = [
     { id: 'dashboard'     as Tab, label: 'Dashboard',      icon: BarChart3 },
     { id: 'applications'  as Tab, label: 'Postulaciones',  icon: FileText,      badge: total },
+    { id: 'quotas'        as Tab, label: 'Cupos',          icon: Layers },
     { id: 'messages'      as Tab, label: 'Mensajes',       icon: MessageSquare, badge: unreadMessages },
     { id: 'notifications' as Tab, label: 'Notificaciones', icon: Bell,          badge: unreadNotifications },
     { id: 'profile'       as Tab, label: 'Perfil',         icon: Building2 },

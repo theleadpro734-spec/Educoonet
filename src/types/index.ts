@@ -224,3 +224,30 @@ export interface AdminApplication {
   institution_id: string;
   institutions?: { name: string };
 }
+
+export interface Quota {
+  id: string;
+  institution_id: string;
+  grade_or_group: string;
+  academic_period: string;
+  total: number;
+  assigned: number;
+  available: number;
+  notes: string | null;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Assignment {
+  id: string;
+  quota_id: string;
+  application_id: string | null;
+  student_name: string;
+  student_email: string | null;
+  status: 'activa' | 'cancelada';
+  created_by: string | null;
+  created_at: string;
+  cancelled_at: string | null;
+  applications?: { name: string; last_name: string | null; email: string } | null;
+}

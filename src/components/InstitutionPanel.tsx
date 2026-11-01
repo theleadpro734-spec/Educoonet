@@ -4,16 +4,17 @@ import { useAuth } from '../lib/auth';
 import { Application } from '../types';
 import { InstitutionDashboard } from './InstitutionDashboard';
 import { InstitutionProfile } from './InstitutionProfile';
+import { QuotasView } from './QuotasView';
 import { MessagingView } from './MessagingView';
 import { ApplicationDetailModal } from './ApplicationDetailModal';
 import { NotificationsView } from './NotificationsView';
-import { ArrowLeft, RefreshCw, Building2, Users, Bell, LogOut, Shield, HelpCircle, Eye, MessageSquare } from 'lucide-react';
+import { ArrowLeft, RefreshCw, Building2, Users, Bell, LogOut, Shield, HelpCircle, Eye, MessageSquare, Layers } from 'lucide-react';
 
 interface InstitutionPanelProps {
   onExit: () => void;
 }
 
-type View = 'dashboard' | 'profile' | 'applications' | 'settings' | 'messages' | 'notifications';
+type View = 'dashboard' | 'profile' | 'applications' | 'quotas' | 'settings' | 'messages' | 'notifications';
 
 interface MessageState {
   selectedApplicationId?: string;
@@ -137,6 +138,16 @@ export function InstitutionPanel({ onExit }: InstitutionPanelProps) {
     );
   }
 
+  if (view === 'quotas') {
+    return (
+      <QuotasView
+        institutionId={institutionId!}
+        applications={applications}
+        onBack={() => setView('dashboard')}
+      />
+    );
+  }
+
   if (view === 'applications') {
     return (
       <ApplicationsListView
@@ -204,6 +215,7 @@ export function InstitutionPanel({ onExit }: InstitutionPanelProps) {
       onViewAllApplications={() => setView('applications')}
       onUpdateStatus={updateStatus}
       onProfile={() => setView('profile')}
+      onQuotas={() => setView('quotas')}
       onSettings={() => setView('settings')}
       onMessages={(appId) => {
         setMessageState({ selectedApplicationId: appId });
