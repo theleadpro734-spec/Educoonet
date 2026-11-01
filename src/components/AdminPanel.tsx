@@ -25,6 +25,7 @@ import {
   ToggleLeft,
   ToggleRight,
   AlertCircle,
+  Eye,
 } from 'lucide-react';
 import {
   AdminAccount,
@@ -40,6 +41,53 @@ interface AdminPanelProps {
 }
 
 type Tab = 'dashboard' | 'institutions' | 'students' | 'applications' | 'reports' | 'activity' | 'settings';
+
+function AppDetailDrawer({ app, onClose }: { app: AdminApplication | null; onClose: () => void }) {
+  if (!app) return null;
+  const st = statusConfig[app.status as keyof typeof statusConfig] ?? statusConfig.pendiente;
+  const StatusIcon = st.icon;
+  return (
+    <div className="fixed inset-0 z-[150] flex items-end sm:items-center justify-center" onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
+      <div className="absolute inset-0 bg-slate-900/50 backdrop-blur-sm" />
+      <div className="relative bg-slate-50 rounded-t-3xl sm:rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col animate-scale-in">
+        <div className={`relative px-6 pt-5 pb-4 ${st.bg} ${st.color} border-b border-slate-200`}>
+          <button onClick={onClose} className="absolute top-4 right-4 p-2 rounded-xl bg-white/60 hover:bg-white transition-colors">
+            <XCircle className="w-5 h-5 text-slate-500" />
+          </button>
+          <div className="flex items-center gap-4 pr-12">
+            <div className="w-14 h-14 rounded-2xl bg-white shadow flex items-center justify-center flex-shrink-0">
+              <span className="text-lg font-bold text-slate-700">{app.name.charAt(0)}{app.last_name?.charAt(0) ?? ''}</span>
+            </div>
+            <div className="min-w-0">
+              <h2 className="text-xl font-bold text-slate-900 truncate">{app.name} {app.last_name ?? ''}</h2>
+              <div className="inline-flex items-center gap-1.5 mt-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-white/80">
+                <StatusIcon className="w-3.5 h-3.5" />
+                {st.label}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="flex-1 overflow-y-auto px-6 py-5 space-y-4">
+          <div className="bg-white rounded-2xl border border-slate-200 p-5">
+            <h3 className="text-sm font-bold text-slate-500 uppercase tracking-wide mb-3">Datos de Contacto</h3>
+            <div className="grid sm:grid-cols-2 gap-3 text-sm">
+              <div><span className="text-slate-400">Correo: </span><span className="text-slate-700">{app.email}</span></div>
+              <div><span className="text-slate-400">Nivel: </span><span className="text-slate-700">{app.educational_level}</span></div>
+              <div><span className="text-slate-400">Institucion: </span><span className="text-slate-700">{app.institutions?.name ?? 'N/A'}</span></div>
+              <div><span className="text-slate-400">Fecha: </span><span className="text-slate-700">{new Date(app.created_at).toLocaleDateString('es-EC')}</span></div>
+            </div>
+          </div>
+          <div className="bg-blue-50 border border-blue-100 rounded-2xl p-4">
+            <p className="text-sm text-blue-700">
+              La gestion de esta postulacion (aceptar, rechazar, mensaje) la realiza la institucion desde su propio panel.
+              Este panel es de supervision y monitoreo del equipo EduConnet.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 const statusConfig = {
   pendiente: { label: 'Pendiente', color: 'text-amber-700', bg: 'bg-amber-100', icon: Clock },
@@ -61,6 +109,7 @@ export function AdminPanel({ admin, onExit }: AdminPanelProps) {
   const [totalMessages, setTotalMessages] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [selectedApp, setSelectedApp] = useState<AdminApplication | null>(null);
 
   const showToast = (type: 'success' | 'error', msg: string) => {
     setToast({ type, msg });
@@ -105,6 +154,7 @@ export function AdminPanel({ admin, onExit }: AdminPanelProps) {
   const toggleInstitutionSuspend = async (id: string, currentSuspended: boolean) => {
     setActionLoading(true);
     const { error } = await supabase.rpc('admin_set_institution_status', {
+      p_admin_id: admin.id,
       p_institution_id: id,
       p_suspend: !currentSuspended,
     });
@@ -120,6 +170,7 @@ export function AdminPanel({ admin, onExit }: AdminPanelProps) {
   const toggleStudentSuspend = async (id: string, currentSuspended: boolean) => {
     setActionLoading(true);
     const { error } = await supabase.rpc('admin_set_student_status', {
+      p_admin_id: admin.id,
       p_student_id: id,
       p_suspend: !currentSuspended,
     });
@@ -132,26 +183,11 @@ export function AdminPanel({ admin, onExit }: AdminPanelProps) {
     fetchData();
   };
 
-  const updateApplicationStatus = async (id: string, status: string) => {
-    setActionLoading(true);
-    const { error } = await supabase.rpc('admin_update_application_status', {
-      p_application_id: id,
-      p_new_status: status,
-    });
-    setActionLoading(false);
-    if (error) {
-      showToast('error', 'No se pudo actualizar la postulacion.');
-      return;
-    }
-    showToast('success', 'Postulacion actualizada.');
-    fetchData();
-  };
-
   const navItems = [
     { id: 'dashboard' as Tab, label: 'Dashboard', icon: BarChart3 },
     { id: 'institutions' as Tab, label: 'Instituciones', icon: Building2, badge: institutions.length },
     { id: 'students' as Tab, label: 'Postulantes', icon: Users, badge: students.length },
-    { id: 'applications' as Tab, label: 'Postulaciones', icon: FileText, badge: applications.length },
+    { id: 'applications' as Tab, label: 'Monitoreo', icon: FileText, badge: applications.length },
     { id: 'reports' as Tab, label: 'Reportes', icon: TrendingUp },
     { id: 'activity' as Tab, label: 'Actividad', icon: Activity, badge: activityLog.length },
     { id: 'settings' as Tab, label: 'Ajustes', icon: Settings },
@@ -520,7 +556,7 @@ export function AdminPanel({ admin, onExit }: AdminPanelProps) {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-slate-900">Postulaciones</h1>
-          <p className="text-sm text-slate-500 mt-1">{applications.length} postulaciones totales</p>
+          <p className="text-sm text-slate-500 mt-1">{applications.length} postulaciones en monitoreo - solo lectura</p>
         </div>
         <div className="flex flex-col sm:flex-row gap-3">
           <div className="relative">
@@ -555,7 +591,7 @@ export function AdminPanel({ admin, onExit }: AdminPanelProps) {
                 <th className="text-left text-xs font-semibold text-slate-500 uppercase tracking-wide px-5 py-3 hidden md:table-cell">Institucion</th>
                 <th className="text-left text-xs font-semibold text-slate-500 uppercase tracking-wide px-5 py-3 hidden sm:table-cell">Nivel</th>
                 <th className="text-left text-xs font-semibold text-slate-500 uppercase tracking-wide px-5 py-3">Estado</th>
-                <th className="text-center text-xs font-semibold text-slate-500 uppercase tracking-wide px-5 py-3">Acciones</th>
+                <th className="text-center text-xs font-semibold text-slate-500 uppercase tracking-wide px-5 py-3">Ver</th>
               </tr>
             </thead>
             <tbody>
@@ -591,39 +627,14 @@ export function AdminPanel({ admin, onExit }: AdminPanelProps) {
                         {st.label}
                       </span>
                     </td>
-                    <td className="px-5 py-4">
-                      <div className="flex items-center justify-center gap-1">
-                        {app.status !== 'aceptada' && (
-                          <button
-                            onClick={() => updateApplicationStatus(app.id, 'aceptada')}
-                            disabled={actionLoading}
-                            className="p-1.5 rounded-lg hover:bg-emerald-50 text-emerald-600 transition-colors disabled:opacity-50"
-                            title="Aceptar"
-                          >
-                            <CheckCircle className="w-4 h-4" />
-                          </button>
-                        )}
-                        {app.status !== 'rechazada' && (
-                          <button
-                            onClick={() => updateApplicationStatus(app.id, 'rechazada')}
-                            disabled={actionLoading}
-                            className="p-1.5 rounded-lg hover:bg-red-50 text-red-600 transition-colors disabled:opacity-50"
-                            title="Rechazar"
-                          >
-                            <XCircle className="w-4 h-4" />
-                          </button>
-                        )}
-                        {app.status === 'aceptada' && (
-                          <button
-                            onClick={() => updateApplicationStatus(app.id, 'pendiente')}
-                            disabled={actionLoading}
-                            className="p-1.5 rounded-lg hover:bg-amber-50 text-amber-600 transition-colors disabled:opacity-50"
-                            title="Marcar pendiente"
-                          >
-                            <Clock className="w-4 h-4" />
-                          </button>
-                        )}
-                      </div>
+                    <td className="px-5 py-4 text-center">
+                      <button
+                        onClick={() => setSelectedApp(app)}
+                        className="p-1.5 rounded-lg hover:bg-slate-100 text-slate-500 transition-colors"
+                        title="Ver detalle"
+                      >
+                        <Eye className="w-4 h-4" />
+                      </button>
                     </td>
                   </tr>
                 );
@@ -996,6 +1007,7 @@ export function AdminPanel({ admin, onExit }: AdminPanelProps) {
           </div>
         </main>
       </div>
+      <AppDetailDrawer app={selectedApp} onClose={() => setSelectedApp(null)} />
     </div>
   );
 }

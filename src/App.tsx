@@ -65,7 +65,7 @@ function App() {
       return;
     }
     supabase
-      .rpc('verify_admin_session')
+      .rpc('verify_admin_session', { p_admin_id: JSON.parse(stored).id })
       .then(({ data }: { data: AdminAccount[] | null }) => {
         if (data && data.length > 0) {
           setAdminUser(data[0]);
