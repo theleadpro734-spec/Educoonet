@@ -47,6 +47,8 @@ interface AuthContextValue {
   signOut: () => Promise<void>;
   linkToEmail: (email: string, password: string) => Promise<{ error: string | null }>;
   linkToGoogle: () => Promise<{ error: string | null }>;
+  signInApplicant: (email: string, password: string) => Promise<{ error: string | null }>;
+  signInWithGoogle: () => Promise<{ error: string | null }>;
   signInInstitution: (email: string, password: string) => Promise<{ error: string | null }>;
   refreshInstitution: () => Promise<void>;
 }
@@ -179,6 +181,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return { error: null };
   }, []);
 
+  const signInApplicant = useCallback(async (email: string, password: string): Promise<{ error: string | null }> => {
+    const { error } = await supabase.auth.signInWithPassword({
+      email: email.trim().toLowerCase(),
+      password,
+    });
+    if (error) {
+      const invalid = error.message.toLowerCase().includes('invalid login credentials');
+      return { error: invalid ? 'Correo o contrasena incorrectos.' : error.message };
+    }
+    setLocalUser(null);
+    return { error: null };
+  }, []);
+
+  const signInWithGoogle = useCallback(async (): Promise<{ error: string | null }> => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: window.location.origin },
+    });
+    if (error) {
+      return { error: error.message };
+    }
+    return { error: null };
+  }, []);
+
   const signInInstitution = useCallback(async (email: string, password: string): Promise<{ error: string | null }> => {
     const { data, error } = await supabase.auth.signInWithPassword({
       email: email.trim().toLowerCase(),
@@ -235,6 +261,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         signOut,
         linkToEmail,
         linkToGoogle,
+        signInApplicant,
+        signInWithGoogle,
         signInInstitution,
         refreshInstitution,
       }}

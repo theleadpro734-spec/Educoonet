@@ -226,6 +226,7 @@ export function ApplyForm({
     }
 
     const applicationPayload = {
+      user_id: isLocalUser ? null : user?.id ?? null,
       institution_id: institutionId,
       quota_id: quotaId || null,
       name: form.name.trim(),
