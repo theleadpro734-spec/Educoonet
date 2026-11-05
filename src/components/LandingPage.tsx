@@ -8,7 +8,6 @@ import {
   CheckCircle,
   ArrowRight,
   Sparkles,
-  ShieldCheck,
   Clock,
   Users,
   Mail,
@@ -173,28 +172,6 @@ export function LandingPage({ onEnterStudent }: LandingPageProps) {
         </div>
       </section>
 
-      {/* Stats bar */}
-      <section className="bg-[#0F172A] py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-            {[
-              { icon: Users, value: '500+', label: 'Postulantes activos' },
-              { icon: Building2, value: '1', label: 'Institucion partner' },
-              { icon: FileText, value: '1,200+', label: 'Postulaciones gestionadas' },
-              { icon: Clock, value: '3-5 dias', label: 'Tiempo de respuesta' },
-            ].map((s) => (
-              <div key={s.label} className="text-center">
-                <div className="w-12 h-12 mx-auto bg-[#22D3EE]/20 rounded-2xl flex items-center justify-center mb-3">
-                  <s.icon className="w-6 h-6 text-[#22D3EE]" />
-                </div>
-                <p className="text-2xl lg:text-3xl font-bold text-white">{s.value}</p>
-                <p className="text-sm text-slate-400 mt-1">{s.label}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Features */}
       <section id="features" className="py-20 lg:py-28">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -208,11 +185,8 @@ export function LandingPage({ onEnterStudent }: LandingPageProps) {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
               { icon: FileText, title: 'Postulacion digital', desc: 'Completa tu formulario con datos personales, documentos y representantes en un proceso guiado paso a paso.', color: 'bg-[#2563EB]' },
-              { icon: MessageSquare, title: 'Mensajeria directa', desc: 'Comunica con la institucion en tiempo real. Resuelve dudas y recibe actualizaciones sin intermediarios.', color: 'bg-blue-600' },
-              { icon: Bell, title: 'Notificaciones en vivo', desc: 'Entero al instante cuando cambie el estado de tu postulacion o recibas un nuevo mensaje.', color: 'bg-emerald-600' },
-              { icon: ShieldCheck, title: 'Datos seguros', desc: 'Tu informacion esta protegida con encriptacion de nivel bancario y politicas de acceso estrictas.', color: 'bg-slate-700' },
-              { icon: Clock, title: 'Seguimiento en tiempo real', desc: 'Visualiza el estado de tus postulaciones: pendiente, aceptada o rechazada, en cualquier momento.', color: 'bg-[#06B6D4]' },
-              { icon: Building2, title: 'Gestion institucional', desc: 'Las instituciones reciben, revisan y gestionan postulaciones desde un panel de control dedicado.', color: 'bg-[#8B5CF6]' },
+              { icon: MessageSquare, title: 'Mensajeria directa', desc: 'Comunica con la institucion en tiempo real. Resuelve dudas y recibe actualizaciones sin intermediarios.', color: 'bg-[#06B6D4]' },
+              { icon: Bell, title: 'Notificaciones en vivo', desc: 'Recibe alertas al instante cuando cambie el estado de tu postulacion o recibas un nuevo mensaje.', color: 'bg-[#8B5CF6]' },
             ].map((f, i) => (
               <div
                 key={f.title}
@@ -273,51 +247,24 @@ export function LandingPage({ onEnterStudent }: LandingPageProps) {
         </div>
       </section>
 
-      {/* About */}
-      <section id="about" className="py-20 lg:py-28">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#EFF6FF] border border-[#BFDBFE]/40 rounded-full mb-6">
-            <Building2 className="w-3.5 h-3.5 text-[#2563EB]" />
-            <span className="text-xs font-semibold text-[#1D4ED8]">Institucion partner</span>
-          </div>
-          <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-6">Liceo Romero Garcia</h2>
-          <p className="text-lg text-slate-600 leading-relaxed">
-            Nuestra primera institucion asociada. El Liceo Romero Garcia utiliza EduConnet para digitalizar
-            su proceso de admision, ofreciendo a los postulantes una experiencia moderna, transparente y eficiente.
-          </p>
-          <div className="mt-10 grid sm:grid-cols-3 gap-6">
-            {[
-              { icon: FileText, label: 'Postulaciones online' },
-              { icon: MessageSquare, label: 'Comunicacion directa' },
-              { icon: CheckCircle, label: 'Respuestas rapidas' },
-            ].map((item) => (
-              <div key={item.label} className="flex flex-col items-center gap-3 p-6 bg-slate-50 rounded-2xl border border-slate-200/60">
-                <div className="w-12 h-12 bg-[#2563EB]/10 rounded-xl flex items-center justify-center">
-                  <item.icon className="w-6 h-6 text-[#2563EB]" />
-                </div>
-                <p className="text-sm font-semibold text-slate-700">{item.label}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="py-20 bg-gradient-to-br from-[#1E3A8A] via-[#2563EB] to-[#3B82F6] relative overflow-hidden">
+      {/* About + CTA combined */}
+      <section id="about" className="py-20 bg-gradient-to-br from-[#1E3A8A] via-[#2563EB] to-[#3B82F6] relative overflow-hidden">
         <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-[#22D3EE]/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-1/3 w-64 h-64 bg-[#8B5CF6]/8 rounded-full blur-3xl pointer-events-none" />
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">
-            Comienza tu postulacion hoy
-          </h2>
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/10 border border-white/20 rounded-full mb-6">
+            <Building2 className="w-3.5 h-3.5 text-[#93C5FD]" />
+            <span className="text-xs font-semibold text-[#BFDBFE]">Institucion partner</span>
+          </div>
+          <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">Liceo Romero Garcia</h2>
           <p className="text-lg text-[#BFDBFE] mb-8 max-w-2xl mx-auto">
-            Unete a la plataforma que esta transformando el proceso de admision educativa.
+            Nuestra primera institucion asociada. Postula hoy y forma parte del cambio educativo.
           </p>
           <button
             onClick={onEnterStudent}
             className="px-8 py-4 bg-white text-[#2563EB] font-bold rounded-2xl transition-all shadow-2xl hover:-translate-y-0.5 inline-flex items-center gap-2 group"
           >
-            Entrar como postulante
+            Comenzar mi postulacion
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </button>
         </div>
@@ -333,7 +280,6 @@ export function LandingPage({ onEnterStudent }: LandingPageProps) {
             <div className="flex items-center gap-6 text-sm text-slate-400">
               <a href="#features" className="hover:text-white transition-colors">Funcionalidades</a>
               <a href="#how" className="hover:text-white transition-colors">Como funciona</a>
-              <a href="#about" className="hover:text-white transition-colors">Acerca de</a>
             </div>
             <div className="flex items-center gap-2 text-sm text-slate-500">
               <Mail className="w-4 h-4" />
