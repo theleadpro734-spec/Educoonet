@@ -100,7 +100,8 @@ export function NotificationsView({ onBack, onNavigate }: NotificationsViewProps
   }, [userId, userEmail, isLocal]);
 
   const markAsRead = async (id: string) => {
-    await supabase.from('notifications').update({ read: true }).eq('id', id);
+    const { error } = await supabase.from('notifications').update({ read: true }).eq('id', id);
+    if (error) return;
     setNotifications((prev) =>
       prev.map((n) => (n.id === id ? { ...n, read: true } : n))
     );
@@ -109,15 +110,17 @@ export function NotificationsView({ onBack, onNavigate }: NotificationsViewProps
   const markAllAsRead = async () => {
     const unreadIds = notifications.filter((n) => !n.read).map((n) => n.id);
     if (unreadIds.length === 0) return;
-    await supabase
+    const { error } = await supabase
       .from('notifications')
       .update({ read: true })
       .in('id', unreadIds);
+    if (error) return;
     setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
   };
 
   const deleteNotification = async (id: string) => {
-    await supabase.from('notifications').delete().eq('id', id);
+    const { error } = await supabase.from('notifications').delete().eq('id', id);
+    if (error) return;
     setNotifications((prev) => prev.filter((n) => n.id !== id));
   };
 

@@ -20,7 +20,6 @@ import {
   GraduationCap,
   Droplet,
   Home,
-  ArrowLeft,
 } from 'lucide-react';
 
 interface ApplicationDetailModalProps {

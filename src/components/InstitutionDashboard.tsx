@@ -427,7 +427,6 @@ export function InstitutionDashboard({
                   >
                     <ApplicationRow
                       application={app}
-                      onUpdateStatus={onUpdateStatus}
                       updatingId={updatingId}
                       onSendMessage={(id) => onMessages(id)}
                       onViewDetail={() => setDetailApp(app)}
@@ -503,13 +502,11 @@ export function InstitutionDashboard({
 
 function ApplicationRow({
   application,
-  onUpdateStatus,
   updatingId,
   onSendMessage,
   onViewDetail,
 }: {
   application: Application;
-  onUpdateStatus: (id: string, status: string) => void;
   updatingId: string | null;
   onSendMessage: (applicationId: string) => void;
   onViewDetail: () => void;

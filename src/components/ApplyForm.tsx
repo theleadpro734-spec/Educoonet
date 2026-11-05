@@ -1,8 +1,9 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth, setStudentEmail } from '../lib/auth';
 import { FileUpload } from './FileUpload';
 import { ArrowLeft, FileText, User, MapPin, Heart, Upload, CheckCircle, AlertCircle } from 'lucide-react';
+import { Application, Quota } from '../types';
 
 interface ApplyFormProps {
   institutionId: string;
@@ -13,6 +14,7 @@ interface ApplyFormProps {
   prefillPhone?: string;
   onBack: () => void;
   onSuccess: () => void;
+  application?: Application;
 }
 
 interface FormData {
@@ -70,6 +72,7 @@ export function ApplyForm({
   prefillPhone,
   onBack,
   onSuccess,
+  application,
 }: ApplyFormProps) {
   const { user, isLocalUser } = useAuth();
   const [submitting, setSubmitting] = useState(false);
@@ -77,14 +80,52 @@ export function ApplyForm({
   const [currentStep, setCurrentStep] = useState(1);
   const [completed, setCompleted] = useState(false);
   const [stepErrors, setStepErrors] = useState<Record<number, string>>({});
+  const [quotas, setQuotas] = useState<Quota[]>([]);
+  const [quotaId, setQuotaId] = useState(application?.quota_id || '');
 
   const [form, setForm] = useState<FormData>({
     ...emptyForm,
-    name: prefillName || '',
-    last_name: prefillLastName || '',
-    phone: prefillPhone || '',
-    email: studentEmail,
+    name: application?.name || prefillName || '',
+    last_name: application?.last_name || prefillLastName || '',
+    phone: application?.phone || prefillPhone || '',
+    email: application?.email || studentEmail,
+    educational_level: application?.educational_level || emptyForm.educational_level,
+    identity_document: application?.identity_document || '',
+    birth_date: application?.birth_date || '',
+    birth_place: application?.birth_place || '',
+    birth_center: application?.birth_center || '',
+    blood_type: application?.blood_type || '',
+    address: application?.address || '',
+    province: application?.province || '',
+    city: application?.city || '',
+    sector: application?.sector || '',
+    representative_name: application?.representative_name || '',
+    representative_cedula: application?.representative_cedula || '',
+    cedula_url: application?.cedula_url || '',
+    birth_certificate_url: application?.birth_certificate_url || '',
+    residence_letter_url: application?.residence_letter_url || '',
+    cedula_rep_url: application?.cedula_rep_url || '',
   });
+
+  useEffect(() => {
+    const loadQuotas = async () => {
+      const { data, error } = await supabase
+        .from('quotas_with_available')
+        .select('*')
+        .eq('institution_id', institutionId)
+        .gt('total', 0)
+        .order('created_at', { ascending: false });
+      if (error || !data) return;
+      setQuotas((data as Quota[]).filter((quota) => quota.available > 0 || quota.id === application?.quota_id));
+    };
+    void loadQuotas();
+    const channel = supabase
+      .channel(`apply_quotas_${institutionId}`)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'applications' }, () => { void loadQuotas(); })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'quotas', filter: `institution_id=eq.${institutionId}` }, () => { void loadQuotas(); })
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
+  }, [institutionId, application?.quota_id]);
 
   const update = (field: keyof FormData, value: string) => {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -106,6 +147,7 @@ export function ApplyForm({
       if (!form.phone.trim()) return 'Telefono es obligatorio';
       if (!form.identity_document.trim()) return 'Cedula es obligatoria';
       if (!form.birth_date) return 'Fecha de nacimiento es obligatoria';
+      if (!quotaId) return 'Selecciona el nivel y periodo al que deseas postular';
     }
     if (step === 2) {
       if (!form.province.trim()) return 'Provincia es obligatoria';
@@ -156,7 +198,9 @@ export function ApplyForm({
     setSubmitting(true);
 
     let existingCheck;
-    if (isLocalUser && form.email) {
+    if (application) {
+      existingCheck = { data: null };
+    } else if (isLocalUser && form.email) {
       existingCheck = await supabase
         .from('applications')
         .select('id, status')
@@ -181,9 +225,9 @@ export function ApplyForm({
       return;
     }
 
-    const { data: insertedApp, error: dbError } = await supabase.from('applications').insert({
+    const applicationPayload = {
       institution_id: institutionId,
-      status: 'pendiente',
+      quota_id: quotaId || null,
       name: form.name.trim(),
       last_name: form.last_name.trim(),
       email: form.email.trim().toLowerCase(),
@@ -204,13 +248,20 @@ export function ApplyForm({
       birth_certificate_url: form.birth_certificate_url || null,
       residence_letter_url: form.residence_letter_url || null,
       cedula_rep_url: form.cedula_rep_url || null,
-    }).select('id').single();
+    };
+
+    const { data: savedApp, error: dbError } = application
+      ? await supabase.from('applications').update(applicationPayload).eq('id', application.id).select('id').maybeSingle()
+      : await supabase.from('applications').insert({ ...applicationPayload, status: 'pendiente' }).select('id').maybeSingle();
+    const insertedApp = savedApp;
 
     if (dbError || !insertedApp) {
       const msg = dbError?.message || '';
       let friendly = 'Error al enviar la postulacion. Intenta de nuevo.';
       if (msg.includes('policy') || msg.includes('row-level') || msg.includes('permission')) {
         friendly = 'No tienes permiso para enviar. Recarga la pagina e intenta de nuevo.';
+      } else if (msg.includes('disponibilidad')) {
+        friendly = 'Este cupo se acaba de agotar. Elige otro nivel o periodo.';
       } else if (msg.includes('duplicate') || msg.includes('unique')) {
         friendly = 'Ya existe una postulacion con esos datos.';
       }
@@ -221,7 +272,9 @@ export function ApplyForm({
 
     setStudentEmail(form.email);
 
-    await supabase.rpc('notify_new_application', { p_application_id: insertedApp.id });
+    if (!application) {
+      await supabase.rpc('notify_new_application', { p_application_id: insertedApp.id });
+    }
 
     setSubmitting(false);
     setCompleted(true);
@@ -330,13 +383,24 @@ export function ApplyForm({
               </div>
 
               <div>
-                <label className={labelClass}>Nivel Educativo *</label>
-                <select value={form.educational_level} onChange={(e) => update('educational_level', e.target.value)} className={inputClass}>
-                  <option value="Bachillerato">Bachillerato</option>
-                  <option value="Tecnico">Tecnico</option>
-                  <option value="Universitario">Universitario</option>
-                  <option value="Postgrado">Postgrado</option>
+                <label className={labelClass}>Nivel y periodo al que deseas postular *</label>
+                <select
+                  value={quotaId}
+                  onChange={(e) => {
+                    const selected = quotas.find((quota) => quota.id === e.target.value);
+                    setQuotaId(e.target.value);
+                    if (selected) update('educational_level', selected.grade_level || selected.grade_name || form.educational_level);
+                  }}
+                  className={inputClass}
+                >
+                  <option value="">Selecciona una opción</option>
+                  {quotas.map((quota) => (
+                    <option key={quota.id} value={quota.id}>
+                      {(quota.grade_name || quota.grade_or_group)} · {(quota.period_name || quota.academic_period)} · {quota.available} disponible{quota.available === 1 ? '' : 's'}
+                    </option>
+                  ))}
                 </select>
+                {quotas.length === 0 && <p className="mt-1.5 text-xs text-amber-600">Esta institución no tiene cupos disponibles para postulación.</p>}
               </div>
 
               <div className="grid md:grid-cols-2 gap-4">

@@ -64,17 +64,22 @@ function App() {
       setAdminChecked(true);
       return;
     }
-    supabase
-      .rpc('verify_admin_session', { p_admin_id: JSON.parse(stored).id })
-      .then(({ data }: { data: AdminAccount[] | null }) => {
+    void (async () => {
+      try {
+        const parsed = JSON.parse(stored) as { id?: string };
+        if (!parsed.id) throw new Error('Invalid admin session');
+        const { data } = await supabase.rpc('verify_admin_session', { p_admin_id: parsed.id });
         if (data && data.length > 0) {
-          setAdminUser(data[0]);
+          setAdminUser(data[0] as AdminAccount);
         } else {
           localStorage.removeItem('edu_admin');
         }
-      })
-      .catch(() => localStorage.removeItem('edu_admin'))
-      .finally(() => setAdminChecked(true));
+      } catch {
+        localStorage.removeItem('edu_admin');
+      } finally {
+        setAdminChecked(true);
+      }
+    })();
   }, [route, adminChecked]);
 
   const handleAdminLogin = (admin: AdminAccount) => {

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../lib/auth';
+import { useUnreadNotifications } from '../lib/useUnreadNotifications';
 import { Application } from '../types';
 import { InstitutionDashboard } from './InstitutionDashboard';
 import { InstitutionProfile } from './InstitutionProfile';
@@ -8,7 +9,7 @@ import { QuotasView } from './QuotasView';
 import { MessagingView } from './MessagingView';
 import { ApplicationDetailModal } from './ApplicationDetailModal';
 import { NotificationsView } from './NotificationsView';
-import { ArrowLeft, RefreshCw, Building2, Users, Bell, LogOut, Shield, HelpCircle, Eye, MessageSquare, Layers } from 'lucide-react';
+import { ArrowLeft, RefreshCw, Building2, Users, Bell, LogOut, Shield, HelpCircle, Eye, MessageSquare, Trash2 } from 'lucide-react';
 
 interface InstitutionPanelProps {
   onExit: () => void;
@@ -22,14 +23,15 @@ interface MessageState {
 
 export function InstitutionPanel({ onExit }: InstitutionPanelProps) {
   const { institution, user, signOut } = useAuth();
+  const unreadNotifications = useUnreadNotifications({ userId: user?.id, userEmail: user?.email, isLocal: false });
   const [view, setView] = useState<View>('dashboard');
   const [messageState, setMessageState] = useState<MessageState>({});
   const [applications, setApplications] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
   const [unreadMessages, setUnreadMessages] = useState(0);
-  const [unreadNotifications, setUnreadNotifications] = useState(0);
 
   const institutionId = institution?.id;
 
@@ -51,10 +53,10 @@ export function InstitutionPanel({ onExit }: InstitutionPanelProps) {
 
   useEffect(() => {
     const channel = supabase
-      .channel('institution_notifications')
+      .channel('institution_applications')
       .on(
         'postgres_changes',
-        { event: 'INSERT', schema: 'public', table: 'notifications' },
+        { event: '*', schema: 'public', table: 'applications' },
         () => setReloadKey((k) => k + 1)
       )
       .subscribe();
@@ -69,6 +71,7 @@ export function InstitutionPanel({ onExit }: InstitutionPanelProps) {
         .from('applications')
         .select('*')
         .eq('institution_id', institutionId)
+        .is('archived_at', null)
         .order('created_at', { ascending: false }),
     ]);
 
@@ -87,15 +90,6 @@ export function InstitutionPanel({ onExit }: InstitutionPanelProps) {
       setUnreadMessages(0);
     }
 
-    if (user?.id) {
-      const { count: notifCount } = await supabase
-        .from('notifications')
-        .select('*', { count: 'exact', head: true })
-        .eq('user_id', user.id)
-        .eq('read', false);
-      setUnreadNotifications(notifCount || 0);
-    }
-
     setLoading(false);
   };
 
@@ -103,19 +97,31 @@ export function InstitutionPanel({ onExit }: InstitutionPanelProps) {
     setReloadKey((k) => k + 1);
   };
 
+  const handleDeleteApplication = async (id: string) => {
+    const { error } = await supabase.from('applications').delete().eq('id', id);
+    if (error) {
+      setActionError('No se pudo eliminar la postulacion. Intenta de nuevo.');
+      return;
+    }
+    setActionError(null);
+    await fetchData();
+  };
+
   const updateStatus = async (id: string, status: string) => {
     setUpdatingId(id);
-    const { error } = await supabase
-      .from('applications')
-      .update({ status })
-      .eq('id', id);
-    if (!error) {
-      await supabase.rpc('notify_status_change', {
-        p_application_id: id,
-        p_new_status: status,
-      });
-      fetchData();
+    const { error } = await supabase.rpc('institution_set_application_status', {
+      p_application_id: id,
+      p_new_status: status,
+    });
+    if (error) {
+      setUpdatingId(null);
+      setActionError(error.message.includes('archivada')
+        ? 'Esta postulacion ya fue rechazada y no se puede volver a aceptar.'
+        : 'No se pudo actualizar la postulacion. Intenta de nuevo.');
+      return;
     }
+    setActionError(null);
+    await fetchData();
     setUpdatingId(null);
   };
 
@@ -154,7 +160,9 @@ export function InstitutionPanel({ onExit }: InstitutionPanelProps) {
         onBack={() => setView('dashboard')}
         applications={applications}
         onUpdateStatus={updateStatus}
+        onDelete={handleDeleteApplication}
         updatingId={updatingId}
+        actionError={actionError}
         onRefresh={handleRefresh}
         institutionName={institution.name}
         onMessage={(appId) => {
@@ -234,7 +242,9 @@ function ApplicationsListView({
   onBack,
   applications,
   onUpdateStatus,
+  onDelete,
   updatingId,
+  actionError,
   onRefresh,
   institutionName,
   onMessage,
@@ -242,7 +252,9 @@ function ApplicationsListView({
   onBack: () => void;
   applications: Application[];
   onUpdateStatus: (id: string, status: string) => void;
+  onDelete: (id: string) => void;
   updatingId: string | null;
+  actionError: string | null;
   onRefresh: () => void;
   institutionName: string;
   onMessage: (appId: string) => void;
@@ -335,6 +347,11 @@ function ApplicationsListView({
       </header>
 
       <main className="max-w-5xl mx-auto px-4 py-6 pb-24">
+        {actionError && (
+          <div role="alert" className="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+            {actionError}
+          </div>
+        )}
         {filteredApplications.length === 0 ? (
           <div className="bg-white rounded-2xl border border-slate-200 p-16 text-center shadow-sm">
             <div className="w-20 h-20 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-5">
@@ -356,8 +373,6 @@ function ApplicationsListView({
             </p>
             {filteredApplications.map((app) => {
               const style = statusStyles[app.status];
-              const isUpdating = updatingId === app.id;
-
               return (
                 <div
                   key={app.id}
@@ -440,6 +455,17 @@ function ApplicationsListView({
                             >
                               <MessageSquare className="w-4 h-4" />
                               Mensaje
+                            </button>
+                            <button
+                              onClick={() => {
+                                if (window.confirm('¿Eliminar esta postulacion? Esta accion no se puede deshacer.')) {
+                                  onDelete(app.id);
+                                }
+                              }}
+                              className="flex items-center gap-1.5 px-3 py-2 bg-red-50 hover:bg-red-100 text-red-600 text-sm font-medium rounded-lg transition-colors"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                              Eliminar
                             </button>
                           </div>
                         </div>

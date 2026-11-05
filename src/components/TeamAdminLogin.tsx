@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { supabase } from '../lib/supabase';
+import { AdminAccount } from '../types';
 import { EduConnetLogo } from './EduConnetLogo';
 import { Shield, Lock, AtSign, Eye, EyeOff, AlertCircle, ArrowLeft, KeyRound } from 'lucide-react';
 
 interface TeamAdminLoginProps {
-  onSuccess: (admin: { id: string; username: string; name: string }) => void;
+  onSuccess: (admin: AdminAccount) => void;
 }
 
 export function TeamAdminLogin({ onSuccess }: TeamAdminLoginProps) {
@@ -30,7 +31,7 @@ export function TeamAdminLogin({ onSuccess }: TeamAdminLoginProps) {
       return;
     }
 
-    const admin = data[0] as { id: string; username: string; name: string };
+    const admin = data[0] as AdminAccount;
     localStorage.setItem('edu_admin', JSON.stringify(admin));
     setLoading(false);
     onSuccess(admin);

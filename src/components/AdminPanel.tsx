@@ -23,7 +23,6 @@ import {
   Activity,
   Download,
   ToggleLeft,
-  ToggleRight,
   AlertCircle,
   Eye,
 } from 'lucide-react';
@@ -110,6 +109,8 @@ export function AdminPanel({ admin, onExit }: AdminPanelProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [selectedApp, setSelectedApp] = useState<AdminApplication | null>(null);
+  const canManageInstitutions = admin.role === 'super_admin' || admin.role === 'operator';
+  const canManageStudents = admin.role === 'super_admin' || admin.role === 'operator';
 
   const showToast = (type: 'success' | 'error', msg: string) => {
     setToast({ type, msg });
@@ -141,7 +142,7 @@ export function AdminPanel({ admin, onExit }: AdminPanelProps) {
 
     if (instRes.data) setInstitutions(instRes.data as AdminInstitution[]);
     if (stuRes.data) setStudents(stuRes.data as AdminStudent[]);
-    if (appRes.data) setApplications(appRes.data as AdminApplication[]);
+    if (appRes.data) setApplications(appRes.data as unknown as AdminApplication[]);
     setTotalMessages(msgRes.count || 0);
     if (logRes.data) setActivityLog(logRes.data as AdminActivityLog[]);
     setLoading(false);
@@ -442,25 +443,29 @@ export function AdminPanel({ admin, onExit }: AdminPanelProps) {
                     )}
                   </td>
                   <td className="px-5 py-4 text-center">
-                    <button
-                      onClick={() => toggleInstitutionSuspend(inst.id, inst.is_suspended)}
-                      disabled={actionLoading}
-                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors disabled:opacity-50 ${
-                        inst.is_suspended
-                          ? 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100'
-                          : 'bg-red-50 text-red-700 hover:bg-red-100'
-                      }`}
-                    >
-                      {inst.is_suspended ? (
-                        <>
-                          <ShieldCheck className="w-3.5 h-3.5" /> Reactivar
-                        </>
-                      ) : (
-                        <>
-                          <ShieldAlert className="w-3.5 h-3.5" /> Suspender
-                        </>
-                      )}
-                    </button>
+                    {canManageInstitutions ? (
+                      <button
+                        onClick={() => toggleInstitutionSuspend(inst.id, inst.is_suspended)}
+                        disabled={actionLoading}
+                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors disabled:opacity-50 ${
+                          inst.is_suspended
+                            ? 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100'
+                            : 'bg-red-50 text-red-700 hover:bg-red-100'
+                        }`}
+                      >
+                        {inst.is_suspended ? (
+                          <>
+                            <ShieldCheck className="w-3.5 h-3.5" /> Reactivar
+                          </>
+                        ) : (
+                          <>
+                            <ShieldAlert className="w-3.5 h-3.5" /> Suspender
+                          </>
+                        )}
+                      </button>
+                    ) : (
+                      <span className="text-xs text-slate-400">Solo lectura</span>
+                    )}
                   </td>
                 </tr>
               ))}
@@ -528,17 +533,21 @@ export function AdminPanel({ admin, onExit }: AdminPanelProps) {
                   {stuApps.length} postulacion{stuApps.length !== 1 ? 'es' : ''}
                 </span>
               </div>
-              <button
-                onClick={() => toggleStudentSuspend(stu.id, stu.is_suspended)}
-                disabled={actionLoading}
-                className={`mt-3 w-full py-2 rounded-lg text-xs font-semibold transition-colors disabled:opacity-50 ${
-                  stu.is_suspended
-                    ? 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100'
-                    : 'bg-red-50 text-red-700 hover:bg-red-100'
-                }`}
-              >
-                {stu.is_suspended ? 'Reactivar cuenta' : 'Suspender cuenta'}
-              </button>
+              {canManageStudents ? (
+                <button
+                  onClick={() => toggleStudentSuspend(stu.id, stu.is_suspended)}
+                  disabled={actionLoading}
+                  className={`mt-3 w-full py-2 rounded-lg text-xs font-semibold transition-colors disabled:opacity-50 ${
+                    stu.is_suspended
+                      ? 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100'
+                      : 'bg-red-50 text-red-700 hover:bg-red-100'
+                  }`}
+                >
+                  {stu.is_suspended ? 'Reactivar cuenta' : 'Suspender cuenta'}
+                </button>
+              ) : (
+                <p className="mt-3 text-center text-xs text-slate-400">Solo lectura</p>
+              )}
             </div>
           );
         })}

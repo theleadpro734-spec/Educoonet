@@ -94,6 +94,8 @@ export interface Application {
   id: string;
   institution_id: string;
   opportunity_id: string | null;
+  quota_id: string | null;
+  archived_at: string | null;
   user_id: string | null;
   name: string;
   last_name: string | null;
@@ -123,6 +125,7 @@ export interface Application {
   created_at: string;
   institutions?: Institution;
   opportunities?: Opportunity;
+  quotas?: Quota;
 }
 
 export interface Favorite {
@@ -172,10 +175,13 @@ export interface ToastMessage {
   message?: string;
 }
 
+export type AdminRole = 'super_admin' | 'operator' | 'viewer';
+
 export interface AdminAccount {
   id: string;
   username: string;
   name: string;
+  role: AdminRole;
 }
 
 export interface AdminActivityLog {

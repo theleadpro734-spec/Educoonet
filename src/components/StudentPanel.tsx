@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { INSTITUTION_ID } from '../lib/constants';
 import { useAuth } from '../lib/auth';
+import { useUnreadNotifications } from '../lib/useUnreadNotifications';
 import { Institution, Application } from '../types';
 import { StudentDashboard } from './StudentDashboard';
 import { MessagingView } from './MessagingView';
@@ -30,33 +31,14 @@ export function StudentPanel({ onExit }: StudentPanelProps) {
   const [loading, setLoading] = useState(true);
   const [selectedApplicationId, setSelectedApplicationId] = useState<string | undefined>(undefined);
   const [unreadMessages, setUnreadMessages] = useState(0);
-  const [unreadNotifications, setUnreadNotifications] = useState(0);
   const [refreshKey, setRefreshKey] = useState(0);
   const [showLinkModal, setShowLinkModal] = useState(false);
+  const [editingApplication, setEditingApplication] = useState<Application | undefined>(undefined);
 
   const userId = user?.id;
   const studentEmail = user?.email || '';
   const isLocal = isLocalUser;
-
-  const fetchUnreadNotifications = async () => {
-    if (isLocal) {
-      if (!studentEmail) { setUnreadNotifications(0); return; }
-      const { count } = await supabase
-        .from('notifications')
-        .select('*', { count: 'exact', head: true })
-        .eq('user_email', studentEmail)
-        .eq('read', false);
-      setUnreadNotifications(count || 0);
-      return;
-    }
-    if (!userId) return;
-    const { count } = await supabase
-      .from('notifications')
-      .select('*', { count: 'exact', head: true })
-      .eq('user_id', userId)
-      .eq('read', false);
-    setUnreadNotifications(count || 0);
-  };
+  const unreadNotifications = useUnreadNotifications({ userId, userEmail: studentEmail, isLocal });
 
   const fetchData = async () => {
     if (!userId) { setLoading(false); return; }
@@ -72,11 +54,13 @@ export function StudentPanel({ onExit }: StudentPanelProps) {
             .from('applications')
             .select('*, institutions(name)')
             .eq('email', studentEmail)
+            .is('archived_at', null)
             .order('created_at', { ascending: false })
         : supabase
             .from('applications')
             .select('*, institutions(name)')
             .eq('user_id', userId)
+            .is('archived_at', null)
             .order('created_at', { ascending: false }),
     ]);
 
@@ -96,7 +80,6 @@ export function StudentPanel({ onExit }: StudentPanelProps) {
       setUnreadMessages(0);
     }
 
-    await fetchUnreadNotifications();
     setLoading(false);
   };
 
@@ -121,7 +104,7 @@ export function StudentPanel({ onExit }: StudentPanelProps) {
       .channel('student_notifications')
       .on(
         'postgres_changes',
-        { event: 'INSERT', schema: 'public', table: 'notifications' },
+        { event: '*', schema: 'public', table: 'applications' },
         () => setRefreshKey((k) => k + 1)
       )
       .subscribe();
@@ -182,8 +165,13 @@ export function StudentPanel({ onExit }: StudentPanelProps) {
         institutionId={INSTITUTION_ID}
         studentEmail={studentEmail}
         institutionName={institution?.name}
-        onBack={() => setView('dashboard')}
+        application={editingApplication}
+        onBack={() => {
+          setEditingApplication(undefined);
+          setView('applications');
+        }}
         onSuccess={() => {
+          setEditingApplication(undefined);
           fetchData();
           setView('applications');
         }}
@@ -196,7 +184,23 @@ export function StudentPanel({ onExit }: StudentPanelProps) {
       <ApplicationsListView
         applications={applications}
         onBack={() => setView('dashboard')}
-        onApply={() => setView('apply')}
+        onApply={() => {
+          setEditingApplication(undefined);
+          setView('apply');
+        }}
+        onEdit={(application) => {
+          setEditingApplication(application);
+          setView('apply');
+        }}
+        onDelete={async (application) => {
+          if (!window.confirm('¿Quieres retirar esta postulación?')) return;
+          const { error } = await supabase.from('applications').delete().eq('id', application.id);
+          if (error) {
+            window.alert('No se pudo retirar la postulación. Intenta de nuevo.');
+            return;
+          }
+          await fetchData();
+        }}
         onMessages={(id) => {
           setSelectedApplicationId(id);
           setView('messages');
@@ -261,11 +265,15 @@ function ApplicationsListView({
   onBack,
   onApply,
   onMessages,
+  onEdit,
+  onDelete,
 }: {
   applications: Application[];
   onBack: () => void;
   onApply: () => void;
   onMessages: (id: string) => void;
+  onEdit: (application: Application) => void;
+  onDelete: (application: Application) => void;
 }) {
   const [filterStatus, setFilterStatus] = useState<string>('all');
 
@@ -362,7 +370,17 @@ function ApplicationsListView({
                       {style.label}
                     </span>
                   </div>
-                  <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-end gap-2">
+                  <div className="mt-4 pt-3 border-t border-slate-100 flex flex-wrap items-center justify-end gap-2">
+                    {app.status === 'pendiente' && (
+                      <>
+                        <button onClick={() => onEdit(app)} className="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition-all">
+                          Editar
+                        </button>
+                        <button onClick={() => onDelete(app)} className="px-3 py-2 bg-red-50 hover:bg-red-100 text-red-600 text-xs font-semibold rounded-lg transition-all">
+                          Retirar
+                        </button>
+                      </>
+                    )}
                     <button onClick={() => onMessages(app.id)} className="flex items-center gap-1.5 px-3 py-2 bg-[#EFF6FF] hover:bg-[#DBEAFE] text-[#2563EB] text-xs font-semibold rounded-lg transition-all">
                       Ver Mensajes
                     </button>
