@@ -15,24 +15,6 @@
   --brand-700: #1D4ED8;
   --brand-900: #1E3A8A;
 
-  --cyan-50:  #ECFEFF;
-  --cyan-100: #CFFAFE;
-  --cyan-200: #A5F3FC;
-  --cyan-300: #67E8F9;
-  --cyan-400: #22D3EE;
-  --cyan-500: #06B6D4;
-  --cyan-600: #0891B2;
-  --cyan-700: #0E7490;
-
-  --violet-50:  #F5F3FF;
-  --violet-100: #EDE9FE;
-  --violet-200: #DDD6FE;
-  --violet-300: #C4B5FD;
-  --violet-400: #A78BFA;
-  --violet-500: #8B5CF6;
-  --violet-600: #7C3AED;
-  --violet-700: #6D28D9;
-
   --ink-bg:      #0F172A;
   --ink-surface: #1E293B;
   --ink-border:  #334155;
@@ -89,9 +71,9 @@ body.dark {
   overflow: hidden;
 }
 
-/* Gradient text — blue dominant with subtle purple */
+/* Gradient text */
 .gradient-text {
-  background: linear-gradient(135deg, #2563EB 0%, #3B82F6 60%, #8B5CF6 100%);
+  background: linear-gradient(135deg, #2563EB 0%, #3B82F6 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -126,8 +108,8 @@ body.dark {
   transition: border-color 0.15s, box-shadow 0.15s;
 }
 .input:focus {
-  border-color: #06B6D4;
-  box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.12);
+  border-color: #2563EB;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
 }
 
 /* Modal open */

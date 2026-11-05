@@ -7,6 +7,7 @@ import {
   Clock,
   CheckCircle,
   XCircle,
+  TrendingUp,
   Calendar,
   Mail,
   Phone,
@@ -22,6 +23,7 @@ import {
   ChevronRight,
   Filter,
   LogOut,
+  UserCheck,
   Layers,
 
   AlertCircle,
@@ -74,6 +76,10 @@ export function InstitutionDashboard({
   const accepted = applications.filter((a) => a.status === 'aceptada').length;
   const rejected = applications.filter((a) => a.status === 'rechazada').length;
 
+  const acceptanceRate = total > 0
+    ? Math.round((accepted / (accepted + rejected || 1)) * 100)
+    : 0;
+
   const filteredApplications =
     filterStatus === 'all' ? applications : applications.filter((a) => a.status === filterStatus);
 
@@ -101,6 +107,8 @@ export function InstitutionDashboard({
     { id: 'quotas'        as Tab, label: 'Cupos',          icon: Layers },
     { id: 'messages'      as Tab, label: 'Mensajes',       icon: MessageSquare, badge: unreadMessages },
     { id: 'notifications' as Tab, label: 'Notificaciones', icon: Bell,          badge: unreadNotifications },
+    { id: 'profile'       as Tab, label: 'Perfil',         icon: Building2 },
+    { id: 'settings'      as Tab, label: 'Ajustes',        icon: Settings },
   ];
 
   const SidebarContent = () => (
@@ -152,6 +160,34 @@ export function InstitutionDashboard({
         })}
       </nav>
 
+      {/* Acceptance rate widget */}
+      <div className="mx-3 mb-3 p-4 rounded-xl bg-white/8 border border-white/10">
+        <div className="flex items-center justify-between mb-2">
+          <p className="text-[#93C5FD] text-xs font-semibold uppercase tracking-wider">Aceptacion</p>
+          <span className="text-xs font-bold text-white bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full">
+            {acceptanceRate}%
+          </span>
+        </div>
+        <div className="h-1.5 bg-white/10 rounded-full overflow-hidden mb-3">
+          <div
+            className="h-full bg-gradient-to-r from-[#3B82F6] to-emerald-400 rounded-full transition-all duration-700"
+            style={{ width: `${acceptanceRate}%` }}
+          />
+        </div>
+        <div className="grid grid-cols-3 text-center gap-1">
+          {[
+            { v: pending, label: 'Pend', c: 'text-amber-400' },
+            { v: accepted, label: 'Acept', c: 'text-emerald-400' },
+            { v: rejected, label: 'Rech', c: 'text-red-400' },
+          ].map((s) => (
+            <div key={s.label}>
+              <p className={`text-base font-bold ${s.c}`}>{s.v}</p>
+              <p className="text-[9px] text-white/40 uppercase tracking-wide">{s.label}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* Account */}
       <div className="px-3 pb-4 relative">
         <button
@@ -169,23 +205,6 @@ export function InstitutionDashboard({
         </button>
         {accountMenuOpen && (
           <div className="absolute bottom-full left-3 right-3 mb-2 bg-[#0F172A] border border-white/10 rounded-xl shadow-2xl py-1 z-10 animate-scale-in">
-            <button
-              onClick={() => handleTabChange('profile')}
-              className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-white/80 hover:text-white hover:bg-white/10 transition-colors rounded-lg mx-1"
-              style={{ width: 'calc(100% - 8px)' }}
-            >
-              <Building2 className="w-4 h-4" />
-              Perfil de la institucion
-            </button>
-            <button
-              onClick={() => handleTabChange('settings')}
-              className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-white/80 hover:text-white hover:bg-white/10 transition-colors rounded-lg mx-1"
-              style={{ width: 'calc(100% - 8px)' }}
-            >
-              <Settings className="w-4 h-4" />
-              Ajustes
-            </button>
-            <div className="my-1 border-t border-white/10" />
             <button
               onClick={onExit}
               className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-400 hover:bg-red-500/10 transition-colors rounded-lg mx-1"
@@ -222,15 +241,11 @@ export function InstitutionDashboard({
             <Menu className="w-6 h-6 text-slate-700" />
           </button>
           <EduConnetLogo size="sm" variant="light" />
-          <button
-            onClick={onNotifications}
-            aria-label="Notificaciones"
-            className="relative p-2 -mr-2 rounded-xl hover:bg-slate-100 transition-colors"
-          >
+          <button className="relative p-2 -mr-2 rounded-xl hover:bg-slate-100 transition-colors">
             <Bell className="w-6 h-6 text-slate-700" />
-            {unreadNotifications > 0 && (
-              <span className="absolute top-1 right-1 min-w-5 h-5 px-1 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center animate-scale-in">
-                {unreadNotifications}
+            {pending > 0 && (
+              <span className="absolute top-1 right-1 w-5 h-5 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center animate-scale-in">
+                {pending}
               </span>
             )}
           </button>
@@ -272,6 +287,27 @@ export function InstitutionDashboard({
               <h1 className="text-2xl lg:text-3xl font-bold text-slate-900">Panel de Control</h1>
               <p className="text-slate-500 mt-1 text-sm">Gestiona postulaciones y el perfil de tu institucion.</p>
             </div>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={onProfile}
+                className="flex items-center gap-2 px-4 py-2.5 bg-[#1E3A8A] hover:bg-[#2563EB] text-white text-sm font-medium rounded-xl transition-all btn-spring shadow-lg shadow-[#1E3A8A]/20"
+              >
+                <Settings className="w-4 h-4" />
+                Editar Perfil
+              </button>
+              <button
+                onClick={() => handleTabChange('messages')}
+                className="relative flex items-center gap-2 px-4 py-2.5 bg-[#2563EB]/10 hover:bg-[#2563EB]/20 text-[#2563EB] text-sm font-medium rounded-xl transition-all btn-spring"
+              >
+                <MessageSquare className="w-4 h-4" />
+                Mensajes
+                {unreadMessages > 0 && (
+                  <span className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center animate-scale-in">
+                    {unreadMessages}
+                  </span>
+                )}
+              </button>
+            </div>
           </div>
 
           {/* Stats Grid */}
@@ -300,10 +336,59 @@ export function InstitutionDashboard({
                       s.color === 'green' ? 'text-emerald-600' : 'text-red-500'
                     }`} />
                   </div>
-                  </div>
+                  {s.color === 'blue' && total > 0 && (
+                    <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full flex items-center gap-1">
+                      <TrendingUp className="w-3 h-3" />Activo
+                    </span>
+                  )}
+                </div>
                 <p className="text-3xl font-bold text-slate-900">{s.value}</p>
                 <p className="text-xs font-semibold text-slate-700 mt-0.5">{s.title}</p>
                 <p className="text-xs text-slate-400">{s.sub}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Info Cards */}
+          <div className="grid lg:grid-cols-3 gap-4 mb-6">
+            {[
+              {
+                icon: UserCheck, iconBg: 'bg-[#2563EB]',
+                cardBg: 'from-[#EFF6FF] to-white border-[#BFDBFE]/40',
+                title: 'Proceso de Revision',
+                sub: 'Tiempo de respuesta',
+                text: 'Responde las postulaciones en menos de 5 dias habiles para mejorar la experiencia del postulante.',
+              },
+              {
+                icon: TrendingUp, iconBg: 'bg-emerald-600',
+                cardBg: 'from-emerald-50 to-white border-emerald-100',
+                title: 'Tasa de Aceptacion',
+                sub: 'Metrica de eficiencia',
+                text: `${acceptanceRate}% de postulaciones han sido aceptadas`,
+              },
+              {
+                icon: AlertCircle, iconBg: 'bg-amber-500',
+                cardBg: 'from-amber-50 to-white border-amber-100',
+                title: 'Pendientes Hoy',
+                sub: 'Nuevas postulaciones',
+                text: `${pendingToday} postulacion${pendingToday !== 1 ? 'es' : ''} nueva${pendingToday !== 1 ? 's' : ''} hoy`,
+              },
+            ].map((c, i) => (
+              <div
+                key={c.title}
+                style={{ animationDelay: `${0.2 + i * 0.07}s` }}
+                className={`animate-slide-up bg-gradient-to-br ${c.cardBg} rounded-2xl p-5 border spring-hover`}
+              >
+                <div className="flex items-center gap-3 mb-3">
+                  <div className={`w-10 h-10 ${c.iconBg} rounded-xl flex items-center justify-center shadow-lg`}>
+                    <c.icon className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-slate-900 text-sm">{c.title}</p>
+                    <p className="text-xs text-slate-500">{c.sub}</p>
+                  </div>
+                </div>
+                <p className="text-sm text-slate-600">{c.text}</p>
               </div>
             ))}
           </div>

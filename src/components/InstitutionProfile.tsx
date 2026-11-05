@@ -480,8 +480,8 @@ export function InstitutionProfile({ onExit }: InstitutionProfileProps) {
               </h2>
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-[#ECFEFF] flex items-center justify-center flex-shrink-0">
-                    <MapPin className="w-5 h-5 text-[#06B6D4]" />
+                  <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center flex-shrink-0">
+                    <MapPin className="w-5 h-5 text-amber-600" />
                   </div>
                   <div className="flex-1">
                     {editMode ? (

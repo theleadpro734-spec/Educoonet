@@ -285,7 +285,7 @@ export function StudentDashboard({
                     }`} />
                   </div>
                   {s.color === 'blue' && applications.length > 0 && (
-                    <span className="text-xs font-semibold text-[#06B6D4] bg-[#ECFEFF] px-2 py-0.5 rounded-full flex items-center gap-1">
+                    <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full flex items-center gap-1">
                       <TrendingUp className="w-3 h-3" /> Activo
                     </span>
                   )}
@@ -367,6 +367,57 @@ export function StudentDashboard({
                   Nueva Postulacion
                 </button>
               )}
+            </div>
+          </div>
+
+          {/* Status overview */}
+          <div className="mt-8 animate-slide-up" style={{ animationDelay: '0.45s' }}>
+            <h2 className="text-lg font-semibold text-slate-900 mb-4">Estado de mis Postulaciones</h2>
+            <div className="grid md:grid-cols-3 gap-4">
+              {[
+                { title: 'Pendientes',  count: pending,  status: 'pendiente' as const,  desc: 'En proceso de revision',  icon: Clock,         iconBg: 'bg-amber-100',   iconC: 'text-amber-600',   bg: 'from-amber-50 to-white border-amber-200', badge: 'bg-amber-500' },
+                { title: 'Aceptadas',   count: accepted, status: 'aceptada' as const,   desc: 'Admitido',                icon: CheckCircle,   iconBg: 'bg-emerald-100', iconC: 'text-emerald-600', bg: 'from-emerald-50 to-white border-emerald-200', badge: 'bg-emerald-500' },
+                { title: 'Rechazadas',  count: rejected, status: 'rechazada' as const,  desc: 'Sigue intentando',        icon: XCircle,       iconBg: 'bg-red-100',     iconC: 'text-red-500',     bg: 'from-red-50 to-white border-red-200', badge: 'bg-red-500' },
+              ].map((s, i) => (
+                <div key={s.title} style={{ animationDelay: `${0.5 + i * 0.07}s` }} className={`animate-fade-in bg-gradient-to-br ${s.bg} rounded-2xl p-5 border spring-hover cursor-pointer`} onClick={() => handleTabChange('applications')}>
+                  <div className="flex items-center justify-between mb-4">
+                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${s.iconBg}`}>
+                      <s.icon className={`w-6 h-6 ${s.iconC}`} />
+                    </div>
+                    <span className={`w-10 h-10 ${s.badge} text-white rounded-xl flex items-center justify-center text-lg font-bold shadow-lg`}>
+                      {s.count}
+                    </span>
+                  </div>
+                  <h3 className="text-base font-semibold text-slate-900">{s.title}</h3>
+                  <p className="text-sm text-slate-500 mt-1">{s.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Info cards */}
+          <div className="mt-6 grid md:grid-cols-2 gap-4 animate-slide-up" style={{ animationDelay: '0.55s' }}>
+            <div className="bg-gradient-to-br from-[#EFF6FF] to-white rounded-2xl p-5 border border-[#BFDBFE]/40 spring-hover">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-[#2563EB] rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-[#2563EB]/20">
+                  <Calendar className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-slate-900">Proceso de Admision</h3>
+                  <p className="text-sm text-slate-600 mt-1">El tiempo de respuesta promedio es de 3-5 dias habiles. Recibiras notificaciones por correo electronico.</p>
+                </div>
+              </div>
+            </div>
+            <div className="bg-gradient-to-br from-emerald-50 to-white rounded-2xl p-5 border border-emerald-200 spring-hover">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-emerald-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-emerald-500/20">
+                  <Mail className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-slate-900">Notificaciones</h3>
+                  <p className="text-sm text-slate-600 mt-1">Te notificaremos cuando haya actualizaciones en tus postulaciones. Revisa tu correo regularmente.</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>

@@ -9,7 +9,6 @@ import { MessagingView } from './MessagingView';
 import { ApplyForm } from './ApplyForm';
 import { NotificationsView } from './NotificationsView';
 import { LinkAccountModal } from './LinkAccountModal';
-import { ApplicantLoginModal } from './ApplicantLoginModal';
 
 interface StudentPanelProps {
   onExit: () => void;
@@ -34,7 +33,6 @@ export function StudentPanel({ onExit }: StudentPanelProps) {
   const [unreadMessages, setUnreadMessages] = useState(0);
   const [refreshKey, setRefreshKey] = useState(0);
   const [showLinkModal, setShowLinkModal] = useState(false);
-  const [showLoginModal, setShowLoginModal] = useState(false);
   const [editingApplication, setEditingApplication] = useState<Application | undefined>(undefined);
 
   const userId = user?.id;
@@ -231,7 +229,6 @@ export function StudentPanel({ onExit }: StudentPanelProps) {
         onBack={() => setView('dashboard')}
         onExit={async () => { await signOut(); onExit(); }}
         onLinkAccount={() => setShowLinkModal(true)}
-        onLogin={() => setShowLoginModal(true)}
       />
     );
   }
@@ -258,9 +255,6 @@ export function StudentPanel({ onExit }: StudentPanelProps) {
       />
       {showLinkModal && (
         <LinkAccountModal onClose={() => setShowLinkModal(false)} />
-      )}
-      {showLoginModal && (
-        <ApplicantLoginModal onClose={() => setShowLoginModal(false)} />
       )}
     </>
   );
@@ -464,7 +458,6 @@ function StudentSettingsView({
   onBack,
   onExit,
   onLinkAccount,
-  onLogin,
 }: {
   studentName: string;
   studentEmail: string;
@@ -473,7 +466,6 @@ function StudentSettingsView({
   onBack: () => void;
   onExit: () => void;
   onLinkAccount: () => void;
-  onLogin: () => void;
 }) {
   const initials = studentName.charAt(0).toUpperCase() || 'P';
 
@@ -523,12 +515,6 @@ function StudentSettingsView({
               className="w-full py-3 bg-white text-[#2563EB] font-semibold rounded-xl hover:bg-[#EFF6FF] transition-colors"
             >
               Vincular mi cuenta
-            </button>
-            <button
-              onClick={onLogin}
-              className="w-full mt-3 py-3 bg-white/10 text-white font-medium rounded-xl hover:bg-white/20 transition-colors"
-            >
-              Ya tengo cuenta: iniciar sesion
             </button>
           </div>
         )}

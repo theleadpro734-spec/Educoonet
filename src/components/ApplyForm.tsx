@@ -226,7 +226,6 @@ export function ApplyForm({
     }
 
     const applicationPayload = {
-      user_id: isLocalUser ? null : user?.id ?? null,
       institution_id: institutionId,
       quota_id: quotaId || null,
       name: form.name.trim(),
@@ -343,7 +342,7 @@ export function ApplyForm({
                   </span>
                 </div>
                 {i < steps.length - 1 && (
-                  <div className={`flex-1 h-0.5 mx-2 rounded-full transition-all ${done ? 'bg-[#22D3EE]' : 'bg-slate-200'}`} />
+                  <div className={`flex-1 h-0.5 mx-2 rounded-full transition-all ${done ? 'bg-emerald-400' : 'bg-slate-200'}`} />
                 )}
               </div>
             );
@@ -592,7 +591,7 @@ export function ApplyForm({
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="flex-1 py-3.5 bg-gradient-to-r from-[#3B82F6] via-[#2563EB] to-[#8B5CF6] hover:from-[#2563EB] hover:to-[#7C3AED] text-white font-semibold rounded-xl transition-all shadow-lg shadow-[#2563EB]/25 disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="flex-1 py-3.5 bg-gradient-to-r from-[#3B82F6] to-[#2563EB] hover:from-[#2563EB] hover:to-[#1D4ED8] text-white font-semibold rounded-xl transition-all shadow-lg shadow-[#2563EB]/25 disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   {submitting ? (
                     <>
