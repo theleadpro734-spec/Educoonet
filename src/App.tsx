@@ -212,7 +212,7 @@ function App() {
 
 function BetaBanner({ onDismiss }: { onDismiss: () => void }) {
   return (
-    <div className="fixed top-0 left-0 right-0 z-[300] bg-gradient-to-r from-amber-500 to-orange-500 text-white px-4 py-2 flex items-center justify-center gap-2 text-sm font-medium shadow-lg">
+    <div className="fixed top-0 left-0 right-0 z-[300] bg-gradient-to-r from-[#2563EB] to-[#06B6D4] text-white px-4 py-2 flex items-center justify-center gap-2 text-sm font-medium shadow-lg">
       <FlaskConical className="w-4 h-4 flex-shrink-0" />
       <span className="text-center">
         Estas usando la version Beta de EduConnet — algunas funciones pueden no estar terminadas.

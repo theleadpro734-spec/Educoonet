@@ -164,13 +164,13 @@ export function InstitutionDashboard({
       <div className="mx-3 mb-3 p-4 rounded-xl bg-white/8 border border-white/10">
         <div className="flex items-center justify-between mb-2">
           <p className="text-[#93C5FD] text-xs font-semibold uppercase tracking-wider">Aceptacion</p>
-          <span className="text-xs font-bold text-white bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full">
+          <span className="text-xs font-bold text-white bg-[#22D3EE]/20 text-[#22D3EE] px-2 py-0.5 rounded-full">
             {acceptanceRate}%
           </span>
         </div>
         <div className="h-1.5 bg-white/10 rounded-full overflow-hidden mb-3">
           <div
-            className="h-full bg-gradient-to-r from-[#3B82F6] to-emerald-400 rounded-full transition-all duration-700"
+            className="h-full bg-gradient-to-r from-[#3B82F6] to-[#22D3EE] rounded-full transition-all duration-700"
             style={{ width: `${acceptanceRate}%` }}
           />
         </div>
@@ -337,7 +337,7 @@ export function InstitutionDashboard({
                     }`} />
                   </div>
                   {s.color === 'blue' && total > 0 && (
-                    <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full flex items-center gap-1">
+                    <span className="text-xs font-semibold text-[#06B6D4] bg-[#ECFEFF] px-2 py-0.5 rounded-full flex items-center gap-1">
                       <TrendingUp className="w-3 h-3" />Activo
                     </span>
                   )}
@@ -360,8 +360,8 @@ export function InstitutionDashboard({
                 text: 'Responde las postulaciones en menos de 5 dias habiles para mejorar la experiencia del postulante.',
               },
               {
-                icon: TrendingUp, iconBg: 'bg-emerald-600',
-                cardBg: 'from-emerald-50 to-white border-emerald-100',
+                icon: TrendingUp, iconBg: 'bg-[#06B6D4]',
+                cardBg: 'from-[#ECFEFF] to-white border-[#A5F3FC]/40',
                 title: 'Tasa de Aceptacion',
                 sub: 'Metrica de eficiencia',
                 text: `${acceptanceRate}% de postulaciones han sido aceptadas`,

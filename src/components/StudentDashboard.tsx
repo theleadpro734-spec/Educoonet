@@ -285,7 +285,7 @@ export function StudentDashboard({
                     }`} />
                   </div>
                   {s.color === 'blue' && applications.length > 0 && (
-                    <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full flex items-center gap-1">
+                    <span className="text-xs font-semibold text-[#06B6D4] bg-[#ECFEFF] px-2 py-0.5 rounded-full flex items-center gap-1">
                       <TrendingUp className="w-3 h-3" /> Activo
                     </span>
                   )}
@@ -408,9 +408,9 @@ export function StudentDashboard({
                 </div>
               </div>
             </div>
-            <div className="bg-gradient-to-br from-emerald-50 to-white rounded-2xl p-5 border border-emerald-200 spring-hover">
+            <div className="bg-gradient-to-br from-[#ECFEFF] to-white rounded-2xl p-5 border border-[#A5F3FC]/40 spring-hover">
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-emerald-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-emerald-500/20">
+                <div className="w-12 h-12 bg-[#06B6D4] rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-[#06B6D4]/20">
                   <Mail className="w-6 h-6 text-white" />
                 </div>
                 <div>

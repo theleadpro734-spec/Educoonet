@@ -72,7 +72,8 @@ export function LandingPage({ onEnterStudent }: LandingPageProps) {
       {/* Hero */}
       <section className="relative pt-32 pb-20 overflow-hidden">
         <div className="absolute top-1/4 right-1/4 w-[500px] h-[500px] bg-[#3B82F6]/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-1/4 w-72 h-72 bg-[#93C5FD]/8 rounded-full blur-2xl pointer-events-none" />
+        <div className="absolute bottom-0 left-1/4 w-72 h-72 bg-[#22D3EE]/8 rounded-full blur-2xl pointer-events-none" />
+        <div className="absolute top-1/3 left-1/3 w-64 h-64 bg-[#8B5CF6]/5 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -163,7 +164,7 @@ export function LandingPage({ onEnterStudent }: LandingPageProps) {
                     </div>
                   </div>
                   <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                    <div className="h-full w-full bg-gradient-to-r from-[#3B82F6] to-emerald-400 rounded-full" />
+                    <div className="h-full w-full bg-gradient-to-r from-[#3B82F6] via-[#22D3EE] to-[#8B5CF6] rounded-full" />
                   </div>
                 </div>
               </div>
@@ -183,8 +184,8 @@ export function LandingPage({ onEnterStudent }: LandingPageProps) {
               { icon: Clock, value: '3-5 dias', label: 'Tiempo de respuesta' },
             ].map((s) => (
               <div key={s.label} className="text-center">
-                <div className="w-12 h-12 mx-auto bg-[#2563EB]/20 rounded-2xl flex items-center justify-center mb-3">
-                  <s.icon className="w-6 h-6 text-[#93C5FD]" />
+                <div className="w-12 h-12 mx-auto bg-[#22D3EE]/20 rounded-2xl flex items-center justify-center mb-3">
+                  <s.icon className="w-6 h-6 text-[#22D3EE]" />
                 </div>
                 <p className="text-2xl lg:text-3xl font-bold text-white">{s.value}</p>
                 <p className="text-sm text-slate-400 mt-1">{s.label}</p>
@@ -210,8 +211,8 @@ export function LandingPage({ onEnterStudent }: LandingPageProps) {
               { icon: MessageSquare, title: 'Mensajeria directa', desc: 'Comunica con la institucion en tiempo real. Resuelve dudas y recibe actualizaciones sin intermediarios.', color: 'bg-blue-600' },
               { icon: Bell, title: 'Notificaciones en vivo', desc: 'Entero al instante cuando cambie el estado de tu postulacion o recibas un nuevo mensaje.', color: 'bg-emerald-600' },
               { icon: ShieldCheck, title: 'Datos seguros', desc: 'Tu informacion esta protegida con encriptacion de nivel bancario y politicas de acceso estrictas.', color: 'bg-slate-700' },
-              { icon: Clock, title: 'Seguimiento en tiempo real', desc: 'Visualiza el estado de tus postulaciones: pendiente, aceptada o rechazada, en cualquier momento.', color: 'bg-amber-600' },
-              { icon: Building2, title: 'Gestion institucional', desc: 'Las instituciones reciben, revisan y gestionan postulaciones desde un panel de control dedicado.', color: 'bg-rose-600' },
+              { icon: Clock, title: 'Seguimiento en tiempo real', desc: 'Visualiza el estado de tus postulaciones: pendiente, aceptada o rechazada, en cualquier momento.', color: 'bg-[#06B6D4]' },
+              { icon: Building2, title: 'Gestion institucional', desc: 'Las instituciones reciben, revisan y gestionan postulaciones desde un panel de control dedicado.', color: 'bg-[#8B5CF6]' },
             ].map((f, i) => (
               <div
                 key={f.title}
@@ -303,7 +304,8 @@ export function LandingPage({ onEnterStudent }: LandingPageProps) {
 
       {/* CTA */}
       <section className="py-20 bg-gradient-to-br from-[#1E3A8A] via-[#2563EB] to-[#3B82F6] relative overflow-hidden">
-        <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-[#93C5FD]/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-[#22D3EE]/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-1/3 w-64 h-64 bg-[#8B5CF6]/8 rounded-full blur-3xl pointer-events-none" />
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">
             Comienza tu postulacion hoy

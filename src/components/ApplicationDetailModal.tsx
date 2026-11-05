@@ -207,7 +207,7 @@ export function ApplicationDetailModal({
 
           {/* Representante */}
           {(app.representative_name || app.representative_cedula) && (
-            <SectionCard title="Representante Legal" icon={Heart} iconColor="bg-rose-100">
+            <SectionCard title="Representante Legal" icon={Heart} iconColor="bg-[#EDE9FE]">
               <div className="grid sm:grid-cols-2 gap-x-4">
                 <InfoRow icon={User} label="Nombres" value={app.representative_name} />
                 <InfoRow icon={FileText} label="Cedula" value={app.representative_cedula} />

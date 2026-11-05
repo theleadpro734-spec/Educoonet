@@ -11,7 +11,7 @@ export function EduConnetLogo({ size = 'md', variant = 'light' }: EduConnetLogoP
   }[size];
 
   const primaryColor = variant === 'dark' ? '#ffffff' : '#0F172A';
-  const accentColor  = variant === 'dark' ? '#93C5FD' : '#2563EB';
+  const accentColor  = variant === 'dark' ? '#22D3EE' : '#06B6D4';
 
   return (
     <span
@@ -50,7 +50,7 @@ export function EduConnetLogo({ size = 'md', variant = 'light' }: EduConnetLogoP
 
         {/* Tassel */}
         <path d="M36 16 L36 22" stroke="#1D4ED8" strokeWidth="1.8" strokeLinecap="round" />
-        <circle cx="36" cy="23.5" r="2" fill="#F59E0B" />
+        <circle cx="36" cy="23.5" r="2" fill="#8B5CF6" />
 
         {/* Connection nodes - representing "Connet" */}
         <circle cx="14" cy="33" r="2.2" fill="#3B82F6" />

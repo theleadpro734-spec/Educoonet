@@ -5,6 +5,16 @@ export const colors = {
     dark: '#1D4ED8',
   },
   secondary: '#3B82F6',
+  cyan: {
+    DEFAULT: '#06B6D4',
+    light: '#22D3EE',
+    dark: '#0891B2',
+  },
+  violet: {
+    DEFAULT: '#8B5CF6',
+    light: '#A78BFA',
+    dark: '#7C3AED',
+  },
   background: '#FFFFFF',
   card: '#F8FAFC',
   text: {
