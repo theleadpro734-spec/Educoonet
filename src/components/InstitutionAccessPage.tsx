@@ -53,10 +53,10 @@ export function InstitutionAccessPage() {
     window.dispatchEvent(new PopStateEvent('popstate'));
   };
 
-  const inputClass = 'w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 transition-all bg-white border-slate-200 text-slate-900 placeholder:text-slate-400 focus:ring-brand-600/20 focus:border-brand-600';
+  const inputClass = 'w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 transition-all bg-white border-slate-200 text-slate-900 placeholder:text-slate-400 focus:ring-cyan-500/25 focus:border-brand-600';
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-50 to-brand-50">
+    <div className="min-h-screen flex flex-col bg-brand-50/50">
       {/* Top bar */}
       <header className="bg-white/80 backdrop-blur-sm border-b border-slate-200">
         <div className="max-w-md mx-auto px-4 py-4 flex items-center justify-between">
@@ -73,7 +73,7 @@ export function InstitutionAccessPage() {
         <div className="w-full max-w-md">
           {/* Logo + title */}
           <div className="text-center mb-8">
-            <div className="w-16 h-16 bg-gradient-to-br from-brand-600 to-brand-900 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-brand-600/25">
+            <div className="w-16 h-16 bg-brand-800 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-brand-600/20">
               <Building2 className="w-8 h-8 text-white" />
             </div>
             <h1 className="text-2xl font-bold text-slate-900">Acceso para instituciones</h1>
@@ -173,7 +173,7 @@ export function InstitutionAccessPage() {
               </p>
               <button
                 onClick={handleTestLogin}
-                className="w-full py-2 bg-white hover:bg-slate-50 text-brand-600 text-xs font-semibold rounded-lg border border-brand-200/40 transition-colors"
+                className="w-full py-2 bg-white hover:bg-brand-50/40 text-brand-600 text-xs font-semibold rounded-lg border border-brand-200/40 transition-colors"
               >
                 Autocompletar credenciales
               </button>

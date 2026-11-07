@@ -92,14 +92,14 @@ export function LandingPage({ onEnterStudent }: LandingPageProps) {
               <div className="mt-8 flex flex-col sm:flex-row gap-4">
                 <button
                   onClick={onEnterStudent}
-                  className="px-7 py-3.5 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-2xl transition-all shadow-xl shadow-brand-600/25 hover:shadow-2xl hover:-translate-y-0.5 flex items-center justify-center gap-2 group"
+                  className="px-7 py-3.5 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-2xl transition-all shadow-xl shadow-brand-600/20 hover:shadow-2xl hover:-translate-y-0.5 flex items-center justify-center gap-2 group"
                 >
                   Soy Postulante
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </button>
                 <a
                   href="#how"
-                  className="px-7 py-3.5 bg-white hover:bg-slate-50 text-slate-700 font-semibold rounded-2xl border border-slate-200 transition-all flex items-center justify-center gap-2"
+                  className="px-7 py-3.5 bg-white hover:bg-brand-50/40 text-slate-700 font-semibold rounded-2xl border border-slate-200 transition-all flex items-center justify-center gap-2"
                 >
                   Ver como funciona
                 </a>
@@ -174,7 +174,7 @@ export function LandingPage({ onEnterStudent }: LandingPageProps) {
       </section>
 
       {/* Stats bar */}
-      <section className="bg-[#0F172A] py-12">
+      <section className="bg-brand-900 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
             {[
@@ -231,7 +231,7 @@ export function LandingPage({ onEnterStudent }: LandingPageProps) {
       </section>
 
       {/* How it works */}
-      <section id="how" className="py-20 bg-slate-50">
+      <section id="how" className="py-20 bg-brand-50/40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl lg:text-4xl font-bold text-slate-900">Como funciona</h2>
@@ -251,7 +251,7 @@ export function LandingPage({ onEnterStudent }: LandingPageProps) {
                   <div className="hidden md:block absolute top-12 left-full w-full h-0.5 bg-gradient-to-r from-brand-600/30 to-transparent" />
                 )}
                 <div className="bg-white rounded-2xl p-8 border border-slate-200/60 shadow-sm">
-                  <div className="w-12 h-12 bg-gradient-to-br from-brand-600 to-brand-900 rounded-2xl flex items-center justify-center mb-5 shadow-lg">
+                  <div className="w-12 h-12 bg-brand-800 rounded-2xl flex items-center justify-center mb-5 shadow-lg">
                     <span className="text-white font-bold text-lg">{s.step}</span>
                   </div>
                   <h3 className="text-lg font-bold text-slate-900 mb-2">{s.title}</h3>
@@ -264,7 +264,7 @@ export function LandingPage({ onEnterStudent }: LandingPageProps) {
           <div className="text-center mt-12">
             <button
               onClick={onEnterStudent}
-              className="px-8 py-4 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-2xl transition-all shadow-xl shadow-brand-600/25 hover:shadow-2xl hover:-translate-y-0.5 inline-flex items-center gap-2 group"
+              className="px-8 py-4 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-2xl transition-all shadow-xl shadow-brand-600/20 hover:shadow-2xl hover:-translate-y-0.5 inline-flex items-center gap-2 group"
             >
               Iniciar mi postulacion
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -291,7 +291,7 @@ export function LandingPage({ onEnterStudent }: LandingPageProps) {
               { icon: MessageSquare, label: 'Comunicacion directa' },
               { icon: CheckCircle, label: 'Respuestas rapidas' },
             ].map((item) => (
-              <div key={item.label} className="flex flex-col items-center gap-3 p-6 bg-slate-50 rounded-2xl border border-slate-200/60">
+              <div key={item.label} className="flex flex-col items-center gap-3 p-6 bg-brand-50/40 rounded-2xl border border-slate-200/60">
                 <div className="w-12 h-12 bg-brand-600/10 rounded-xl flex items-center justify-center">
                   <item.icon className="w-6 h-6 text-brand-600" />
                 </div>
@@ -324,7 +324,7 @@ export function LandingPage({ onEnterStudent }: LandingPageProps) {
       </section>
 
       {/* Footer */}
-      <footer className="bg-[#0F172A] py-12">
+      <footer className="bg-brand-900 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-3">

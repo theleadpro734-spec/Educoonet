@@ -208,7 +208,7 @@ export function MessagingView({
   });
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col">
+    <div className="min-h-screen bg-brand-50/40 flex flex-col">
       {/* Header */}
       <header className="bg-white border-b border-slate-200 sticky top-0 z-40">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
@@ -249,7 +249,7 @@ export function MessagingView({
                   placeholder="Buscar..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all"
+                  className="w-full pl-9 pr-3 py-2 bg-brand-50/40 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500/25 focus:border-cyan-500 transition-all"
                 />
               </div>
             )}
@@ -278,7 +278,7 @@ export function MessagingView({
                     key={app.id}
                     onClick={() => setSelectedApp(app)}
                     className={`w-full text-left p-4 hover:bg-brand-50/50 transition-colors relative ${
-                      selectedApp?.id === app.id ? 'bg-brand-50 border-l-[3px] border-brand-600' : ''
+                      selectedApp?.id === app.id ? 'bg-brand-50 border-l-[3px] border-violet-600' : ''
                     }`}
                   >
                     {unread > 0 && (
@@ -287,7 +287,7 @@ export function MessagingView({
                       </span>
                     )}
                     <div className="flex items-start gap-3">
-                      <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-slate-700 to-slate-900 flex items-center justify-center flex-shrink-0 text-white font-semibold text-sm">
+                      <div className="w-11 h-11 rounded-xl bg-brand-900 flex items-center justify-center flex-shrink-0 text-white font-semibold text-sm">
                         {app.name.charAt(0)}{app.last_name?.charAt(0) || ''}
                       </div>
                       <div className="flex-1 min-w-0">
@@ -312,7 +312,7 @@ export function MessagingView({
         {selectedApp ? (
           <div className="flex-1 bg-white rounded-2xl border border-slate-200 overflow-hidden flex flex-col">
             {/* Thread Header */}
-            <div className="p-4 border-b border-slate-100 bg-slate-50">
+            <div className="p-4 border-b border-slate-100 bg-brand-50/40">
               <div className="flex items-center gap-3">
                 <button
                   onClick={() => setSelectedApp(null)}
@@ -320,7 +320,7 @@ export function MessagingView({
                 >
                   <ArrowLeft className="w-5 h-5" />
                 </button>
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-slate-700 to-slate-900 flex items-center justify-center text-white font-semibold text-sm flex-shrink-0">
+                <div className="w-10 h-10 rounded-xl bg-brand-900 flex items-center justify-center text-white font-semibold text-sm flex-shrink-0">
                   {selectedApp.name.charAt(0)}{selectedApp.last_name?.charAt(0) || ''}
                 </div>
                 <div className="flex-1 min-w-0">
@@ -351,7 +351,7 @@ export function MessagingView({
             </div>
 
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50/50">
+            <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-brand-50/40/50">
               {loading ? (
                 <div className="flex items-center justify-center h-32">
                   <div className="w-8 h-8 border-2 border-brand-200 border-t-brand-600 rounded-full animate-spin" />
@@ -380,8 +380,8 @@ export function MessagingView({
                         <div className={`flex items-center gap-2 ${isOwn ? 'flex-row-reverse' : ''}`}>
                           <div className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 ${
                             msg.sender_type === 'institution'
-                              ? 'bg-gradient-to-br from-slate-700 to-slate-900'
-                              : 'bg-gradient-to-br from-brand-500 to-brand-700'
+                              ? 'bg-brand-900'
+                              : 'bg-brand-700'
                           }`}>
                             {msg.sender_type === 'institution'
                               ? <Building2 className="w-4 h-4 text-white" />
@@ -426,7 +426,7 @@ export function MessagingView({
                       : 'Escribe tu respuesta...'
                   }
                   rows={2}
-                  className="flex-1 resize-none px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all"
+                  className="flex-1 resize-none px-4 py-3 bg-brand-50/40 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/25 focus:border-cyan-500 transition-all"
                 />
                 <button
                   onClick={handleSend}

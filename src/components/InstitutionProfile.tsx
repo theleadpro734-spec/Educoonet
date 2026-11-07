@@ -153,14 +153,14 @@ export function InstitutionProfile({ onExit }: InstitutionProfileProps) {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+      <div className="min-h-screen flex items-center justify-center bg-brand-50/40">
         <div className="w-10 h-10 border-3 border-slate-300 border-t-slate-900 rounded-full animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-8">
+    <div className="min-h-screen bg-brand-50/40 pb-8">
       {/* Header Navigation */}
       <header className="bg-white border-b border-slate-200 sticky top-0 z-40">
         <div className="max-w-5xl mx-auto px-4 lg:px-6 py-4 flex items-center justify-between">
@@ -203,7 +203,7 @@ export function InstitutionProfile({ onExit }: InstitutionProfileProps) {
       </header>
 
       {/* Cover Image */}
-      <div className="relative h-56 lg:h-72 bg-gradient-to-br from-slate-800 via-slate-900 to-slate-800 overflow-hidden">
+      <div className="relative h-56 lg:h-72 bg-brand-900 overflow-hidden">
         {institution?.cover_image && (
           <img
             src={institution.cover_image}
@@ -249,7 +249,7 @@ export function InstitutionProfile({ onExit }: InstitutionProfileProps) {
                     className="w-28 h-28 lg:w-32 lg:h-32 rounded-2xl object-cover border-4 border-white shadow-lg"
                   />
                 ) : (
-                  <div className="w-28 h-28 lg:w-32 lg:h-32 rounded-2xl bg-gradient-to-br from-slate-700 to-slate-900 flex items-center justify-center border-4 border-white shadow-lg">
+                  <div className="w-28 h-28 lg:w-32 lg:h-32 rounded-2xl bg-brand-900 flex items-center justify-center border-4 border-white shadow-lg">
                     <span className="text-white font-bold text-4xl">
                       {institution?.name.charAt(0)}
                     </span>
@@ -281,14 +281,14 @@ export function InstitutionProfile({ onExit }: InstitutionProfileProps) {
                       type="text"
                       value={form.name}
                       onChange={(e) => setForm({ ...form, name: e.target.value })}
-                      className="text-2xl lg:text-3xl font-bold text-slate-900 w-full bg-slate-50 rounded-xl px-4 py-2 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
+                      className="text-2xl lg:text-3xl font-bold text-slate-900 w-full bg-brand-50/40 rounded-xl px-4 py-2 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-cyan-500/25 focus:border-cyan-500"
                     />
                     <input
                       type="text"
                       value={form.institution_type}
                       onChange={(e) => setForm({ ...form, institution_type: e.target.value })}
                       placeholder="Tipo de institucion"
-                      className="text-lg text-slate-500 w-full bg-slate-50 rounded-xl px-4 py-2 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
+                      className="text-lg text-slate-500 w-full bg-brand-50/40 rounded-xl px-4 py-2 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-cyan-500/25 focus:border-cyan-500"
                     />
                   </div>
                 ) : (
@@ -329,7 +329,7 @@ export function InstitutionProfile({ onExit }: InstitutionProfileProps) {
                   value={form.description}
                   onChange={(e) => setForm({ ...form, description: e.target.value })}
                   rows={4}
-                  className="w-full bg-slate-50 rounded-xl px-4 py-3 border border-slate-200 text-slate-700 resize-none focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
+                  className="w-full bg-brand-50/40 rounded-xl px-4 py-3 border border-slate-200 text-slate-700 resize-none focus:outline-none focus:ring-2 focus:ring-cyan-500/25 focus:border-cyan-500"
                 />
               ) : (
                 <p className="text-slate-600 leading-relaxed">
@@ -350,7 +350,7 @@ export function InstitutionProfile({ onExit }: InstitutionProfileProps) {
                     value={form.mission}
                     onChange={(e) => setForm({ ...form, mission: e.target.value })}
                     rows={4}
-                    className="w-full bg-slate-50 rounded-xl px-3 py-2 border border-slate-200 text-sm text-slate-700 resize-none focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
+                    className="w-full bg-brand-50/40 rounded-xl px-3 py-2 border border-slate-200 text-sm text-slate-700 resize-none focus:outline-none focus:ring-2 focus:ring-cyan-500/25 focus:border-cyan-500"
                   />
                 ) : institution?.mission ? (
                   <p className="text-sm text-slate-600 leading-relaxed">
@@ -373,7 +373,7 @@ export function InstitutionProfile({ onExit }: InstitutionProfileProps) {
                     value={form.vision}
                     onChange={(e) => setForm({ ...form, vision: e.target.value })}
                     rows={4}
-                    className="w-full bg-slate-50 rounded-xl px-3 py-2 border border-slate-200 text-sm text-slate-700 resize-none focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
+                    className="w-full bg-brand-50/40 rounded-xl px-3 py-2 border border-slate-200 text-sm text-slate-700 resize-none focus:outline-none focus:ring-2 focus:ring-cyan-500/25 focus:border-cyan-500"
                   />
                 ) : institution?.vision ? (
                   <p className="text-sm text-slate-600 leading-relaxed">
@@ -406,7 +406,7 @@ export function InstitutionProfile({ onExit }: InstitutionProfileProps) {
                         type="email"
                         value={form.email}
                         onChange={(e) => setForm({ ...form, email: e.target.value })}
-                        className="w-full bg-slate-50 rounded-lg px-3 py-1.5 border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
+                        className="w-full bg-brand-50/40 rounded-lg px-3 py-1.5 border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500/25 focus:border-cyan-500"
                       />
                     ) : (
                       <>
@@ -431,7 +431,7 @@ export function InstitutionProfile({ onExit }: InstitutionProfileProps) {
                         type="tel"
                         value={form.phone}
                         onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                        className="w-full bg-slate-50 rounded-lg px-3 py-1.5 border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
+                        className="w-full bg-brand-50/40 rounded-lg px-3 py-1.5 border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500/25 focus:border-cyan-500"
                       />
                     ) : (
                       <>
@@ -456,7 +456,7 @@ export function InstitutionProfile({ onExit }: InstitutionProfileProps) {
                         type="text"
                         value={form.website}
                         onChange={(e) => setForm({ ...form, website: e.target.value })}
-                        className="w-full bg-slate-50 rounded-lg px-3 py-1.5 border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
+                        className="w-full bg-brand-50/40 rounded-lg px-3 py-1.5 border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500/25 focus:border-cyan-500"
                       />
                     ) : (
                       <>
@@ -491,14 +491,14 @@ export function InstitutionProfile({ onExit }: InstitutionProfileProps) {
                           value={form.location}
                           onChange={(e) => setForm({ ...form, location: e.target.value })}
 placeholder="Carabobo, Venezuela"
-                          className="w-full bg-slate-50 rounded-lg px-3 py-1.5 border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
+                          className="w-full bg-brand-50/40 rounded-lg px-3 py-1.5 border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500/25 focus:border-cyan-500"
                         />
                         <input
                           type="text"
                           value={form.address}
                           onChange={(e) => setForm({ ...form, address: e.target.value })}
 placeholder="Dirección, Carabobo, Venezuela"
-                          className="w-full bg-slate-50 rounded-lg px-3 py-1.5 border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
+                          className="w-full bg-brand-50/40 rounded-lg px-3 py-1.5 border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500/25 focus:border-cyan-500"
                         />
                       </div>
                     ) : (

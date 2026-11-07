@@ -48,7 +48,7 @@ function AppDetailDrawer({ app, onClose }: { app: AdminApplication | null; onClo
   return (
     <div className="fixed inset-0 z-[150] flex items-end sm:items-center justify-center" onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
       <div className="absolute inset-0 bg-slate-900/50 backdrop-blur-sm" />
-      <div className="relative bg-slate-50 rounded-t-3xl sm:rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col animate-scale-in">
+      <div className="relative bg-brand-50/40 rounded-t-3xl sm:rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col animate-scale-in">
         <div className={`relative px-6 pt-5 pb-4 ${st.bg} ${st.color} border-b border-slate-200`}>
           <button onClick={onClose} className="absolute top-4 right-4 p-2 rounded-xl bg-white/60 hover:bg-white transition-colors">
             <XCircle className="w-5 h-5 text-slate-500" />
@@ -383,7 +383,7 @@ export function AdminPanel({ admin, onExit }: AdminPanelProps) {
             placeholder="Buscar institucion..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all w-full sm:w-64"
+            className="pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500/25 focus:border-cyan-500 transition-all w-full sm:w-64"
           />
         </div>
       </div>
@@ -392,7 +392,7 @@ export function AdminPanel({ admin, onExit }: AdminPanelProps) {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-slate-100 bg-slate-50">
+              <tr className="border-b border-slate-100 bg-brand-50/40">
                 <th className="text-left text-xs font-semibold text-slate-500 uppercase tracking-wide px-5 py-3">Institucion</th>
                 <th className="text-left text-xs font-semibold text-slate-500 uppercase tracking-wide px-5 py-3 hidden sm:table-cell">Tipo</th>
                 <th className="text-left text-xs font-semibold text-slate-500 uppercase tracking-wide px-5 py-3 hidden md:table-cell">Contacto</th>
@@ -403,10 +403,10 @@ export function AdminPanel({ admin, onExit }: AdminPanelProps) {
             </thead>
             <tbody>
               {filteredInstitutions.map((inst) => (
-                <tr key={inst.id} className="border-b border-slate-50 hover:bg-slate-50/50 transition-colors">
+                <tr key={inst.id} className="border-b border-slate-50 hover:bg-brand-50/40/50 transition-colors">
                   <td className="px-5 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center flex-shrink-0">
+                      <div className="w-9 h-9 rounded-xl bg-brand-700 flex items-center justify-center flex-shrink-0">
                         <Building2 className="w-4 h-4 text-white" />
                       </div>
                       <div className="min-w-0">
@@ -497,7 +497,7 @@ export function AdminPanel({ admin, onExit }: AdminPanelProps) {
             placeholder="Buscar postulante..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all w-full sm:w-64"
+            className="pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500/25 focus:border-cyan-500 transition-all w-full sm:w-64"
           />
         </div>
       </div>
@@ -508,7 +508,7 @@ export function AdminPanel({ admin, onExit }: AdminPanelProps) {
           return (
             <div key={stu.id} className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm hover:shadow-md transition-shadow">
               <div className="flex items-start gap-3 mb-4">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center flex-shrink-0">
+                <div className="w-12 h-12 rounded-2xl bg-brand-600 flex items-center justify-center flex-shrink-0">
                   <span className="text-white font-bold text-sm">
                     {stu.name.charAt(0)}{stu.last_name?.charAt(0) ?? ''}
                   </span>
@@ -575,13 +575,13 @@ export function AdminPanel({ admin, onExit }: AdminPanelProps) {
               placeholder="Buscar por nombre o email..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all w-full sm:w-64"
+              className="pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500/25 focus:border-cyan-500 transition-all w-full sm:w-64"
             />
           </div>
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all"
+            className="px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-cyan-500/25 focus:border-cyan-500 transition-all"
           >
             <option value="all">Todos los estados</option>
             <option value="pendiente">Pendientes</option>
@@ -595,7 +595,7 @@ export function AdminPanel({ admin, onExit }: AdminPanelProps) {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-slate-100 bg-slate-50">
+              <tr className="border-b border-slate-100 bg-brand-50/40">
                 <th className="text-left text-xs font-semibold text-slate-500 uppercase tracking-wide px-5 py-3">Estudiante</th>
                 <th className="text-left text-xs font-semibold text-slate-500 uppercase tracking-wide px-5 py-3 hidden md:table-cell">Institucion</th>
                 <th className="text-left text-xs font-semibold text-slate-500 uppercase tracking-wide px-5 py-3 hidden sm:table-cell">Nivel</th>
@@ -608,7 +608,7 @@ export function AdminPanel({ admin, onExit }: AdminPanelProps) {
                 const st = statusConfig[app.status as keyof typeof statusConfig] ?? statusConfig.pendiente;
                 const StatusIcon = st.icon;
                 return (
-                  <tr key={app.id} className="border-b border-slate-50 hover:bg-slate-50/50 transition-colors">
+                  <tr key={app.id} className="border-b border-slate-50 hover:bg-brand-50/40/50 transition-colors">
                     <td className="px-5 py-4">
                       <div className="flex items-center gap-3">
                         <div className="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center flex-shrink-0">
@@ -803,7 +803,7 @@ export function AdminPanel({ admin, onExit }: AdminPanelProps) {
                 application_status: 'text-blue-600',
               };
               return (
-                <div key={log.id} className="flex items-center gap-4 px-5 py-4 hover:bg-slate-50/50 transition-colors">
+                <div key={log.id} className="flex items-center gap-4 px-5 py-4 hover:bg-brand-50/40/50 transition-colors">
                   <div className="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center flex-shrink-0">
                     <Activity className={`w-4 h-4 ${actionColor[log.action] || 'text-slate-500'}`} />
                   </div>
@@ -845,7 +845,7 @@ export function AdminPanel({ admin, onExit }: AdminPanelProps) {
           <Shield className="w-5 h-5 text-slate-400" />
           Cuenta de Administrador
         </h2>
-        <div className="p-4 bg-slate-50 rounded-xl">
+        <div className="p-4 bg-brand-50/40 rounded-xl">
           <p className="font-semibold text-slate-900">{admin.name}</p>
           <p className="text-sm text-slate-500 mt-1">Usuario: @{admin.username}</p>
           <p className="text-xs text-slate-400 mt-1">ID: {admin.id}</p>
@@ -867,7 +867,7 @@ export function AdminPanel({ admin, onExit }: AdminPanelProps) {
               </p>
             </div>
           </div>
-          <div className="flex items-start gap-3 p-3 bg-slate-50 rounded-xl">
+          <div className="flex items-start gap-3 p-3 bg-brand-50/40 rounded-xl">
             <Activity className="w-5 h-5 text-slate-500 flex-shrink-0 mt-0.5" />
             <div>
               <p className="text-sm font-medium text-slate-700">Registro de auditoria</p>
@@ -897,7 +897,7 @@ export function AdminPanel({ admin, onExit }: AdminPanelProps) {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+      <div className="min-h-screen flex items-center justify-center bg-brand-50/40">
         <div className="text-center">
           <div className="w-12 h-12 border-[3px] border-slate-200 border-t-slate-900 rounded-full animate-spin mx-auto" />
           <p className="mt-4 text-slate-500">Cargando panel de administracion...</p>
@@ -907,7 +907,7 @@ export function AdminPanel({ admin, onExit }: AdminPanelProps) {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 flex">
+    <div className="min-h-screen bg-brand-50/40 flex">
       {/* Toast */}
       {toast && (
         <div className="fixed top-5 right-5 z-[200] animate-scale-in">

@@ -46,7 +46,7 @@ export function TeamAdminLogin({ onSuccess }: TeamAdminLoginProps) {
     'w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 transition-all bg-white border-slate-200 text-slate-900 placeholder:text-slate-400 focus:ring-slate-400/30 focus:border-slate-500';
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+    <div className="min-h-screen flex flex-col bg-brand-900">
       {/* Top bar */}
       <header className="bg-slate-900/60 backdrop-blur-sm border-b border-slate-700/50">
         <div className="max-w-md mx-auto px-4 py-4 flex items-center justify-between">
@@ -66,7 +66,7 @@ export function TeamAdminLogin({ onSuccess }: TeamAdminLoginProps) {
         <div className="w-full max-w-md">
           {/* Logo + title */}
           <div className="text-center mb-8">
-            <div className="w-16 h-16 bg-gradient-to-br from-slate-600 to-slate-800 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-slate-900/50 border border-slate-600/50">
+            <div className="w-16 h-16 bg-brand-800 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-slate-900/50 border border-slate-600/50">
               <Shield className="w-8 h-8 text-slate-300" />
             </div>
             <h1 className="text-2xl font-bold text-white">Acceso Equipo EduConnet</h1>

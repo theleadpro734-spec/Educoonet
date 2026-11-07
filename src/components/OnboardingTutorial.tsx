@@ -54,8 +54,8 @@ export function OnboardingTutorial({ onComplete }: OnboardingTutorialProps) {
   };
 
   return (
-    <div className="fixed inset-0 z-[100] bg-[#0F172A] flex flex-col">
-      <div className="absolute inset-0 bg-gradient-to-br from-brand-900 via-brand-600 to-[#0F172A]" />
+    <div className="fixed inset-0 z-[100] bg-brand-900 flex flex-col">
+      <div className="absolute inset-0 bg-brand-900" />
       <div className="absolute inset-0 opacity-[0.04]" style={{
         backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)',
         backgroundSize: '40px 40px',

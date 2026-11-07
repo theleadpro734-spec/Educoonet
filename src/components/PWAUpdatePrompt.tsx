@@ -47,7 +47,7 @@ export function PWAUpdatePrompt() {
       <div className="fixed bottom-4 left-4 right-4 z-[200] flex justify-center pointer-events-none" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
         <div className="pointer-events-auto max-w-md w-full bg-white rounded-2xl shadow-2xl border border-slate-200 p-4 animate-slide-up">
           <div className="flex items-start gap-3">
-            <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center flex-shrink-0">
+            <div className="w-11 h-11 rounded-xl bg-brand-600 flex items-center justify-center flex-shrink-0">
               {updating ? (
                 <Loader2 className="w-5 h-5 text-white animate-spin" />
               ) : (
@@ -96,7 +96,7 @@ export function PWAUpdatePrompt() {
       <div className="fixed bottom-4 left-4 right-4 z-[200] flex justify-center pointer-events-none" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
         <div className="pointer-events-auto max-w-md w-full bg-white rounded-2xl shadow-2xl border border-slate-200 p-4 animate-slide-up">
           <div className="flex items-start gap-3">
-            <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center flex-shrink-0">
+            <div className="w-11 h-11 rounded-xl bg-brand-600 flex items-center justify-center flex-shrink-0">
               <CheckCircle2 className="w-5 h-5 text-white" />
             </div>
             <div className="flex-1 min-w-0">

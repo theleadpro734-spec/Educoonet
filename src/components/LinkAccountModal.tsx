@@ -46,7 +46,7 @@ export function LinkAccountModal({ onClose, onLinked }: LinkAccountModalProps) {
     }
   };
 
-  const inputClass = 'w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 transition-all bg-white border-slate-200 text-slate-900 placeholder:text-slate-400 focus:ring-brand-600/20 focus:border-brand-600';
+  const inputClass = 'w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 transition-all bg-white border-slate-200 text-slate-900 placeholder:text-slate-400 focus:ring-cyan-500/25 focus:border-brand-600';
 
   if (success) {
     return (
@@ -70,7 +70,7 @@ export function LinkAccountModal({ onClose, onLinked }: LinkAccountModalProps) {
       <div className="absolute inset-0 bg-slate-900/50 backdrop-blur-sm" onClick={onClose} />
       <div className="relative bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden">
         {/* Header */}
-        <div className="bg-gradient-to-br from-brand-600 to-brand-900 px-8 pt-8 pb-6">
+        <div className="bg-brand-800 px-8 pt-8 pb-6">
           <button onClick={onClose} className="absolute top-4 right-4 p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-colors">
             <X className="w-5 h-5" />
           </button>
@@ -95,7 +95,7 @@ export function LinkAccountModal({ onClose, onLinked }: LinkAccountModalProps) {
           <button
             onClick={handleGoogleLink}
             disabled={loading || !isAnonymous}
-            className="w-full py-3 border border-slate-200 hover:bg-slate-50 disabled:opacity-50 text-slate-700 font-medium rounded-xl transition-colors flex items-center justify-center gap-3 mb-5"
+            className="w-full py-3 border border-slate-200 hover:bg-brand-50/40 disabled:opacity-50 text-slate-700 font-medium rounded-xl transition-colors flex items-center justify-center gap-3 mb-5"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24">
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />

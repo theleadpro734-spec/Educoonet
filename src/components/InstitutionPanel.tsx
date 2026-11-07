@@ -127,7 +127,7 @@ export function InstitutionPanel({ onExit }: InstitutionPanelProps) {
 
   if (loading || !institution) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+      <div className="min-h-screen flex items-center justify-center bg-brand-50/40">
         <div className="text-center">
           <div className="w-12 h-12 border-[3px] border-slate-200 border-t-slate-900 rounded-full animate-spin mx-auto" />
           <p className="mt-4 text-slate-500">Cargando panel...</p>
@@ -291,7 +291,7 @@ function ApplicationsListView({
   const rejected = applications.filter(a => a.status === 'rechazada').length;
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-brand-50/40">
       {/* Header */}
       <header className="bg-white border-b border-slate-200 sticky top-0 z-40">
         <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
@@ -380,7 +380,7 @@ function ApplicationsListView({
                 >
                   <div className="flex flex-col lg:flex-row lg:items-start gap-6">
                     {/* Avatar */}
-                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-slate-700 to-slate-900 flex items-center justify-center flex-shrink-0 shadow-lg">
+                    <div className="w-16 h-16 rounded-2xl bg-brand-900 flex items-center justify-center flex-shrink-0 shadow-lg">
                       <span className="text-white font-bold text-lg">
                         {app.name.charAt(0)}
                         {app.last_name?.charAt(0) || ''}
@@ -502,7 +502,7 @@ function SettingsView({
   institutionName: string;
 }) {
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-brand-50/40">
       {/* Header */}
       <header className="bg-white border-b border-slate-200 sticky top-0 z-40">
         <div className="max-w-2xl mx-auto px-4 py-4 flex items-center justify-between">
@@ -525,7 +525,7 @@ function SettingsView({
               <Building2 className="w-5 h-5 text-slate-400" />
               Institucion
             </h2>
-            <div className="p-4 bg-slate-50 rounded-xl">
+            <div className="p-4 bg-brand-50/40 rounded-xl">
               <p className="font-semibold text-slate-900 text-lg">{institutionName}</p>
               <p className="text-sm text-slate-500 mt-1">Panel de administracion activo</p>
             </div>

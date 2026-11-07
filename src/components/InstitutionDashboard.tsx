@@ -194,7 +194,7 @@ export function InstitutionDashboard({
           onClick={() => setAccountMenuOpen(!accountMenuOpen)}
           className="w-full flex items-center gap-3 px-3 py-3 rounded-xl bg-white/8 border border-white/10 hover:bg-white/15 transition-all"
         >
-          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center flex-shrink-0 shadow-lg">
+          <div className="w-9 h-9 rounded-full bg-brand-600 flex items-center justify-center flex-shrink-0 shadow-lg">
             <Building2 className="w-4 h-4 text-white" />
           </div>
           <div className="flex-1 min-w-0 text-left">
@@ -204,7 +204,7 @@ export function InstitutionDashboard({
           <ChevronDown className={`w-4 h-4 text-white/40 transition-transform duration-300 ${accountMenuOpen ? 'rotate-180' : ''}`} />
         </button>
         {accountMenuOpen && (
-          <div className="absolute bottom-full left-3 right-3 mb-2 bg-[#0F172A] border border-white/10 rounded-xl shadow-2xl py-1 z-10 animate-scale-in">
+          <div className="absolute bottom-full left-3 right-3 mb-2 bg-brand-900 border border-white/10 rounded-xl shadow-2xl py-1 z-10 animate-scale-in">
             <button
               onClick={onExit}
               className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-400 hover:bg-red-500/10 transition-colors rounded-lg mx-1"
@@ -406,7 +406,7 @@ export function InstitutionDashboard({
                   <select
                     value={filterStatus}
                     onChange={(e) => setFilterStatus(e.target.value)}
-                    className="pl-9 pr-8 py-2.5 bg-brand-50 border border-brand-200/50 rounded-xl text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-600/20 focus:border-brand-600 appearance-none cursor-pointer transition-all"
+                    className="pl-9 pr-8 py-2.5 bg-brand-50 border border-brand-200/50 rounded-xl text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-cyan-500/25 focus:border-brand-600 appearance-none cursor-pointer transition-all"
                   >
                     <option value="all">Todas ({total})</option>
                     <option value="pendiente">Pendientes ({pending})</option>
@@ -445,7 +445,7 @@ export function InstitutionDashboard({
             )}
 
             {applications.length > 5 && (
-              <div className="p-4 border-t border-slate-100 bg-slate-50/50">
+              <div className="p-4 border-t border-slate-100 bg-brand-50/40/50">
                 <button
                   onClick={onViewAllApplications}
                   className="w-full py-2.5 text-sm font-semibold text-brand-600 hover:text-brand-700 bg-white hover:bg-brand-50 rounded-xl border border-brand-200/50 flex items-center justify-center gap-1 transition-all btn-spring"
@@ -472,7 +472,7 @@ export function InstitutionDashboard({
                   active ? 'text-brand-600' : 'text-slate-400 hover:text-slate-700'
                 }`}
               >
-                <div className={`relative p-1.5 rounded-xl transition-all ${active ? 'bg-brand-600/10' : ''}`}>
+                <div className={`relative p-1.5 rounded-xl transition-all ${active ? 'bg-violet-600/10' : ''}`}>
                   <item.icon className="w-5 h-5" />
                   {item.badge !== undefined && item.badge > 0 && (
                     <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-brand-600 text-white rounded-full flex items-center justify-center text-[9px] font-bold">
@@ -480,7 +480,7 @@ export function InstitutionDashboard({
                     </span>
                   )}
                 </div>
-                <span className={`text-[9px] font-semibold leading-tight ${active ? 'text-brand-600' : ''}`}>{item.label}</span>
+                <span className={`text-[9px] font-semibold leading-tight ${active ? 'text-violet-600' : ''}`}>{item.label}</span>
               </button>
             );
           })}
@@ -522,7 +522,7 @@ function ApplicationRow({
   return (
     <div className="p-5 hover:bg-brand-50/30 transition-colors duration-200 group">
       <div className="flex items-start gap-4">
-        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-600 to-brand-900 flex items-center justify-center flex-shrink-0 shadow-md group-hover:scale-105 transition-transform duration-200">
+        <div className="w-12 h-12 rounded-xl bg-brand-800 flex items-center justify-center flex-shrink-0 shadow-md group-hover:scale-105 transition-transform duration-200">
           <span className="text-white font-bold text-sm">
             {application.name.charAt(0)}{application.last_name?.charAt(0) || ''}
           </span>

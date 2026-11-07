@@ -104,7 +104,7 @@ function App() {
   if (route === '/equipo-admin') {
     if (!adminChecked) {
       return (
-        <div className="min-h-screen flex items-center justify-center bg-slate-50">
+        <div className="min-h-screen flex items-center justify-center bg-brand-50/40">
           <div className="text-center">
             <div className="w-12 h-12 border-[3px] border-slate-200 border-t-slate-900 rounded-full animate-spin mx-auto" />
             <p className="mt-4 text-slate-500">Verificando acceso...</p>
@@ -126,7 +126,7 @@ function App() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+      <div className="min-h-screen flex items-center justify-center bg-brand-50/40">
         <div className="text-center">
           <div className="w-12 h-12 border-[3px] border-slate-200 border-t-brand-600 rounded-full animate-spin mx-auto" />
           <p className="mt-4 text-slate-500">Cargando EduConnet...</p>
@@ -155,7 +155,7 @@ function App() {
 
   if (view === 'role-select') {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-brand-900 via-brand-600 to-brand-500 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-brand-800 flex items-center justify-center p-4">
         {showBetaBanner && <BetaBanner onDismiss={dismissBetaBanner} />}
 
         <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-brand-500/20 rounded-full blur-3xl pointer-events-none" />
@@ -182,7 +182,7 @@ function App() {
                 onClick={() => setView('student')}
                 className="w-full flex items-center gap-4 p-5 bg-white hover:bg-brand-50 text-brand-600 font-bold rounded-2xl transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 group"
               >
-                <div className="w-12 h-12 bg-gradient-to-br from-brand-500 to-brand-600 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
+                <div className="w-12 h-12 bg-brand-600 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
                   <GraduationCap className="w-6 h-6 text-white" />
                 </div>
                 <div className="flex-1 text-left">

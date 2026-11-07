@@ -115,7 +115,7 @@ export function StudentPanel({ onExit }: StudentPanelProps) {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+      <div className="min-h-screen flex items-center justify-center bg-brand-50/40">
         <div className="text-center">
           <div className="w-12 h-12 border-[3px] border-slate-200 border-t-brand-600 rounded-full animate-spin mx-auto" />
           <p className="mt-4 text-slate-500">Cargando panel...</p>
@@ -294,7 +294,7 @@ function ApplicationsListView({
   };
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-brand-50/40">
       <header className="bg-white border-b border-slate-200 sticky top-0 z-40">
         <div className="max-w-3xl mx-auto px-4 py-4 flex items-center justify-between">
           <button onClick={onBack} className="flex items-center gap-2 text-slate-600 hover:text-slate-900 font-medium transition-colors">
@@ -344,7 +344,7 @@ function ApplicationsListView({
               {filterStatus === 'all' ? 'No tienes postulaciones aun' : 'No hay postulaciones con este filtro'}
             </p>
             {filterStatus === 'all' && (
-              <button onClick={onApply} className="mt-5 px-6 py-3 bg-gradient-to-r from-brand-500 to-brand-600 text-white font-semibold rounded-xl">
+              <button onClick={onApply} className="mt-5 px-6 py-3 bg-brand-600 text-white font-semibold rounded-xl">
                 Postularme Ahora
               </button>
             )}
@@ -357,7 +357,7 @@ function ApplicationsListView({
                 <div key={app.id} className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm hover:shadow-md transition-shadow">
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-3 min-w-0 flex-1">
-                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center flex-shrink-0 shadow-sm">
+                      <div className="w-12 h-12 rounded-xl bg-brand-600 flex items-center justify-center flex-shrink-0 shadow-sm">
                         <span className="text-white font-bold text-sm">{app.name.charAt(0)}{app.last_name?.charAt(0) || ''}</span>
                       </div>
                       <div className="min-w-0">
@@ -398,7 +398,7 @@ function ApplicationsListView({
 function InstitutionDetailView({ institution, onBack, onApply }: { institution: Institution | null; onBack: () => void; onApply: () => void; }) {
   if (!institution) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+      <div className="min-h-screen bg-brand-50/40 flex items-center justify-center">
         <div className="text-center">
           <p className="text-slate-500">No hay institucion disponible</p>
           <button onClick={onBack} className="mt-4 px-4 py-2 bg-brand-600 text-white rounded-xl">Volver</button>
@@ -407,7 +407,7 @@ function InstitutionDetailView({ institution, onBack, onApply }: { institution: 
     );
   }
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-brand-50/40">
       <header className="bg-white border-b border-slate-200 sticky top-0 z-40">
         <div className="max-w-3xl mx-auto px-4 py-4 flex items-center justify-between">
           <button onClick={onBack} className="flex items-center gap-2 text-slate-600 hover:text-slate-900 font-medium transition-colors">
@@ -430,7 +430,7 @@ function InstitutionDetailView({ institution, onBack, onApply }: { institution: 
               {institution.logo_url ? (
                 <img src={institution.logo_url} alt="" className="w-16 h-16 rounded-xl object-cover border border-slate-200 shadow-sm flex-shrink-0" />
               ) : (
-                <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-brand-600 to-[#134E4A] flex items-center justify-center text-white text-2xl font-bold shadow-lg flex-shrink-0">
+                <div className="w-16 h-16 rounded-xl bg-brand-800 flex items-center justify-center text-white text-2xl font-bold shadow-lg flex-shrink-0">
                   {institution.name.charAt(0)}
                 </div>
               )}
@@ -440,7 +440,7 @@ function InstitutionDetailView({ institution, onBack, onApply }: { institution: 
               </div>
             </div>
             {institution.description && <p className="mt-4 text-slate-600 text-sm leading-relaxed">{institution.description}</p>}
-            <button onClick={onApply} className="mt-6 w-full py-3.5 bg-gradient-to-r from-brand-500 to-brand-600 text-white font-semibold rounded-xl transition-all shadow-lg shadow-brand-600/25">
+            <button onClick={onApply} className="mt-6 w-full py-3.5 bg-brand-600 text-white font-semibold rounded-xl transition-all shadow-lg shadow-brand-600/20">
               Postularme Ahora
             </button>
           </div>
@@ -470,7 +470,7 @@ function StudentSettingsView({
   const initials = studentName.charAt(0).toUpperCase() || 'P';
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-brand-50/40">
       <header className="bg-white border-b border-slate-200 sticky top-0 z-40">
         <div className="max-w-2xl mx-auto px-4 py-4 flex items-center justify-between">
           <button onClick={onBack} className="flex items-center gap-2 text-slate-600 hover:text-slate-900 font-medium transition-colors">
@@ -484,7 +484,7 @@ function StudentSettingsView({
       <main className="max-w-2xl mx-auto px-4 py-6 pb-24 space-y-4">
         <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center text-white text-xl font-bold shadow-lg">
+            <div className="w-16 h-16 rounded-2xl bg-brand-600 flex items-center justify-center text-white text-xl font-bold shadow-lg">
               {initials}
             </div>
             <div className="min-w-0">
@@ -498,7 +498,7 @@ function StudentSettingsView({
         </div>
 
         {(isAnonymous || isLocal) && (
-          <div className="bg-gradient-to-br from-brand-600 to-[#134E4A] rounded-2xl p-6 shadow-lg">
+          <div className="bg-brand-800 rounded-2xl p-6 shadow-lg">
             <div className="flex items-start gap-3 mb-4">
               <div className="w-10 h-10 bg-white/15 rounded-xl flex items-center justify-center flex-shrink-0">
                 <svg className="w-5 h-5 text-cyan-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>

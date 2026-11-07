@@ -126,7 +126,7 @@ export function ApplicationDetailModal({
     >
       <div className="absolute inset-0 bg-slate-900/50 backdrop-blur-sm" />
 
-      <div className="relative bg-slate-50 rounded-t-3xl sm:rounded-3xl shadow-2xl w-full max-w-3xl max-h-[95vh] overflow-hidden flex flex-col animate-scale-in">
+      <div className="relative bg-brand-50/40 rounded-t-3xl sm:rounded-3xl shadow-2xl w-full max-w-3xl max-h-[95vh] overflow-hidden flex flex-col animate-scale-in">
         {/* Header con gradiente */}
         <div className={`relative px-6 pt-6 pb-5 ${st.bg} ${st.border} border-b`}>
           <button
@@ -242,7 +242,7 @@ export function ApplicationDetailModal({
                   onChange={(e) => setOptionalMessage(e.target.value)}
                   placeholder={`Mensaje opcional para ${app.name}...`}
                   rows={2}
-                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all resize-none"
+                  className="w-full px-4 py-2.5 bg-brand-50/40 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/25 focus:border-cyan-500 transition-all resize-none"
                 />
                 <div className="flex gap-3">
                   <button

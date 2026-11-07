@@ -339,7 +339,7 @@ export function QuotasView({ institutionId, applications, onBack }: QuotasViewPr
   // ---------- Render ----------
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-brand-50/40">
       {/* Header */}
       <header className="bg-white border-b border-slate-200 sticky top-0 z-40">
         <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
@@ -410,7 +410,7 @@ export function QuotasView({ institutionId, applications, onBack }: QuotasViewPr
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     placeholder="Buscar por grado o periodo..."
-                    className="w-full pl-9 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all"
+                    className="w-full pl-9 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-cyan-500/25 focus:border-cyan-500 transition-all"
                   />
                 </div>
                 <button
@@ -921,7 +921,7 @@ function FilterSelect({
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full pl-9 pr-8 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 appearance-none cursor-pointer transition-all"
+        className="w-full pl-9 pr-8 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-cyan-500/25 focus:border-cyan-500 appearance-none cursor-pointer transition-all"
       >
         {options.map((o) => (
           <option key={o.value} value={o.value}>
@@ -971,7 +971,7 @@ function QuotaFormModal({
             value={gradeId}
             onChange={(e) => setGradeId(e.target.value)}
             disabled={isEdit}
-            className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 disabled:opacity-60 disabled:cursor-not-allowed transition-all"
+            className="w-full px-3 py-2.5 bg-brand-50/40 border border-slate-200 rounded-xl text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-cyan-500/25 focus:border-cyan-500 disabled:opacity-60 disabled:cursor-not-allowed transition-all"
           >
             <option value="">-- Seleccionar --</option>
             {grades.map((g) => (
@@ -987,7 +987,7 @@ function QuotaFormModal({
             value={periodId}
             onChange={(e) => setPeriodId(e.target.value)}
             disabled={isEdit}
-            className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 disabled:opacity-60 disabled:cursor-not-allowed transition-all"
+            className="w-full px-3 py-2.5 bg-brand-50/40 border border-slate-200 rounded-xl text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-cyan-500/25 focus:border-cyan-500 disabled:opacity-60 disabled:cursor-not-allowed transition-all"
           >
             <option value="">-- Seleccionar --</option>
             {periods.map((p) => (
@@ -1004,7 +1004,7 @@ function QuotaFormModal({
             min={isEdit ? quota?.assigned ?? 0 : 0}
             value={total}
             onChange={(e) => setTotal(e.target.value)}
-            className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all"
+            className="w-full px-3 py-2.5 bg-brand-50/40 border border-slate-200 rounded-xl text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-cyan-500/25 focus:border-cyan-500 transition-all"
           />
         </Field>
         <Field label="Notas (opcional)">
@@ -1013,7 +1013,7 @@ function QuotaFormModal({
             onChange={(e) => setNotes(e.target.value)}
             rows={2}
             placeholder="Informacion adicional sobre este cupo..."
-            className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all resize-none"
+            className="w-full px-3 py-2.5 bg-brand-50/40 border border-slate-200 rounded-xl text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-cyan-500/25 focus:border-cyan-500 transition-all resize-none"
           />
         </Field>
         <div className="flex gap-3 pt-2">
@@ -1074,14 +1074,14 @@ function GradeFormModal({
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Ej. 1ro Bachillerato, Grupo A"
-            className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all"
+            className="w-full px-3 py-2.5 bg-brand-50/40 border border-slate-200 rounded-xl text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-cyan-500/25 focus:border-cyan-500 transition-all"
           />
         </Field>
         <Field label="Nivel (opcional)">
           <select
             value={level}
             onChange={(e) => setLevel(e.target.value)}
-            className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all"
+            className="w-full px-3 py-2.5 bg-brand-50/40 border border-slate-200 rounded-xl text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-cyan-500/25 focus:border-cyan-500 transition-all"
           >
             <option value="">-- Sin nivel --</option>
             <option value="Inicial">Inicial</option>
@@ -1098,11 +1098,11 @@ function GradeFormModal({
             min={0}
             value={sortOrder}
             onChange={(e) => setSortOrder(e.target.value)}
-            className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all"
+            className="w-full px-3 py-2.5 bg-brand-50/40 border border-slate-200 rounded-xl text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-cyan-500/25 focus:border-cyan-500 transition-all"
           />
         </Field>
         {isEdit && (
-          <label className="flex items-center gap-3 p-3 bg-slate-50 rounded-xl cursor-pointer hover:bg-slate-100 transition-colors">
+          <label className="flex items-center gap-3 p-3 bg-brand-50/40 rounded-xl cursor-pointer hover:bg-slate-100 transition-colors">
             <input
               type="checkbox"
               checked={isActive}
@@ -1173,7 +1173,7 @@ function PeriodFormModal({
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Ej. 2026-2027, Semestre 1 2026"
-            className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all"
+            className="w-full px-3 py-2.5 bg-brand-50/40 border border-slate-200 rounded-xl text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-cyan-500/25 focus:border-cyan-500 transition-all"
           />
         </Field>
         <div className="grid grid-cols-2 gap-3">
@@ -1182,7 +1182,7 @@ function PeriodFormModal({
               type="date"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
-              className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all"
+              className="w-full px-3 py-2.5 bg-brand-50/40 border border-slate-200 rounded-xl text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-cyan-500/25 focus:border-cyan-500 transition-all"
             />
           </Field>
           <Field label="Fecha de fin (opcional)">
@@ -1190,12 +1190,12 @@ function PeriodFormModal({
               type="date"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
-              className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all"
+              className="w-full px-3 py-2.5 bg-brand-50/40 border border-slate-200 rounded-xl text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-cyan-500/25 focus:border-cyan-500 transition-all"
             />
           </Field>
         </div>
         {isEdit && (
-          <label className="flex items-center gap-3 p-3 bg-slate-50 rounded-xl cursor-pointer hover:bg-slate-100 transition-colors">
+          <label className="flex items-center gap-3 p-3 bg-brand-50/40 rounded-xl cursor-pointer hover:bg-slate-100 transition-colors">
             <input
               type="checkbox"
               checked={isActive}
@@ -1277,7 +1277,7 @@ function AssignmentFormModal({
           </p>
         </div>
 
-        <label className="flex items-center gap-3 p-3 bg-slate-50 rounded-xl cursor-pointer hover:bg-slate-100 transition-colors">
+        <label className="flex items-center gap-3 p-3 bg-brand-50/40 rounded-xl cursor-pointer hover:bg-slate-100 transition-colors">
           <input
             type="checkbox"
             checked={linkApp}
@@ -1292,7 +1292,7 @@ function AssignmentFormModal({
             <select
               value={appId}
               onChange={(e) => setAppId(e.target.value)}
-              className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all"
+              className="w-full px-3 py-2.5 bg-brand-50/40 border border-slate-200 rounded-xl text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-cyan-500/25 focus:border-cyan-500 transition-all"
             >
               <option value="">-- Elegir --</option>
               {applications.map((a) => (
@@ -1302,7 +1302,7 @@ function AssignmentFormModal({
               ))}
             </select>
             {selectedApp && (
-              <div className="mt-2 p-2.5 bg-slate-50 rounded-lg text-xs text-slate-600">
+              <div className="mt-2 p-2.5 bg-brand-50/40 rounded-lg text-xs text-slate-600">
                 <p><span className="text-slate-400">Nombre: </span>{selectedApp.name} {selectedApp.last_name || ''}</p>
                 <p><span className="text-slate-400">Email: </span>{selectedApp.email}</p>
               </div>
@@ -1315,7 +1315,7 @@ function AssignmentFormModal({
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Nombre completo"
-                className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all"
+                className="w-full px-3 py-2.5 bg-brand-50/40 border border-slate-200 rounded-xl text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-cyan-500/25 focus:border-cyan-500 transition-all"
               />
             </Field>
             <Field label="Email (opcional)">
@@ -1324,7 +1324,7 @@ function AssignmentFormModal({
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="correo@ejemplo.com"
-                className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all"
+                className="w-full px-3 py-2.5 bg-brand-50/40 border border-slate-200 rounded-xl text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-cyan-500/25 focus:border-cyan-500 transition-all"
               />
             </Field>
           </>
@@ -1387,7 +1387,7 @@ function AssignmentListModal({
 
   return (
     <ModalShell onClose={onClose} title={`Asignaciones - ${gradeLabel}`} wide>
-      <div className="flex items-center gap-2 mb-4 p-3 bg-slate-50 rounded-xl">
+      <div className="flex items-center gap-2 mb-4 p-3 bg-brand-50/40 rounded-xl">
         <Calendar className="w-4 h-4 text-slate-400 flex-shrink-0" />
         <p className="text-sm text-slate-600">
           {periodLabel} - {quota.assigned} asignados / {quota.total} total
@@ -1411,10 +1411,10 @@ function AssignmentListModal({
               <div
                 key={a.id}
                 className={`flex items-center gap-3 p-3 rounded-xl border transition-colors ${
-                  isActive ? 'bg-white border-slate-200' : 'bg-slate-50 border-slate-100 opacity-70'
+                  isActive ? 'bg-white border-slate-200' : 'bg-brand-50/40 border-slate-100 opacity-70'
                 }`}
               >
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center flex-shrink-0 shadow-sm">
+                <div className="w-10 h-10 rounded-xl bg-brand-700 flex items-center justify-center flex-shrink-0 shadow-sm">
                   <GraduationCap className="w-5 h-5 text-white" />
                 </div>
                 <div className="flex-1 min-w-0">

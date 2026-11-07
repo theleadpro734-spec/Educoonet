@@ -167,7 +167,7 @@ export function StudentDashboard({
           onClick={() => setAccountMenuOpen(!accountMenuOpen)}
           className="w-full flex items-center gap-3 px-3 py-3 rounded-xl bg-white/8 border border-white/10 hover:bg-white/15 transition-all"
         >
-          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center flex-shrink-0 shadow-lg text-white text-xs font-bold">
+          <div className="w-9 h-9 rounded-full bg-brand-600 flex items-center justify-center flex-shrink-0 shadow-lg text-white text-xs font-bold">
             {studentInitials}
           </div>
           <div className="flex-1 min-w-0 text-left">
@@ -177,7 +177,7 @@ export function StudentDashboard({
           <ChevronDown className={`w-4 h-4 text-white/40 transition-transform duration-300 ${accountMenuOpen ? 'rotate-180' : ''}`} />
         </button>
         {accountMenuOpen && (
-          <div className="absolute bottom-full left-3 right-3 mb-2 bg-[#0F172A] border border-white/10 rounded-xl shadow-2xl py-1 z-10 animate-scale-in">
+          <div className="absolute bottom-full left-3 right-3 mb-2 bg-brand-900 border border-white/10 rounded-xl shadow-2xl py-1 z-10 animate-scale-in">
             <button
               onClick={handleLogout}
               className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-400 hover:bg-red-500/10 transition-colors rounded-lg"
@@ -254,7 +254,7 @@ export function StudentDashboard({
               placeholder="Buscar instituciones, programas..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-3.5 bg-white rounded-2xl border border-slate-200 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-600/20 focus:border-brand-600 transition-all shadow-sm"
+              className="w-full pl-12 pr-4 py-3.5 bg-white rounded-2xl border border-slate-200 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/25 focus:border-brand-600 transition-all shadow-sm"
             />
           </div>
 
@@ -362,7 +362,7 @@ export function StudentDashboard({
               {applications.length > 0 && (
                 <button
                   onClick={onApply}
-                  className="mt-3 w-full py-3 bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-600 hover:to-brand-700 text-white text-sm font-semibold rounded-xl transition-all btn-spring shadow-lg shadow-brand-600/20"
+                  className="mt-3 w-full py-3 bg-brand-600 hover:from-brand-600 hover:to-brand-700 text-white text-sm font-semibold rounded-xl transition-all btn-spring shadow-lg shadow-brand-600/20"
                 >
                   Nueva Postulacion
                 </button>
@@ -397,7 +397,7 @@ export function StudentDashboard({
 
           {/* Info cards */}
           <div className="mt-6 grid md:grid-cols-2 gap-4 animate-slide-up" style={{ animationDelay: '0.55s' }}>
-            <div className="bg-gradient-to-br from-brand-50 to-white rounded-2xl p-5 border border-brand-200/40 spring-hover">
+            <div className="bg-brand-50 rounded-2xl p-5 border border-brand-200/40 spring-hover">
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 bg-brand-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-brand-600/20">
                   <Calendar className="w-6 h-6 text-white" />
@@ -432,9 +432,9 @@ export function StudentDashboard({
               <button
                 key={item.id}
                 onClick={() => handleTabChange(item.id)}
-                className={`flex flex-1 flex-col items-center gap-1 py-2 px-1 rounded-xl transition-all btn-spring ${active ? 'text-brand-600' : 'text-slate-400 hover:text-slate-700'}`}
+                className={`flex flex-1 flex-col items-center gap-1 py-2 px-1 rounded-xl transition-all btn-spring ${active ? 'text-violet-600' : 'text-slate-400 hover:text-slate-700'}`}
               >
-                <div className={`relative p-1.5 rounded-xl transition-all ${active ? 'bg-brand-600/10' : ''}`}>
+                <div className={`relative p-1.5 rounded-xl transition-all ${active ? 'bg-violet-600/10' : ''}`}>
                   <item.icon className="w-5 h-5" />
                   {item.badge !== undefined && item.badge > 0 && (
                     <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-brand-600 text-white rounded-full flex items-center justify-center text-[9px] font-bold">
@@ -442,7 +442,7 @@ export function StudentDashboard({
                     </span>
                   )}
                 </div>
-                <span className={`text-[9px] font-semibold leading-tight ${active ? 'text-brand-600' : ''}`}>{item.label}</span>
+                <span className={`text-[9px] font-semibold leading-tight ${active ? 'text-violet-600' : ''}`}>{item.label}</span>
               </button>
             );
           })}
@@ -474,7 +474,7 @@ function InstitutionCard({
           {institution.logo_url ? (
             <img src={institution.logo_url} alt="" className="w-16 h-16 rounded-xl object-cover border border-slate-200 shadow-sm" />
           ) : (
-            <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-brand-600 to-brand-900 flex items-center justify-center text-white text-2xl font-bold shadow-lg">
+            <div className="w-16 h-16 rounded-xl bg-brand-800 flex items-center justify-center text-white text-2xl font-bold shadow-lg">
               {institution.name.charAt(0)}
             </div>
           )}
@@ -496,7 +496,7 @@ function InstitutionCard({
         <div className="mt-5 flex flex-col sm:flex-row gap-3">
           <button
             onClick={onApply}
-            className="flex-1 py-3 bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-600 hover:to-brand-700 text-white font-semibold rounded-xl transition-all btn-spring shadow-lg shadow-brand-600/25"
+            className="flex-1 py-3 bg-brand-600 hover:from-brand-600 hover:to-brand-700 text-white font-semibold rounded-xl transition-all btn-spring shadow-lg shadow-brand-600/20"
           >
             Postularme Ahora
           </button>
@@ -525,7 +525,7 @@ function ApplicationCard({ application, onMessages }: { application: Application
       <div className="flex items-start justify-between gap-3">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center flex-shrink-0 shadow-sm">
+            <div className="w-8 h-8 rounded-lg bg-brand-600 flex items-center justify-center flex-shrink-0 shadow-sm">
               <span className="text-white text-xs font-bold">
                 {application.name.charAt(0)}{application.last_name?.charAt(0) || ''}
               </span>
