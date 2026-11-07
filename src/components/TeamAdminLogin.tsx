@@ -48,7 +48,7 @@ export function TeamAdminLogin({ onSuccess }: TeamAdminLoginProps) {
   return (
     <div className="min-h-screen flex flex-col bg-brand-900">
       {/* Top bar */}
-      <header className="bg-slate-900/60 backdrop-blur-sm border-b border-slate-700/50">
+      <header className="bg-brand-900/60 backdrop-blur-sm border-b border-brand-700/50">
         <div className="max-w-md mx-auto px-4 py-4 flex items-center justify-between">
           <button
             onClick={goHome}
@@ -75,7 +75,7 @@ export function TeamAdminLogin({ onSuccess }: TeamAdminLoginProps) {
             </p>
           </div>
 
-          <div className="bg-slate-800/60 backdrop-blur-xl border border-slate-700/50 rounded-2xl shadow-2xl p-6 sm:p-8">
+          <div className="bg-brand-800/50 backdrop-blur-xl border border-brand-700/50 rounded-2xl shadow-2xl p-6 sm:p-8">
             <form onSubmit={handleLogin} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-1.5 text-slate-300">
@@ -128,7 +128,7 @@ export function TeamAdminLogin({ onSuccess }: TeamAdminLoginProps) {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3 bg-slate-200 hover:bg-white disabled:opacity-50 text-slate-900 font-semibold rounded-xl transition-colors flex items-center justify-center gap-2"
+                className="w-full py-3 bg-cyan-400 hover:bg-cyan-300 disabled:opacity-50 text-brand-900 font-semibold rounded-xl transition-colors flex items-center justify-center gap-2"
               >
                 {loading ? (
                   <div className="w-4 h-4 border-2 border-slate-900/30 border-t-slate-900 rounded-full animate-spin" />

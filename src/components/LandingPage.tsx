@@ -7,7 +7,6 @@ import {
   FileText,
   CheckCircle,
   ArrowRight,
-  Sparkles,
   ShieldCheck,
   Clock,
   Users,
@@ -15,53 +14,113 @@ import {
   Menu,
   X,
 } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface LandingPageProps {
   onEnterStudent: () => void;
 }
 
+const NAV_LINKS = [
+  { href: '#features', label: 'Funcionalidades' },
+  { href: '#how', label: 'Como funciona' },
+  { href: '#about', label: 'Institucion' },
+];
+
+const FEATURES = [
+  { icon: FileText, title: 'Postulacion digital', desc: 'Completa tu formulario con datos personales, documentos y representantes en un proceso guiado paso a paso.' },
+  { icon: MessageSquare, title: 'Mensajeria directa', desc: 'Comunica con la institucion en tiempo real. Resuelve dudas y recibe actualizaciones sin intermediarios.' },
+  { icon: Bell, title: 'Notificaciones en vivo', desc: 'Entérate al instante cuando cambie el estado de tu postulacion o recibas un nuevo mensaje.' },
+  { icon: ShieldCheck, title: 'Datos protegidos', desc: 'Tu informacion se guarda con politicas de acceso estrictas: solo tu y la institucion pueden verla.' },
+  { icon: Clock, title: 'Seguimiento claro', desc: 'Revisa en cualquier momento si tu postulacion esta pendiente, aceptada o rechazada.' },
+  { icon: Building2, title: 'Gestion institucional', desc: 'Las instituciones reciben, revisan y responden postulaciones desde un panel de control dedicado.' },
+];
+
+const STEPS = [
+  { step: '01', title: 'Entra como postulante', desc: 'Empieza sin registrarte. Tu informacion se guarda automaticamente y puedes vincular tu correo despues.' },
+  { step: '02', title: 'Completa tu formulario', desc: 'Sube tus datos personales, documentos e informacion de tu representante en un proceso guiado.' },
+  { step: '03', title: 'Recibe tu respuesta', desc: 'La institucion revisa tu postulacion y te notifica el resultado al instante, con mensajeria directa.' },
+];
+
+const STATS = [
+  { icon: Users, value: '500+', label: 'Postulantes activos' },
+  { icon: FileText, value: '1,200+', label: 'Postulaciones gestionadas' },
+  { icon: Clock, value: '3-5 dias', label: 'Tiempo de respuesta' },
+  { icon: Building2, value: '1', label: 'Institucion asociada' },
+];
+
 export function LandingPage({ onEnterStudent }: LandingPageProps) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 16);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Nav */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-white font-sans text-slate-900">
+      <nav
+        className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
+          scrolled ? 'bg-white/90 backdrop-blur-xl shadow-sm border-b border-brand-100' : 'bg-transparent'
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-5 sm:px-8">
           <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-3">
-              <EduConnetLogo size="sm" variant="light" />
+            <EduConnetLogo size="sm" variant={scrolled ? 'light' : 'dark'} />
+
+            <div className="hidden md:flex items-center gap-10">
+              {NAV_LINKS.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className={`text-sm font-medium transition-colors ${
+                    scrolled ? 'text-slate-600 hover:text-brand-600' : 'text-brand-100 hover:text-white'
+                  }`}
+                >
+                  {link.label}
+                </a>
+              ))}
             </div>
-            <div className="hidden md:flex items-center gap-8">
-              <a href="#features" className="text-sm font-medium text-slate-600 hover:text-brand-600 transition-colors">Funcionalidades</a>
-              <a href="#how" className="text-sm font-medium text-slate-600 hover:text-brand-600 transition-colors">Como funciona</a>
-              <a href="#about" className="text-sm font-medium text-slate-600 hover:text-brand-600 transition-colors">Acerca de</a>
-            </div>
+
             <div className="hidden md:flex items-center gap-3">
               <button
                 onClick={onEnterStudent}
-                className="px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold rounded-xl transition-all shadow-lg shadow-brand-600/20 hover:shadow-xl hover:-translate-y-0.5"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-cyan-400 hover:bg-cyan-300 text-brand-900 text-sm font-bold rounded-xl transition-all shadow-lg shadow-cyan-500/20 hover:-translate-y-0.5"
               >
                 Comenzar ahora
+                <ArrowRight className="w-4 h-4" />
               </button>
             </div>
+
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="md:hidden p-2 rounded-xl hover:bg-slate-100 transition-colors"
+              aria-label={menuOpen ? 'Cerrar menu' : 'Abrir menu'}
+              className={`md:hidden p-2 rounded-xl transition-colors ${scrolled ? 'hover:bg-brand-50' : 'hover:bg-white/10'}`}
             >
-              {menuOpen ? <X className="w-5 h-5 text-slate-700" /> : <Menu className="w-5 h-5 text-slate-700" />}
+              {menuOpen
+                ? <X className={`w-5 h-5 ${scrolled ? 'text-slate-700' : 'text-white'}`} />
+                : <Menu className={`w-5 h-5 ${scrolled ? 'text-slate-700' : 'text-white'}`} />}
             </button>
           </div>
         </div>
+
         {menuOpen && (
-          <div className="md:hidden bg-white border-t border-slate-100 px-4 py-4 space-y-3 animate-fade-in">
-            <a href="#features" onClick={() => setMenuOpen(false)} className="block text-sm font-medium text-slate-600 hover:text-brand-600">Funcionalidades</a>
-            <a href="#how" onClick={() => setMenuOpen(false)} className="block text-sm font-medium text-slate-600 hover:text-brand-600">Como funciona</a>
-            <a href="#about" onClick={() => setMenuOpen(false)} className="block text-sm font-medium text-slate-600 hover:text-brand-600">Acerca de</a>
+          <div className="md:hidden bg-white border-t border-brand-100 shadow-lg px-5 py-6 space-y-4">
+            {NAV_LINKS.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                onClick={() => setMenuOpen(false)}
+                className="block text-base font-medium text-slate-700 hover:text-brand-600"
+              >
+                {link.label}
+              </a>
+            ))}
             <button
               onClick={() => { setMenuOpen(false); onEnterStudent(); }}
-              className="w-full px-5 py-2.5 bg-brand-600 text-white text-sm font-semibold rounded-xl"
+              className="w-full mt-2 px-5 py-3 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold rounded-xl transition-colors"
             >
               Comenzar ahora
             </button>
@@ -70,160 +129,109 @@ export function LandingPage({ onEnterStudent }: LandingPageProps) {
       </nav>
 
       {/* Hero */}
-      <section className="relative pt-32 pb-20 overflow-hidden">
-        <div className="absolute top-1/4 right-1/4 w-[500px] h-[500px] bg-cyan-400/15 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute top-1/3 left-0 w-80 h-80 bg-violet-500/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-1/4 w-72 h-72 bg-brand-300/8 rounded-full blur-2xl pointer-events-none" />
+      <section className="relative bg-brand-900 text-white overflow-hidden">
+        <div className="absolute -top-40 -right-40 w-[560px] h-[560px] bg-brand-600/50 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-1/3 w-96 h-96 bg-violet-500/15 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="animate-fade-in">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-brand-50 border border-brand-200/40 rounded-full mb-6">
-                <Sparkles className="w-3.5 h-3.5 text-cyan-500" />
-                <span className="text-xs font-semibold text-brand-700">Plataforma educativa digital</span>
-              </div>
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 leading-[1.1] tracking-tight">
-                Conecta talento con{' '}
-                <span className="bg-gradient-to-r from-brand-600 to-cyan-500 bg-clip-text text-transparent">instituciones</span> de excelencia
-              </h1>
-              <p className="mt-6 text-lg text-slate-600 leading-relaxed max-w-xl">
-                EduConnet digitaliza el proceso de admision. Postula a instituciones educativas, gestiona tus documentos y recibe respuestas en tiempo real, todo desde un solo lugar.
-              </p>
-              <div className="mt-8 flex flex-col sm:flex-row gap-4">
-                <button
-                  onClick={onEnterStudent}
-                  className="px-7 py-3.5 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-2xl transition-all shadow-xl shadow-brand-600/20 hover:shadow-2xl hover:-translate-y-0.5 flex items-center justify-center gap-2 group"
-                >
-                  Soy Postulante
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </button>
-                <a
-                  href="#how"
-                  className="px-7 py-3.5 bg-white hover:bg-brand-50/40 text-slate-700 font-semibold rounded-2xl border border-slate-200 transition-all flex items-center justify-center gap-2"
-                >
-                  Ver como funciona
-                </a>
-              </div>
-              <div className="mt-10 flex items-center gap-6 text-sm text-slate-500">
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-brand-600" />
-                  Sin costos ocultos
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-brand-600" />
-                  100% digital
-                </div>
-              </div>
+        <div className="relative max-w-7xl mx-auto px-5 sm:px-8 pt-36 pb-40 lg:pt-44 lg:pb-52 grid lg:grid-cols-12 gap-14 items-center">
+          <div className="lg:col-span-6 animate-fade-in">
+            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-white/10 border border-white/15 rounded-full text-xs font-semibold tracking-wide text-brand-100">
+              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+              Admision educativa digital
+            </span>
+            <h1 className="mt-6 text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.15] tracking-tight">
+              Tu admision, <span className="text-cyan-300">simple</span> y en un solo lugar
+            </h1>
+            <p className="mt-6 text-lg text-brand-200 leading-relaxed max-w-xl">
+              Postula a tu institucion, sube tus documentos y sigue cada etapa en tiempo real. Sin filas, sin papeleo y sin esperar a que te llamen.
+            </p>
+            <div className="mt-10 flex flex-col sm:flex-row gap-4">
+              <button
+                onClick={onEnterStudent}
+                className="group inline-flex items-center justify-center gap-2 px-7 py-4 bg-cyan-400 hover:bg-cyan-300 text-brand-900 font-bold rounded-2xl transition-all shadow-xl shadow-cyan-500/25 hover:-translate-y-0.5"
+              >
+                Soy postulante
+                <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+              </button>
+              <a
+                href="#how"
+                className="inline-flex items-center justify-center px-7 py-4 bg-white/5 hover:bg-white/10 border border-white/20 text-white font-semibold rounded-2xl transition-colors"
+              >
+                Ver como funciona
+              </a>
+            </div>
+            <div className="mt-10 flex flex-wrap gap-x-8 gap-y-3 text-sm text-brand-200">
+              <span className="inline-flex items-center gap-2"><CheckCircle className="w-4 h-4 text-cyan-300" />Sin costos ocultos</span>
+              <span className="inline-flex items-center gap-2"><CheckCircle className="w-4 h-4 text-cyan-300" />100% digital</span>
+              <span className="inline-flex items-center gap-2"><CheckCircle className="w-4 h-4 text-cyan-300" />Respuestas en tiempo real</span>
+            </div>
+          </div>
+
+          <div className="lg:col-span-6 relative animate-slide-up" style={{ animationDelay: '0.15s' }}>
+            <div className="relative rounded-[28px] overflow-hidden shadow-2xl ring-1 ring-white/10">
+              <img
+                src="https://images.pexels.com/photos/27910975/pexels-photo-27910975.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
+                alt="Estudiantes caminando por el pasillo de su institucion"
+                className="w-full h-[420px] lg:h-[500px] object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-brand-900/60 via-transparent to-transparent" />
             </div>
 
-            {/* Hero visual */}
-            <div className="relative animate-slide-up" style={{ animationDelay: '0.15s' }}>
-              <div className="relative">
-                <div className="bg-gradient-to-br from-brand-900 via-brand-600 to-cyan-500 rounded-3xl p-8 shadow-2xl">
-                  <div className="bg-white/10 backdrop-blur-xl rounded-2xl p-6 border border-white/20">
-                    <div className="flex items-center justify-between mb-6">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
-                          <GraduationCap className="w-5 h-5 text-white" />
-                        </div>
-                        <div>
-                          <p className="text-white font-semibold text-sm">Liceo Romero Garcia</p>
-                          <p className="text-brand-200 text-xs">Inscripcion abierta</p>
-                        </div>
-                      </div>
-                      <span className="px-3 py-1 bg-emerald-400/20 text-emerald-300 text-xs font-bold rounded-lg">Activo</span>
-                    </div>
-
-                    <div className="space-y-3">
-                      {[
-                        { icon: FileText, label: 'Formulario digital', status: 'Completo' },
-                        { icon: MessageSquare, label: 'Mensajes', status: '2 nuevos' },
-                        { icon: Bell, label: 'Notificaciones', status: 'En vivo' },
-                      ].map((item) => (
-                        <div key={item.label} className="flex items-center gap-3 p-3 bg-white/5 rounded-xl border border-white/10">
-                          <div className="w-8 h-8 bg-white/15 rounded-lg flex items-center justify-center flex-shrink-0">
-                            <item.icon className="w-4 h-4 text-white" />
-                          </div>
-                          <p className="text-white text-sm font-medium flex-1">{item.label}</p>
-                          <span className="text-brand-300 text-xs font-semibold">{item.status}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+            <div className="absolute -bottom-8 -left-4 sm:-left-8 w-72 bg-white text-slate-900 rounded-2xl shadow-2xl p-5 border border-brand-100 animate-fade-in" style={{ animationDelay: '0.4s' }}>
+              <div className="flex items-center gap-3">
+                <div className="w-11 h-11 bg-brand-50 rounded-xl flex items-center justify-center">
+                  <GraduationCap className="w-5 h-5 text-brand-600" />
                 </div>
-
-                {/* Floating card */}
-                <div className="absolute -bottom-6 -left-6 bg-white rounded-2xl shadow-2xl p-5 border border-slate-100 w-56 animate-fade-in" style={{ animationDelay: '0.4s' }}>
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center">
-                      <CheckCircle className="w-5 h-5 text-emerald-600" />
-                    </div>
-                    <div>
-                      <p className="text-sm font-bold text-slate-900">Postulacion aceptada</p>
-                      <p className="text-xs text-slate-400">Hace 2 minutos</p>
-                    </div>
-                  </div>
-                  <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                    <div className="h-full w-full bg-gradient-to-r from-brand-600 to-cyan-400 rounded-full" />
-                  </div>
+                <div className="min-w-0">
+                  <p className="text-sm font-bold truncate">Liceo Romero Garcia</p>
+                  <p className="text-xs text-slate-500">Inscripcion abierta</p>
                 </div>
+              </div>
+              <div className="mt-4 flex items-center justify-between rounded-xl bg-emerald-50 px-3 py-2.5">
+                <span className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-700">
+                  <CheckCircle className="w-4 h-4" />
+                  Postulacion aceptada
+                </span>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Stats bar */}
-      <section className="bg-brand-900 py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-            {[
-              { icon: Users, value: '500+', label: 'Postulantes activos' },
-              { icon: Building2, value: '1', label: 'Institucion partner' },
-              { icon: FileText, value: '1,200+', label: 'Postulaciones gestionadas' },
-              { icon: Clock, value: '3-5 dias', label: 'Tiempo de respuesta' },
-            ].map((s) => (
-              <div key={s.label} className="text-center">
-                <div className="w-12 h-12 mx-auto bg-brand-600/20 rounded-2xl flex items-center justify-center mb-3">
-                  <s.icon className="w-6 h-6 text-brand-300" />
-                </div>
-                <p className="text-2xl lg:text-3xl font-bold text-white">{s.value}</p>
-                <p className="text-sm text-slate-400 mt-1">{s.label}</p>
-              </div>
-            ))}
-          </div>
+      {/* Stats */}
+      <section className="relative -mt-20 z-10 px-5 sm:px-8">
+        <div className="max-w-6xl mx-auto bg-white rounded-3xl shadow-xl shadow-brand-900/10 border border-brand-100 grid grid-cols-2 lg:grid-cols-4 divide-x divide-y lg:divide-y-0 divide-brand-100">
+          {STATS.map((s) => (
+            <div key={s.label} className="p-6 sm:p-8 text-center">
+              <s.icon className="w-5 h-5 mx-auto text-cyan-600 mb-3" />
+              <p className="text-2xl sm:text-3xl font-bold text-brand-900">{s.value}</p>
+              <p className="mt-1 text-sm text-slate-500">{s.label}</p>
+            </div>
+          ))}
         </div>
       </section>
 
       {/* Features */}
-      <section id="features" className="py-20 lg:py-28">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold text-slate-900">Todo lo que necesitas en un solo lugar</h2>
-            <p className="mt-4 text-lg text-slate-600 max-w-2xl mx-auto">
-              Una plataforma completa que simplifica el proceso de admision para postulantes e instituciones.
-            </p>
+      <section id="features" className="py-24 lg:py-32">
+        <div className="max-w-7xl mx-auto px-5 sm:px-8">
+          <div className="max-w-2xl">
+            <p className="text-sm font-semibold uppercase tracking-widest text-brand-600">Funcionalidades</p>
+            <h2 className="mt-3 text-3xl lg:text-4xl font-bold text-brand-900 leading-tight">Todo lo necesario para postular, en un solo lugar</h2>
+            <p className="mt-4 text-lg text-slate-600">Una plataforma pensada para que postulantes e instituciones avancen sin complicaciones.</p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              { icon: FileText, title: 'Postulacion digital', desc: 'Completa tu formulario con datos personales, documentos y representantes en un proceso guiado paso a paso.' },
-              { icon: MessageSquare, title: 'Mensajeria directa', desc: 'Comunica con la institucion en tiempo real. Resuelve dudas y recibe actualizaciones sin intermediarios.' },
-              { icon: Bell, title: 'Notificaciones en vivo', desc: 'Entero al instante cuando cambie el estado de tu postulacion o recibas un nuevo mensaje.' },
-              { icon: ShieldCheck, title: 'Datos seguros', desc: 'Tu informacion esta protegida con encriptacion de nivel bancario y politicas de acceso estrictas.' },
-              { icon: Clock, title: 'Seguimiento en tiempo real', desc: 'Visualiza el estado de tus postulaciones: pendiente, aceptada o rechazada, en cualquier momento.' },
-              { icon: Building2, title: 'Gestion institucional', desc: 'Las instituciones reciben, revisan y gestionan postulaciones desde un panel de control dedicado.' },
-            ].map((f, i) => (
+          <div className="mt-14 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {FEATURES.map((f, i) => (
               <div
                 key={f.title}
-                style={{ animationDelay: `${i * 0.08}s` }}
-                className="animate-slide-up group bg-white rounded-2xl p-6 border border-slate-200/60 shadow-sm hover:shadow-xl transition-all hover:-translate-y-1"
+                style={{ animationDelay: `${i * 0.06}s` }}
+                className="animate-slide-up group relative bg-white rounded-2xl p-7 border border-brand-100 hover:border-cyan-300 hover:shadow-xl hover:shadow-brand-900/5 transition-all duration-300 hover:-translate-y-1"
               >
-                <div className="w-12 h-12 bg-brand-50 group-hover:bg-brand-600 rounded-2xl flex items-center justify-center mb-5 transition-colors duration-300">
-                  <f.icon className="w-6 h-6 text-brand-600 group-hover:text-white transition-colors duration-300" />
+                <div className="w-12 h-12 bg-brand-600 rounded-xl flex items-center justify-center mb-6 shadow-md shadow-brand-600/20">
+                  <f.icon className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-lg font-bold text-slate-900 mb-2">{f.title}</h3>
-                <p className="text-sm text-slate-600 leading-relaxed">{f.desc}</p>
+                <h3 className="text-lg font-bold text-brand-900">{f.title}</h3>
+                <p className="mt-2 text-sm text-slate-600 leading-relaxed">{f.desc}</p>
               </div>
             ))}
           </div>
@@ -231,118 +239,117 @@ export function LandingPage({ onEnterStudent }: LandingPageProps) {
       </section>
 
       {/* How it works */}
-      <section id="how" className="py-20 bg-brand-50/40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold text-slate-900">Como funciona</h2>
-            <p className="mt-4 text-lg text-slate-600 max-w-2xl mx-auto">
-              Tres pasos simples para iniciar tu proceso de admision.
-            </p>
+      <section id="how" className="relative bg-brand-700 text-white py-24 lg:py-32 overflow-hidden">
+        <div className="absolute -bottom-32 -left-20 w-96 h-96 bg-cyan-400/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="relative max-w-7xl mx-auto px-5 sm:px-8">
+          <div className="max-w-2xl">
+            <p className="text-sm font-semibold uppercase tracking-widest text-cyan-300">Como funciona</p>
+            <h2 className="mt-3 text-3xl lg:text-4xl font-bold leading-tight">Tres pasos para iniciar tu admision</h2>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              { step: '01', title: 'Crea tu cuenta', desc: 'Ingresa como postulante sin necesidad de registrarte. Tu informacion se guarda automaticamente.' },
-              { step: '02', title: 'Completa el formulario', desc: 'Sube tus datos personales, documentos y informacion de tu representante en un proceso guiado.' },
-              { step: '03', title: 'Recibe respuesta', desc: 'La institucion revisa tu postulacion y te notifica al instante el resultado, con mensajeria directa.' },
-            ].map((s, i) => (
-              <div key={s.step} className="relative">
-                {i < 2 && (
-                  <div className="hidden md:block absolute top-12 left-full w-full h-0.5 bg-gradient-to-r from-brand-600/30 to-transparent" />
-                )}
-                <div className="bg-white rounded-2xl p-8 border border-slate-200/60 shadow-sm">
-                  <div className="w-12 h-12 bg-brand-800 rounded-2xl flex items-center justify-center mb-5 shadow-lg">
-                    <span className="text-white font-bold text-lg">{s.step}</span>
-                  </div>
-                  <h3 className="text-lg font-bold text-slate-900 mb-2">{s.title}</h3>
-                  <p className="text-sm text-slate-600 leading-relaxed">{s.desc}</p>
-                </div>
-              </div>
+          <ol className="mt-16 grid md:grid-cols-3 gap-6">
+            {STEPS.map((s) => (
+              <li key={s.step} className="rounded-2xl bg-white/10 border border-white/15 backdrop-blur-sm p-8">
+                <span className="text-5xl font-bold text-cyan-300/90">{s.step}</span>
+                <h3 className="mt-6 text-xl font-bold">{s.title}</h3>
+                <p className="mt-3 text-sm text-brand-100 leading-relaxed">{s.desc}</p>
+              </li>
             ))}
-          </div>
+          </ol>
 
-          <div className="text-center mt-12">
+          <div className="mt-14">
             <button
               onClick={onEnterStudent}
-              className="px-8 py-4 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-2xl transition-all shadow-xl shadow-brand-600/20 hover:shadow-2xl hover:-translate-y-0.5 inline-flex items-center gap-2 group"
+              className="group inline-flex items-center gap-2 px-8 py-4 bg-cyan-400 hover:bg-cyan-300 text-brand-900 font-bold rounded-2xl transition-all shadow-xl shadow-cyan-500/20 hover:-translate-y-0.5"
             >
               Iniciar mi postulacion
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
             </button>
           </div>
         </div>
       </section>
 
       {/* About */}
-      <section id="about" className="py-20 lg:py-28">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-brand-50 border border-brand-200/40 rounded-full mb-6">
-            <Building2 className="w-3.5 h-3.5 text-brand-600" />
-            <span className="text-xs font-semibold text-brand-700">Institucion partner</span>
-          </div>
-          <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-6">Liceo Romero Garcia</h2>
-          <p className="text-lg text-slate-600 leading-relaxed">
-            Nuestra primera institucion asociada. El Liceo Romero Garcia utiliza EduConnet para digitalizar
-            su proceso de admision, ofreciendo a los postulantes una experiencia moderna, transparente y eficiente.
-          </p>
-          <div className="mt-10 grid sm:grid-cols-3 gap-6">
-            {[
-              { icon: FileText, label: 'Postulaciones online' },
-              { icon: MessageSquare, label: 'Comunicacion directa' },
-              { icon: CheckCircle, label: 'Respuestas rapidas' },
-            ].map((item) => (
-              <div key={item.label} className="flex flex-col items-center gap-3 p-6 bg-brand-50/40 rounded-2xl border border-slate-200/60">
-                <div className="w-12 h-12 bg-brand-600/10 rounded-xl flex items-center justify-center">
-                  <item.icon className="w-6 h-6 text-brand-600" />
-                </div>
-                <p className="text-sm font-semibold text-slate-700">{item.label}</p>
+      <section id="about" className="py-24 lg:py-32">
+        <div className="max-w-7xl mx-auto px-5 sm:px-8 grid lg:grid-cols-2 gap-16 items-center">
+          <div className="relative">
+            <img
+              src="https://images.pexels.com/photos/32292157/pexels-photo-32292157.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
+              alt="Estudiantes conversando en el pasillo de la institucion"
+              className="w-full h-[380px] lg:h-[460px] object-cover rounded-3xl"
+            />
+            <div className="absolute -top-5 -right-5 hidden sm:flex items-center gap-3 bg-white rounded-2xl shadow-xl border border-brand-100 px-5 py-4">
+              <div className="w-10 h-10 bg-violet-50 rounded-xl flex items-center justify-center">
+                <ShieldCheck className="w-5 h-5 text-violet-600" />
               </div>
-            ))}
+              <div>
+                <p className="text-sm font-bold text-brand-900">Acceso seguro</p>
+                <p className="text-xs text-slate-500">Datos solo para tu institucion</p>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-widest text-brand-600">Institucion asociada</p>
+            <h2 className="mt-3 text-3xl lg:text-4xl font-bold text-brand-900 leading-tight">Liceo Romero Garcia</h2>
+            <p className="mt-5 text-lg text-slate-600 leading-relaxed">
+              Nuestra primera institucion asociada utiliza EduConnet para digitalizar su proceso de admision, ofreciendo a los postulantes una experiencia moderna, transparente y eficiente.
+            </p>
+            <ul className="mt-8 space-y-4">
+              {[
+                { icon: FileText, label: 'Postulaciones en linea' },
+                { icon: MessageSquare, label: 'Comunicacion directa con la institucion' },
+                { icon: CheckCircle, label: 'Respuestas rapidas y claras' },
+              ].map((item) => (
+                <li key={item.label} className="flex items-center gap-4">
+                  <span className="w-10 h-10 rounded-xl bg-brand-50 flex items-center justify-center">
+                    <item.icon className="w-5 h-5 text-brand-600" />
+                  </span>
+                  <span className="font-medium text-slate-700">{item.label}</span>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </section>
 
       {/* CTA */}
-      <section className="py-24 bg-brand-900 relative overflow-hidden">
-        <div className="absolute -top-24 right-1/4 w-96 h-96 bg-cyan-400/20 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-24 left-1/4 w-80 h-80 bg-violet-500/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">
-            Comienza tu postulacion hoy
-          </h2>
-          <p className="text-lg text-brand-100 mb-8 max-w-2xl mx-auto">
-            Unete a la plataforma que esta transformando el proceso de admision educativa.
-          </p>
-          <button
-            onClick={onEnterStudent}
-            className="px-8 py-4 bg-white hover:bg-brand-50 text-brand-700 font-bold rounded-2xl transition-all shadow-2xl hover:-translate-y-0.5 inline-flex items-center gap-2 group"
-          >
-            Entrar como postulante
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-          </button>
+      <section className="px-5 sm:px-8 pb-24">
+        <div className="relative max-w-6xl mx-auto overflow-hidden rounded-[32px] bg-brand-900 px-8 py-16 sm:px-16 text-center shadow-2xl">
+          <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-[480px] h-[240px] bg-cyan-400/25 rounded-full blur-3xl pointer-events-none" />
+          <div className="relative">
+            <h2 className="text-3xl lg:text-4xl font-bold text-white">Comienza tu postulacion hoy</h2>
+            <p className="mt-4 text-lg text-brand-200 max-w-2xl mx-auto">
+              Crea tu espacio de postulante en segundos y sigue tu proceso desde cualquier dispositivo.
+            </p>
+            <button
+              onClick={onEnterStudent}
+              className="group mt-10 inline-flex items-center gap-2 px-8 py-4 bg-cyan-400 hover:bg-cyan-300 text-brand-900 font-bold rounded-2xl transition-all shadow-xl shadow-cyan-500/25 hover:-translate-y-0.5"
+            >
+              Entrar como postulante
+              <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+            </button>
+          </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-brand-900 py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="flex items-center gap-3">
-              <EduConnetLogo size="sm" variant="dark" />
-            </div>
-            <div className="flex items-center gap-6 text-sm text-slate-400">
-              <a href="#features" className="hover:text-white transition-colors">Funcionalidades</a>
-              <a href="#how" className="hover:text-white transition-colors">Como funciona</a>
-              <a href="#about" className="hover:text-white transition-colors">Acerca de</a>
-            </div>
+      <footer className="border-t border-brand-100 bg-white py-12">
+        <div className="max-w-7xl mx-auto px-5 sm:px-8">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+            <EduConnetLogo size="sm" variant="light" />
+            <nav className="flex items-center gap-8 text-sm font-medium text-slate-600">
+              {NAV_LINKS.map((link) => (
+                <a key={link.href} href={link.href} className="hover:text-brand-600 transition-colors">{link.label}</a>
+              ))}
+            </nav>
             <div className="flex items-center gap-2 text-sm text-slate-500">
-              <Mail className="w-4 h-4" />
+              <Mail className="w-4 h-4 text-cyan-600" />
               <span>contacto@educonnet.com</span>
             </div>
           </div>
-          <div className="mt-8 pt-8 border-t border-white/10 text-center text-sm text-slate-500">
-            <p>&copy; {new Date().getFullYear()} EduConnet. Todos los derechos reservados.</p>
-          </div>
+          <p className="mt-10 pt-8 border-t border-brand-100 text-center text-sm text-slate-500">
+            &copy; {new Date().getFullYear()} EduConnet. Todos los derechos reservados.
+          </p>
         </div>
       </footer>
     </div>

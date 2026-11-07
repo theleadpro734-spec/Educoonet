@@ -142,7 +142,7 @@ export function InstitutionDashboard({
               style={{ animationDelay: `${i * 0.05}s` }}
               className={`animate-slide-in-left w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 btn-spring ${
                 active
-                  ? 'bg-brand-600 text-white shadow-lg shadow-brand-600/30'
+                  ? 'bg-white text-brand-900 shadow-lg shadow-black/20 font-semibold'
                   : 'text-white/70 hover:text-white hover:bg-white/10'
               }`}
             >
@@ -170,7 +170,7 @@ export function InstitutionDashboard({
         </div>
         <div className="h-1.5 bg-white/10 rounded-full overflow-hidden mb-3">
           <div
-            className="h-full bg-gradient-to-r from-brand-500 to-emerald-400 rounded-full transition-all duration-700"
+            className="h-full bg-cyan-400 rounded-full transition-all duration-700"
             style={{ width: `${acceptanceRate}%` }}
           />
         </div>
@@ -220,12 +220,11 @@ export function InstitutionDashboard({
   );
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC]">
+    <div className="min-h-screen bg-brand-50/40">
       {/* Desktop Sidebar */}
       <aside className="hidden lg:fixed lg:inset-y-0 lg:left-0 lg:flex lg:w-64 lg:flex-col z-40">
         <div
-          className="flex grow flex-col overflow-hidden"
-          style={{ background: 'linear-gradient(165deg, #1E293B 0%, #0F172A 60%, #0F172A 100%)' }}
+          className="flex grow flex-col overflow-hidden bg-brand-900"
         >
           <SidebarContent />
         </div>
@@ -257,8 +256,7 @@ export function InstitutionDashboard({
         <div className="lg:hidden fixed inset-0 z-50 bg-black/40 backdrop-blur-sm" onClick={() => setSidebarOpen(false)} />
       )}
       <div
-        className={`lg:hidden fixed inset-y-0 left-0 z-50 w-64 transform transition-all duration-300 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}
-        style={{ background: 'linear-gradient(165deg, #1E293B 0%, #0F172A 60%, #0F172A 100%)' }}
+        className={`lg:hidden fixed inset-y-0 left-0 z-50 w-64 bg-brand-900 transform transition-all duration-300 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}
       >
         <div className="absolute top-4 right-4">
           <button onClick={() => setSidebarOpen(false)} className="p-2 rounded-xl bg-white/10 hover:bg-white/20 transition-colors">
@@ -276,7 +274,7 @@ export function InstitutionDashboard({
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-8 animate-fade-in">
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <span className="px-2.5 py-1 bg-brand-600/10 text-brand-600 text-xs font-semibold rounded-lg">Panel Admin</span>
+                <span className="px-2.5 py-1 bg-cyan-50 text-cyan-700 text-xs font-semibold rounded-lg">Panel Admin</span>
                 {pendingToday > 0 && (
                   <span className="px-2.5 py-1 bg-amber-100 text-amber-700 text-xs font-semibold rounded-lg flex items-center gap-1 animate-scale-in">
                     <AlertCircle className="w-3 h-3" />
@@ -297,7 +295,7 @@ export function InstitutionDashboard({
               </button>
               <button
                 onClick={() => handleTabChange('messages')}
-                className="relative flex items-center gap-2 px-4 py-2.5 bg-brand-600/10 hover:bg-brand-600/20 text-brand-600 text-sm font-medium rounded-xl transition-all btn-spring"
+                className="relative flex items-center gap-2 px-4 py-2.5 bg-cyan-50 hover:bg-cyan-100 text-cyan-700 text-sm font-medium rounded-xl transition-all btn-spring"
               >
                 <MessageSquare className="w-4 h-4" />
                 Mensajes
@@ -326,12 +324,12 @@ export function InstitutionDashboard({
               >
                 <div className="flex items-center justify-between mb-3">
                   <div className={`w-11 h-11 rounded-xl flex items-center justify-center ${
-                    s.color === 'blue' ? 'bg-brand-600/10' :
+                    s.color === 'blue' ? 'bg-cyan-500/15' :
                     s.color === 'amber' ? 'bg-amber-100' :
                     s.color === 'green' ? 'bg-emerald-100' : 'bg-red-100'
                   }`}>
                     <s.icon className={`w-5 h-5 ${
-                      s.color === 'blue' ? 'text-brand-600' :
+                      s.color === 'blue' ? 'text-cyan-700' :
                       s.color === 'amber' ? 'text-amber-600' :
                       s.color === 'green' ? 'text-emerald-600' : 'text-red-500'
                     }`} />
@@ -353,8 +351,8 @@ export function InstitutionDashboard({
           <div className="grid lg:grid-cols-3 gap-4 mb-6">
             {[
               {
-                icon: UserCheck, iconBg: 'bg-brand-600',
-                cardBg: 'from-brand-50 to-white border-brand-200/40',
+                icon: UserCheck, iconBg: 'bg-cyan-400',
+                cardBg: 'bg-brand-900 text-white border-brand-900',
                 title: 'Proceso de Revision',
                 sub: 'Tiempo de respuesta',
                 text: 'Responde las postulaciones en menos de 5 dias habiles para mejorar la experiencia del postulante.',
@@ -381,14 +379,14 @@ export function InstitutionDashboard({
               >
                 <div className="flex items-center gap-3 mb-3">
                   <div className={`w-10 h-10 ${c.iconBg} rounded-xl flex items-center justify-center shadow-lg`}>
-                    <c.icon className="w-5 h-5 text-white" />
+                    <c.icon className={`w-5 h-5 ${c.iconBg === 'bg-cyan-400' ? 'text-brand-900' : 'text-white'}`} />
                   </div>
                   <div>
-                    <p className="font-semibold text-slate-900 text-sm">{c.title}</p>
-                    <p className="text-xs text-slate-500">{c.sub}</p>
+                    <p className={`font-semibold text-sm ${c.iconBg === 'bg-cyan-400' ? 'text-white' : 'text-slate-900'}`}>{c.title}</p>
+                    <p className={`text-xs ${c.iconBg === 'bg-cyan-400' ? 'text-brand-200' : 'text-slate-500'}`}>{c.sub}</p>
                   </div>
                 </div>
-                <p className="text-sm text-slate-600">{c.text}</p>
+                <p className={`text-sm ${c.iconBg === 'bg-cyan-400' ? 'text-brand-100' : 'text-slate-600'}`}>{c.text}</p>
               </div>
             ))}
           </div>

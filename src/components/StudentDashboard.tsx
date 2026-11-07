@@ -124,7 +124,7 @@ export function StudentDashboard({
               style={{ animationDelay: `${i * 0.05}s` }}
               className={`animate-slide-in-left w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 btn-spring ${
                 active
-                  ? 'bg-brand-600 text-white shadow-lg shadow-brand-600/30'
+                  ? 'bg-white text-brand-900 shadow-lg shadow-black/20 font-semibold'
                   : 'text-white/70 hover:text-white hover:bg-white/10'
               }`}
             >
@@ -192,12 +192,11 @@ export function StudentDashboard({
   );
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC]">
+    <div className="min-h-screen bg-brand-50/40">
       {/* Desktop Sidebar */}
       <aside className="hidden lg:fixed lg:inset-y-0 lg:left-0 lg:flex lg:w-64 lg:flex-col z-40">
         <div
-          className="flex grow flex-col overflow-hidden"
-          style={{ background: 'linear-gradient(165deg, #1E293B 0%, #0F172A 60%, #0F172A 100%)' }}
+          className="flex grow flex-col overflow-hidden bg-brand-900"
         >
           <SidebarContent />
         </div>
@@ -224,8 +223,7 @@ export function StudentDashboard({
         <div className="lg:hidden fixed inset-0 z-50 bg-black/40 backdrop-blur-sm" onClick={() => setSidebarOpen(false)} />
       )}
       <div
-        className={`lg:hidden fixed inset-y-0 left-0 z-50 w-64 transform transition-all duration-300 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}
-        style={{ background: 'linear-gradient(165deg, #1E293B 0%, #0F172A 60%, #0F172A 100%)' }}
+        className={`lg:hidden fixed inset-y-0 left-0 z-50 w-64 bg-brand-900 transform transition-all duration-300 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}
       >
         <div className="absolute top-4 right-4">
           <button onClick={() => setSidebarOpen(false)} className="p-2 rounded-xl bg-white/10 hover:bg-white/20 transition-colors">
@@ -274,12 +272,12 @@ export function StudentDashboard({
               >
                 <div className="flex items-center justify-between mb-3">
                   <div className={`w-11 h-11 rounded-xl flex items-center justify-center ${
-                    s.color === 'blue'  ? 'bg-brand-600/10' :
+                    s.color === 'blue'  ? 'bg-cyan-500/15' :
                     s.color === 'amber' ? 'bg-amber-100'    :
                     s.color === 'green' ? 'bg-emerald-100'  : 'bg-red-100'
                   }`}>
                     <s.icon className={`w-5 h-5 ${
-                      s.color === 'blue'  ? 'text-brand-600'    :
+                      s.color === 'blue'  ? 'text-cyan-700'       :
                       s.color === 'amber' ? 'text-amber-600'    :
                       s.color === 'green' ? 'text-emerald-600'  : 'text-red-500'
                     }`} />
@@ -362,7 +360,7 @@ export function StudentDashboard({
               {applications.length > 0 && (
                 <button
                   onClick={onApply}
-                  className="mt-3 w-full py-3 bg-brand-600 hover:from-brand-600 hover:to-brand-700 text-white text-sm font-semibold rounded-xl transition-all btn-spring shadow-lg shadow-brand-600/20"
+                  className="mt-3 w-full py-3 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold rounded-xl transition-all btn-spring shadow-lg shadow-brand-600/20"
                 >
                   Nueva Postulacion
                 </button>
@@ -397,14 +395,14 @@ export function StudentDashboard({
 
           {/* Info cards */}
           <div className="mt-6 grid md:grid-cols-2 gap-4 animate-slide-up" style={{ animationDelay: '0.55s' }}>
-            <div className="bg-brand-50 rounded-2xl p-5 border border-brand-200/40 spring-hover">
+            <div className="bg-brand-900 text-white rounded-2xl p-5 spring-hover">
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-brand-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-brand-600/20">
-                  <Calendar className="w-6 h-6 text-white" />
+                <div className="w-12 h-12 bg-cyan-400 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <Calendar className="w-6 h-6 text-brand-900" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-slate-900">Proceso de Admision</h3>
-                  <p className="text-sm text-slate-600 mt-1">El tiempo de respuesta promedio es de 3-5 dias habiles. Recibiras notificaciones por correo electronico.</p>
+                  <h3 className="font-semibold text-white">Proceso de Admision</h3>
+                  <p className="text-sm text-brand-200 mt-1">El tiempo de respuesta promedio es de 3-5 dias habiles. Recibiras notificaciones por correo electronico.</p>
                 </div>
               </div>
             </div>
@@ -496,13 +494,13 @@ function InstitutionCard({
         <div className="mt-5 flex flex-col sm:flex-row gap-3">
           <button
             onClick={onApply}
-            className="flex-1 py-3 bg-brand-600 hover:from-brand-600 hover:to-brand-700 text-white font-semibold rounded-xl transition-all btn-spring shadow-lg shadow-brand-600/20"
+            className="flex-1 py-3 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-xl transition-all btn-spring shadow-lg shadow-brand-600/20"
           >
             Postularme Ahora
           </button>
           <button
             onClick={onViewDetails}
-            className="px-5 py-3 bg-brand-50 hover:bg-brand-100 text-brand-600 font-semibold rounded-xl transition-all btn-spring flex items-center justify-center gap-2"
+            className="px-5 py-3 bg-cyan-50 hover:bg-cyan-100 text-cyan-700 font-semibold rounded-xl transition-all btn-spring flex items-center justify-center gap-2"
           >
             Ver Detalles
           </button>
@@ -553,7 +551,7 @@ function ApplicationCard({ application, onMessages }: { application: Application
           {onMessages && (
             <button
               onClick={onMessages}
-              className="flex items-center gap-1 px-2.5 py-1.5 bg-brand-50 hover:bg-brand-100 text-brand-600 text-xs font-semibold rounded-lg transition-all btn-spring"
+              className="flex items-center gap-1 px-2.5 py-1.5 bg-cyan-50 hover:bg-cyan-100 text-cyan-700 text-xs font-semibold rounded-lg transition-all btn-spring"
             >
               <MessageSquare className="w-3 h-3" />
               Chat

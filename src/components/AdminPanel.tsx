@@ -763,7 +763,7 @@ export function AdminPanel({ admin, onExit }: AdminPanelProps) {
             URL.revokeObjectURL(url);
             showToast('success', 'Reporte CSV descargado.');
           }}
-          className="flex items-center gap-2 px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-sm font-medium rounded-xl transition-colors"
+          className="flex items-center gap-2 px-4 py-2.5 bg-brand-900 hover:bg-brand-800 text-white text-sm font-medium rounded-xl transition-colors"
         >
           <Download className="w-4 h-4" />
           Exportar postulaciones a CSV
@@ -886,7 +886,7 @@ export function AdminPanel({ admin, onExit }: AdminPanelProps) {
         </p>
         <button
           onClick={onExit}
-          className="w-full py-3 bg-slate-900 hover:bg-slate-800 text-white font-medium rounded-xl transition-colors flex items-center justify-center gap-2"
+          className="w-full py-3 bg-brand-900 hover:bg-brand-800 text-white font-medium rounded-xl transition-colors flex items-center justify-center gap-2"
         >
           <LogOut className="w-5 h-5" />
           Salir del panel
@@ -933,7 +933,7 @@ export function AdminPanel({ admin, onExit }: AdminPanelProps) {
 
         <div className="px-4 py-3 border-b border-slate-100">
           <div className="flex items-center gap-3 px-2">
-            <div className="w-10 h-10 rounded-xl bg-slate-900 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-brand-900 flex items-center justify-center">
               <Shield className="w-5 h-5 text-white" />
             </div>
             <div className="min-w-0">
@@ -951,7 +951,7 @@ export function AdminPanel({ admin, onExit }: AdminPanelProps) {
                 key={item.id}
                 onClick={() => { setActiveTab(item.id); setSidebarOpen(false); setSearchTerm(''); setStatusFilter('all'); }}
                 className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium text-sm transition-all ${
-                  active ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-600 hover:bg-slate-100'
+                  active ? 'bg-brand-600 text-white shadow-lg shadow-brand-600/20' : 'text-slate-600 hover:bg-slate-100'
                 }`}
               >
                 <item.icon className={`w-5 h-5 flex-shrink-0 ${active ? 'text-white' : 'text-slate-400'}`} />
@@ -997,7 +997,7 @@ export function AdminPanel({ admin, onExit }: AdminPanelProps) {
                 <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
                 <span className="text-xs font-medium text-emerald-700">Acceso verificado</span>
               </div>
-              <div className="w-9 h-9 rounded-xl bg-slate-900 flex items-center justify-center">
+              <div className="w-9 h-9 rounded-xl bg-brand-900 flex items-center justify-center">
                 <Shield className="w-4 h-4 text-white" />
               </div>
             </div>
