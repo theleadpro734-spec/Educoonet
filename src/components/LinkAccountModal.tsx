@@ -46,7 +46,7 @@ export function LinkAccountModal({ onClose, onLinked }: LinkAccountModalProps) {
     }
   };
 
-  const inputClass = 'w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 transition-all bg-white border-slate-200 text-slate-900 placeholder:text-slate-400 focus:ring-[#2563EB]/20 focus:border-[#2563EB]';
+  const inputClass = 'w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 transition-all bg-white border-slate-200 text-slate-900 placeholder:text-slate-400 focus:ring-brand-600/20 focus:border-brand-600';
 
   if (success) {
     return (
@@ -70,15 +70,15 @@ export function LinkAccountModal({ onClose, onLinked }: LinkAccountModalProps) {
       <div className="absolute inset-0 bg-slate-900/50 backdrop-blur-sm" onClick={onClose} />
       <div className="relative bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden">
         {/* Header */}
-        <div className="bg-gradient-to-br from-[#2563EB] to-[#1E3A8A] px-8 pt-8 pb-6">
+        <div className="bg-gradient-to-br from-brand-600 to-brand-900 px-8 pt-8 pb-6">
           <button onClick={onClose} className="absolute top-4 right-4 p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-colors">
             <X className="w-5 h-5" />
           </button>
           <div className="flex items-center gap-3 mb-2">
-            <Shield className="w-6 h-6 text-[#93C5FD]" />
+            <Shield className="w-6 h-6 text-brand-300" />
             <h2 className="text-xl font-bold text-white">Guardar mi cuenta</h2>
           </div>
-          <p className="text-[#BFDBFE] text-sm">
+          <p className="text-brand-200 text-sm">
             Vincula tu sesion anonima con un correo o Google para no perder tus postulaciones y mensajes.
           </p>
         </div>
@@ -133,7 +133,7 @@ export function LinkAccountModal({ onClose, onLinked }: LinkAccountModalProps) {
                 {error}
               </div>
             )}
-            <button type="submit" disabled={loading || !isAnonymous} className="w-full py-3 bg-[#2563EB] hover:bg-[#1D4ED8] disabled:opacity-50 text-white font-semibold rounded-xl transition-colors flex items-center justify-center gap-2">
+            <button type="submit" disabled={loading || !isAnonymous} className="w-full py-3 bg-brand-600 hover:bg-brand-700 disabled:opacity-50 text-white font-semibold rounded-xl transition-colors flex items-center justify-center gap-2">
               {loading ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : 'Vincular cuenta'}
             </button>
           </form>

@@ -117,7 +117,7 @@ export function StudentPanel({ onExit }: StudentPanelProps) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50">
         <div className="text-center">
-          <div className="w-12 h-12 border-[3px] border-slate-200 border-t-[#2563EB] rounded-full animate-spin mx-auto" />
+          <div className="w-12 h-12 border-[3px] border-slate-200 border-t-brand-600 rounded-full animate-spin mx-auto" />
           <p className="mt-4 text-slate-500">Cargando panel...</p>
         </div>
       </div>
@@ -304,7 +304,7 @@ function ApplicationsListView({
             <span className="hidden sm:inline">Volver</span>
           </button>
           <span className="font-semibold text-slate-900">Mis Postulaciones</span>
-          <button onClick={onApply} className="flex items-center gap-1.5 px-3 py-2 bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-sm font-semibold rounded-xl transition-colors">
+          <button onClick={onApply} className="flex items-center gap-1.5 px-3 py-2 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold rounded-xl transition-colors">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
             </svg>
@@ -323,7 +323,7 @@ function ApplicationsListView({
               onClick={() => setFilterStatus(filter.id)}
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all whitespace-nowrap ${
                 filterStatus === filter.id
-                  ? 'bg-[#2563EB] text-white shadow-lg shadow-[#2563EB]/20'
+                  ? 'bg-brand-600 text-white shadow-lg shadow-brand-600/20'
                   : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
               }`}
             >
@@ -344,7 +344,7 @@ function ApplicationsListView({
               {filterStatus === 'all' ? 'No tienes postulaciones aun' : 'No hay postulaciones con este filtro'}
             </p>
             {filterStatus === 'all' && (
-              <button onClick={onApply} className="mt-5 px-6 py-3 bg-gradient-to-r from-[#3B82F6] to-[#2563EB] text-white font-semibold rounded-xl">
+              <button onClick={onApply} className="mt-5 px-6 py-3 bg-gradient-to-r from-brand-500 to-brand-600 text-white font-semibold rounded-xl">
                 Postularme Ahora
               </button>
             )}
@@ -357,7 +357,7 @@ function ApplicationsListView({
                 <div key={app.id} className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm hover:shadow-md transition-shadow">
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-3 min-w-0 flex-1">
-                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#3B82F6] to-[#2563EB] flex items-center justify-center flex-shrink-0 shadow-sm">
+                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center flex-shrink-0 shadow-sm">
                         <span className="text-white font-bold text-sm">{app.name.charAt(0)}{app.last_name?.charAt(0) || ''}</span>
                       </div>
                       <div className="min-w-0">
@@ -381,7 +381,7 @@ function ApplicationsListView({
                         </button>
                       </>
                     )}
-                    <button onClick={() => onMessages(app.id)} className="flex items-center gap-1.5 px-3 py-2 bg-[#EFF6FF] hover:bg-[#DBEAFE] text-[#2563EB] text-xs font-semibold rounded-lg transition-all">
+                    <button onClick={() => onMessages(app.id)} className="flex items-center gap-1.5 px-3 py-2 bg-brand-50 hover:bg-brand-100 text-brand-600 text-xs font-semibold rounded-lg transition-all">
                       Ver Mensajes
                     </button>
                   </div>
@@ -401,7 +401,7 @@ function InstitutionDetailView({ institution, onBack, onApply }: { institution: 
       <div className="min-h-screen bg-slate-50 flex items-center justify-center">
         <div className="text-center">
           <p className="text-slate-500">No hay institucion disponible</p>
-          <button onClick={onBack} className="mt-4 px-4 py-2 bg-[#2563EB] text-white rounded-xl">Volver</button>
+          <button onClick={onBack} className="mt-4 px-4 py-2 bg-brand-600 text-white rounded-xl">Volver</button>
         </div>
       </div>
     );
@@ -430,7 +430,7 @@ function InstitutionDetailView({ institution, onBack, onApply }: { institution: 
               {institution.logo_url ? (
                 <img src={institution.logo_url} alt="" className="w-16 h-16 rounded-xl object-cover border border-slate-200 shadow-sm flex-shrink-0" />
               ) : (
-                <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-[#2563EB] to-[#134E4A] flex items-center justify-center text-white text-2xl font-bold shadow-lg flex-shrink-0">
+                <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-brand-600 to-[#134E4A] flex items-center justify-center text-white text-2xl font-bold shadow-lg flex-shrink-0">
                   {institution.name.charAt(0)}
                 </div>
               )}
@@ -440,7 +440,7 @@ function InstitutionDetailView({ institution, onBack, onApply }: { institution: 
               </div>
             </div>
             {institution.description && <p className="mt-4 text-slate-600 text-sm leading-relaxed">{institution.description}</p>}
-            <button onClick={onApply} className="mt-6 w-full py-3.5 bg-gradient-to-r from-[#3B82F6] to-[#2563EB] text-white font-semibold rounded-xl transition-all shadow-lg shadow-[#2563EB]/25">
+            <button onClick={onApply} className="mt-6 w-full py-3.5 bg-gradient-to-r from-brand-500 to-brand-600 text-white font-semibold rounded-xl transition-all shadow-lg shadow-brand-600/25">
               Postularme Ahora
             </button>
           </div>
@@ -484,13 +484,13 @@ function StudentSettingsView({
       <main className="max-w-2xl mx-auto px-4 py-6 pb-24 space-y-4">
         <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#3B82F6] to-[#2563EB] flex items-center justify-center text-white text-xl font-bold shadow-lg">
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center text-white text-xl font-bold shadow-lg">
               {initials}
             </div>
             <div className="min-w-0">
               <h2 className="text-lg font-semibold text-slate-900 truncate">{studentName}</h2>
               <p className="text-sm text-slate-500 truncate">{studentEmail || 'Sesion anonima'}</p>
-              <p className="text-xs text-[#2563EB] font-medium mt-1">
+              <p className="text-xs text-brand-600 font-medium mt-1">
                 {isAnonymous || isLocal ? 'Postulante (sin cuenta vinculada)' : 'Postulante'}
               </p>
             </div>
@@ -498,21 +498,21 @@ function StudentSettingsView({
         </div>
 
         {(isAnonymous || isLocal) && (
-          <div className="bg-gradient-to-br from-[#2563EB] to-[#134E4A] rounded-2xl p-6 shadow-lg">
+          <div className="bg-gradient-to-br from-brand-600 to-[#134E4A] rounded-2xl p-6 shadow-lg">
             <div className="flex items-start gap-3 mb-4">
               <div className="w-10 h-10 bg-white/15 rounded-xl flex items-center justify-center flex-shrink-0">
-                <svg className="w-5 h-5 text-[#5EEAD4]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                <svg className="w-5 h-5 text-cyan-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
               </div>
               <div>
                 <h3 className="font-semibold text-white">Guarda tu cuenta</h3>
-                <p className="text-sm text-[#99F6E4] mt-1">
+                <p className="text-sm text-cyan-300 mt-1">
                   Estás usando una sesion de invitado. Vincula tu correo o Google para no perder tus postulaciones al cambiar de dispositivo.
                 </p>
               </div>
             </div>
             <button
               onClick={onLinkAccount}
-              className="w-full py-3 bg-white text-[#2563EB] font-semibold rounded-xl hover:bg-[#EFF6FF] transition-colors"
+              className="w-full py-3 bg-white text-brand-600 font-semibold rounded-xl hover:bg-brand-50 transition-colors"
             >
               Vincular mi cuenta
             </button>

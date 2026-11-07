@@ -53,10 +53,10 @@ export function InstitutionAccessPage() {
     window.dispatchEvent(new PopStateEvent('popstate'));
   };
 
-  const inputClass = 'w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 transition-all bg-white border-slate-200 text-slate-900 placeholder:text-slate-400 focus:ring-[#2563EB]/20 focus:border-[#2563EB]';
+  const inputClass = 'w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 transition-all bg-white border-slate-200 text-slate-900 placeholder:text-slate-400 focus:ring-brand-600/20 focus:border-brand-600';
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-50 to-[#EFF6FF]">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-50 to-brand-50">
       {/* Top bar */}
       <header className="bg-white/80 backdrop-blur-sm border-b border-slate-200">
         <div className="max-w-md mx-auto px-4 py-4 flex items-center justify-between">
@@ -73,7 +73,7 @@ export function InstitutionAccessPage() {
         <div className="w-full max-w-md">
           {/* Logo + title */}
           <div className="text-center mb-8">
-            <div className="w-16 h-16 bg-gradient-to-br from-[#2563EB] to-[#1E3A8A] rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-[#2563EB]/25">
+            <div className="w-16 h-16 bg-gradient-to-br from-brand-600 to-brand-900 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-brand-600/25">
               <Building2 className="w-8 h-8 text-white" />
             </div>
             <h1 className="text-2xl font-bold text-slate-900">Acceso para instituciones</h1>
@@ -95,7 +95,7 @@ export function InstitutionAccessPage() {
                   </p>
                   <button
                     onClick={() => { setForgotMode(false); setForgotSent(false); }}
-                    className="mt-5 w-full py-3 bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-semibold rounded-xl transition-colors"
+                    className="mt-5 w-full py-3 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-xl transition-colors"
                   >
                     Volver a iniciar sesion
                   </button>
@@ -115,7 +115,7 @@ export function InstitutionAccessPage() {
                       {error}
                     </div>
                   )}
-                  <button type="submit" disabled={loading} className="w-full py-3 bg-[#2563EB] hover:bg-[#1D4ED8] disabled:opacity-50 text-white font-semibold rounded-xl transition-colors flex items-center justify-center gap-2">
+                  <button type="submit" disabled={loading} className="w-full py-3 bg-brand-600 hover:bg-brand-700 disabled:opacity-50 text-white font-semibold rounded-xl transition-colors flex items-center justify-center gap-2">
                     {loading ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : 'Enviar enlace de recuperacion'}
                   </button>
                   <button type="button" onClick={() => setForgotMode(false)} className="w-full text-sm text-slate-500 hover:text-slate-700 transition-colors">
@@ -148,7 +148,7 @@ export function InstitutionAccessPage() {
                     {error}
                   </div>
                 )}
-                <button type="submit" disabled={loading} className="w-full py-3 bg-[#2563EB] hover:bg-[#1D4ED8] disabled:opacity-50 text-white font-semibold rounded-xl transition-colors flex items-center justify-center gap-2">
+                <button type="submit" disabled={loading} className="w-full py-3 bg-brand-600 hover:bg-brand-700 disabled:opacity-50 text-white font-semibold rounded-xl transition-colors flex items-center justify-center gap-2">
                   {loading ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : 'Ingresar'}
                 </button>
                 <button type="button" onClick={() => { setForgotMode(true); setError(''); }} className="w-full text-sm text-slate-500 hover:text-slate-700 transition-colors">
@@ -160,10 +160,10 @@ export function InstitutionAccessPage() {
 
           {/* Test credentials hint */}
           {!forgotMode && (
-            <div className="mt-5 p-4 bg-[#EFF6FF] border border-[#BFDBFE]/40 rounded-2xl">
+            <div className="mt-5 p-4 bg-brand-50 border border-brand-200/40 rounded-2xl">
               <div className="flex items-center gap-2 mb-2">
-                <KeyRound className="w-4 h-4 text-[#2563EB]" />
-                <p className="text-sm font-semibold text-[#1D4ED8]">Cuenta de prueba - Liceo Romero Garcia</p>
+                <KeyRound className="w-4 h-4 text-brand-600" />
+                <p className="text-sm font-semibold text-brand-700">Cuenta de prueba - Liceo Romero Garcia</p>
               </div>
               <p className="text-xs text-slate-600 mb-1">
                 <span className="text-slate-400">Correo:</span> liceo.romero.garcia@educonnet.com
@@ -173,7 +173,7 @@ export function InstitutionAccessPage() {
               </p>
               <button
                 onClick={handleTestLogin}
-                className="w-full py-2 bg-white hover:bg-slate-50 text-[#2563EB] text-xs font-semibold rounded-lg border border-[#BFDBFE]/40 transition-colors"
+                className="w-full py-2 bg-white hover:bg-slate-50 text-brand-600 text-xs font-semibold rounded-lg border border-brand-200/40 transition-colors"
               >
                 Autocompletar credenciales
               </button>

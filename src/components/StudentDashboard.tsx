@@ -103,12 +103,12 @@ export function StudentDashboard({
       {/* Student chip */}
       <div className="px-5 py-3">
         <div className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl bg-white/10 border border-white/10">
-          <div className="w-8 h-8 rounded-lg bg-[#2563EB] flex items-center justify-center flex-shrink-0 shadow-lg text-white text-xs font-bold">
+          <div className="w-8 h-8 rounded-lg bg-brand-600 flex items-center justify-center flex-shrink-0 shadow-lg text-white text-xs font-bold">
             {studentInitials}
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-white text-xs font-bold truncate">{studentName}</p>
-            <p className="text-[#93C5FD] text-[10px]">Postulante</p>
+            <p className="text-brand-300 text-[10px]">Postulante</p>
           </div>
         </div>
       </div>
@@ -124,7 +124,7 @@ export function StudentDashboard({
               style={{ animationDelay: `${i * 0.05}s` }}
               className={`animate-slide-in-left w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 btn-spring ${
                 active
-                  ? 'bg-[#2563EB] text-white shadow-lg shadow-[#2563EB]/30'
+                  ? 'bg-brand-600 text-white shadow-lg shadow-brand-600/30'
                   : 'text-white/70 hover:text-white hover:bg-white/10'
               }`}
             >
@@ -132,7 +132,7 @@ export function StudentDashboard({
               <span className="flex-1 text-left">{item.label}</span>
               {item.badge !== undefined && item.badge > 0 && (
                 <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full transition-all ${
-                  active ? 'bg-white/25 text-white' : 'bg-[#2563EB]/80 text-white'
+                  active ? 'bg-white/25 text-white' : 'bg-brand-600/80 text-white'
                 }`}>
                   {item.badge}
                 </span>
@@ -145,7 +145,7 @@ export function StudentDashboard({
       {/* Stats mini */}
       {applications.length > 0 && (
         <div className="mx-3 mb-3 p-4 rounded-xl bg-white/8 border border-white/10">
-          <p className="text-[#93C5FD] text-xs font-semibold uppercase tracking-wider mb-3">Mis Postulaciones</p>
+          <p className="text-brand-300 text-xs font-semibold uppercase tracking-wider mb-3">Mis Postulaciones</p>
           <div className="grid grid-cols-3 text-center gap-1">
             {[
               { v: pending,  label: 'Pend', c: 'text-amber-400' },
@@ -167,7 +167,7 @@ export function StudentDashboard({
           onClick={() => setAccountMenuOpen(!accountMenuOpen)}
           className="w-full flex items-center gap-3 px-3 py-3 rounded-xl bg-white/8 border border-white/10 hover:bg-white/15 transition-all"
         >
-          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#3B82F6] to-[#2563EB] flex items-center justify-center flex-shrink-0 shadow-lg text-white text-xs font-bold">
+          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center flex-shrink-0 shadow-lg text-white text-xs font-bold">
             {studentInitials}
           </div>
           <div className="flex-1 min-w-0 text-left">
@@ -241,7 +241,7 @@ export function StudentDashboard({
 
           {/* Welcome */}
           <div className="mb-8 animate-fade-in">
-            <p className="text-sm text-[#2563EB] font-semibold mb-1">Hola, bienvenido de nuevo</p>
+            <p className="text-sm text-brand-600 font-semibold mb-1">Hola, bienvenido de nuevo</p>
             <h1 className="text-2xl lg:text-3xl font-bold text-slate-900">{studentName}</h1>
             <p className="text-slate-500 mt-1 text-sm">Gestiona tus postulaciones y descubre nuevas oportunidades.</p>
           </div>
@@ -254,7 +254,7 @@ export function StudentDashboard({
               placeholder="Buscar instituciones, programas..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-3.5 bg-white rounded-2xl border border-slate-200 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2563EB]/20 focus:border-[#2563EB] transition-all shadow-sm"
+              className="w-full pl-12 pr-4 py-3.5 bg-white rounded-2xl border border-slate-200 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-600/20 focus:border-brand-600 transition-all shadow-sm"
             />
           </div>
 
@@ -274,12 +274,12 @@ export function StudentDashboard({
               >
                 <div className="flex items-center justify-between mb-3">
                   <div className={`w-11 h-11 rounded-xl flex items-center justify-center ${
-                    s.color === 'blue'  ? 'bg-[#2563EB]/10' :
+                    s.color === 'blue'  ? 'bg-brand-600/10' :
                     s.color === 'amber' ? 'bg-amber-100'    :
                     s.color === 'green' ? 'bg-emerald-100'  : 'bg-red-100'
                   }`}>
                     <s.icon className={`w-5 h-5 ${
-                      s.color === 'blue'  ? 'text-[#2563EB]'    :
+                      s.color === 'blue'  ? 'text-brand-600'    :
                       s.color === 'amber' ? 'text-amber-600'    :
                       s.color === 'green' ? 'text-emerald-600'  : 'text-red-500'
                     }`} />
@@ -303,7 +303,7 @@ export function StudentDashboard({
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-lg font-semibold text-slate-900">Institucion Disponible</h2>
                 {institution && (
-                  <button onClick={onViewInstitution} className="text-sm font-semibold text-[#2563EB] hover:text-[#1D4ED8] flex items-center gap-1 transition-colors">
+                  <button onClick={onViewInstitution} className="text-sm font-semibold text-brand-600 hover:text-brand-700 flex items-center gap-1 transition-colors">
                     Ver detalles <ChevronRight className="w-4 h-4" />
                   </button>
                 )}
@@ -312,8 +312,8 @@ export function StudentDashboard({
                 <InstitutionCard institution={institution} onApply={onApply} onViewDetails={onViewInstitution} />
               ) : (
                 <div className="bg-white rounded-2xl border border-slate-200 p-10 text-center shadow-sm">
-                  <div className="w-16 h-16 bg-[#EFF6FF] rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    <Building2 className="w-8 h-8 text-[#2563EB]/40" />
+                  <div className="w-16 h-16 bg-brand-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <Building2 className="w-8 h-8 text-brand-600/40" />
                   </div>
                   <p className="text-slate-500 font-medium">Sin instituciones disponibles</p>
                   <p className="text-slate-400 text-sm mt-1">Pronto encontraras nuevas oportunidades</p>
@@ -326,7 +326,7 @@ export function StudentDashboard({
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-lg font-semibold text-slate-900">Postulaciones</h2>
                 {applications.length > 0 && (
-                  <button onClick={() => handleTabChange('applications')} className="text-sm font-semibold text-[#2563EB] hover:text-[#1D4ED8] transition-colors">
+                  <button onClick={() => handleTabChange('applications')} className="text-sm font-semibold text-brand-600 hover:text-brand-700 transition-colors">
                     Ver todas
                   </button>
                 )}
@@ -343,14 +343,14 @@ export function StudentDashboard({
                   ))
                 ) : (
                   <div className="bg-white rounded-2xl p-6 text-center border border-slate-200 shadow-sm">
-                    <div className="w-14 h-14 bg-[#EFF6FF] rounded-2xl flex items-center justify-center mx-auto mb-3">
-                      <Bookmark className="w-7 h-7 text-[#2563EB]/40" />
+                    <div className="w-14 h-14 bg-brand-50 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                      <Bookmark className="w-7 h-7 text-brand-600/40" />
                     </div>
                     <p className="text-slate-600 font-medium text-sm">Sin postulaciones</p>
                     <p className="text-slate-400 text-xs mt-1">Comienza tu proceso hoy</p>
                     <button
                       onClick={onApply}
-                      className="mt-4 px-5 py-2.5 bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-sm font-semibold rounded-xl transition-all btn-spring shadow-lg shadow-[#2563EB]/20"
+                      className="mt-4 px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold rounded-xl transition-all btn-spring shadow-lg shadow-brand-600/20"
                     >
                       Postularme ahora
                     </button>
@@ -362,7 +362,7 @@ export function StudentDashboard({
               {applications.length > 0 && (
                 <button
                   onClick={onApply}
-                  className="mt-3 w-full py-3 bg-gradient-to-r from-[#3B82F6] to-[#2563EB] hover:from-[#2563EB] hover:to-[#1D4ED8] text-white text-sm font-semibold rounded-xl transition-all btn-spring shadow-lg shadow-[#2563EB]/20"
+                  className="mt-3 w-full py-3 bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-600 hover:to-brand-700 text-white text-sm font-semibold rounded-xl transition-all btn-spring shadow-lg shadow-brand-600/20"
                 >
                   Nueva Postulacion
                 </button>
@@ -397,9 +397,9 @@ export function StudentDashboard({
 
           {/* Info cards */}
           <div className="mt-6 grid md:grid-cols-2 gap-4 animate-slide-up" style={{ animationDelay: '0.55s' }}>
-            <div className="bg-gradient-to-br from-[#EFF6FF] to-white rounded-2xl p-5 border border-[#BFDBFE]/40 spring-hover">
+            <div className="bg-gradient-to-br from-brand-50 to-white rounded-2xl p-5 border border-brand-200/40 spring-hover">
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-[#2563EB] rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-[#2563EB]/20">
+                <div className="w-12 h-12 bg-brand-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-brand-600/20">
                   <Calendar className="w-6 h-6 text-white" />
                 </div>
                 <div>
@@ -432,17 +432,17 @@ export function StudentDashboard({
               <button
                 key={item.id}
                 onClick={() => handleTabChange(item.id)}
-                className={`flex flex-1 flex-col items-center gap-1 py-2 px-1 rounded-xl transition-all btn-spring ${active ? 'text-[#2563EB]' : 'text-slate-400 hover:text-slate-700'}`}
+                className={`flex flex-1 flex-col items-center gap-1 py-2 px-1 rounded-xl transition-all btn-spring ${active ? 'text-brand-600' : 'text-slate-400 hover:text-slate-700'}`}
               >
-                <div className={`relative p-1.5 rounded-xl transition-all ${active ? 'bg-[#2563EB]/10' : ''}`}>
+                <div className={`relative p-1.5 rounded-xl transition-all ${active ? 'bg-brand-600/10' : ''}`}>
                   <item.icon className="w-5 h-5" />
                   {item.badge !== undefined && item.badge > 0 && (
-                    <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-[#2563EB] text-white rounded-full flex items-center justify-center text-[9px] font-bold">
+                    <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-brand-600 text-white rounded-full flex items-center justify-center text-[9px] font-bold">
                       {item.badge}
                     </span>
                   )}
                 </div>
-                <span className={`text-[9px] font-semibold leading-tight ${active ? 'text-[#2563EB]' : ''}`}>{item.label}</span>
+                <span className={`text-[9px] font-semibold leading-tight ${active ? 'text-brand-600' : ''}`}>{item.label}</span>
               </button>
             );
           })}
@@ -474,14 +474,14 @@ function InstitutionCard({
           {institution.logo_url ? (
             <img src={institution.logo_url} alt="" className="w-16 h-16 rounded-xl object-cover border border-slate-200 shadow-sm" />
           ) : (
-            <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-[#2563EB] to-[#1E3A8A] flex items-center justify-center text-white text-2xl font-bold shadow-lg">
+            <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-brand-600 to-brand-900 flex items-center justify-center text-white text-2xl font-bold shadow-lg">
               {institution.name.charAt(0)}
             </div>
           )}
           <div className="flex-1 min-w-0">
             <h3 className="text-xl font-semibold text-slate-900">{institution.name}</h3>
             {institution.institution_type && (
-              <p className="text-sm text-[#2563EB] font-medium mt-0.5">{institution.institution_type}</p>
+              <p className="text-sm text-brand-600 font-medium mt-0.5">{institution.institution_type}</p>
             )}
             {institution.location && (
               <div className="flex items-center gap-1.5 mt-1 text-slate-500 text-sm">
@@ -496,13 +496,13 @@ function InstitutionCard({
         <div className="mt-5 flex flex-col sm:flex-row gap-3">
           <button
             onClick={onApply}
-            className="flex-1 py-3 bg-gradient-to-r from-[#3B82F6] to-[#2563EB] hover:from-[#2563EB] hover:to-[#1D4ED8] text-white font-semibold rounded-xl transition-all btn-spring shadow-lg shadow-[#2563EB]/25"
+            className="flex-1 py-3 bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-600 hover:to-brand-700 text-white font-semibold rounded-xl transition-all btn-spring shadow-lg shadow-brand-600/25"
           >
             Postularme Ahora
           </button>
           <button
             onClick={onViewDetails}
-            className="px-5 py-3 bg-[#EFF6FF] hover:bg-[#DBEAFE] text-[#2563EB] font-semibold rounded-xl transition-all btn-spring flex items-center justify-center gap-2"
+            className="px-5 py-3 bg-brand-50 hover:bg-brand-100 text-brand-600 font-semibold rounded-xl transition-all btn-spring flex items-center justify-center gap-2"
           >
             Ver Detalles
           </button>
@@ -525,7 +525,7 @@ function ApplicationCard({ application, onMessages }: { application: Application
       <div className="flex items-start justify-between gap-3">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#3B82F6] to-[#2563EB] flex items-center justify-center flex-shrink-0 shadow-sm">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center flex-shrink-0 shadow-sm">
               <span className="text-white text-xs font-bold">
                 {application.name.charAt(0)}{application.last_name?.charAt(0) || ''}
               </span>
@@ -553,7 +553,7 @@ function ApplicationCard({ application, onMessages }: { application: Application
           {onMessages && (
             <button
               onClick={onMessages}
-              className="flex items-center gap-1 px-2.5 py-1.5 bg-[#EFF6FF] hover:bg-[#DBEAFE] text-[#2563EB] text-xs font-semibold rounded-lg transition-all btn-spring"
+              className="flex items-center gap-1 px-2.5 py-1.5 bg-brand-50 hover:bg-brand-100 text-brand-600 text-xs font-semibold rounded-lg transition-all btn-spring"
             >
               <MessageSquare className="w-3 h-3" />
               Chat

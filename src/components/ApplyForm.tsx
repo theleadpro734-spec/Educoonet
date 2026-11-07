@@ -281,7 +281,7 @@ export function ApplyForm({
     setTimeout(onSuccess, 1600);
   };
 
-  const inputClass = 'w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2563EB]/20 focus:border-[#2563EB] transition-all';
+  const inputClass = 'w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-600/20 focus:border-brand-600 transition-all';
   const labelClass = 'block text-sm font-medium text-slate-700 mb-1.5';
   const sectionTitleClass = 'text-base font-semibold text-slate-900 flex items-center gap-2';
   const stepErrorBox = (step: number) =>
@@ -332,12 +332,12 @@ export function ApplyForm({
                 <div className="flex flex-col items-center gap-1.5">
                   <div className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all ${
                     done ? 'bg-emerald-500 text-white' :
-                    active ? 'bg-[#2563EB] text-white shadow-lg shadow-[#2563EB]/25' :
+                    active ? 'bg-brand-600 text-white shadow-lg shadow-brand-600/25' :
                     'bg-slate-100 text-slate-400'
                   }`}>
                     {done ? <CheckCircle className="w-5 h-5" /> : <step.icon className="w-4 h-4" />}
                   </div>
-                  <span className={`text-[10px] font-semibold ${active ? 'text-[#1D4ED8]' : done ? 'text-emerald-600' : 'text-slate-400'}`}>
+                  <span className={`text-[10px] font-semibold ${active ? 'text-brand-700' : done ? 'text-emerald-600' : 'text-slate-400'}`}>
                     {step.label}
                   </span>
                 </div>
@@ -354,8 +354,8 @@ export function ApplyForm({
           {currentStep === 1 && (
             <div className="space-y-5 animate-fade-in">
               <h2 className={sectionTitleClass}>
-                <div className="w-8 h-8 bg-[#EFF6FF] rounded-lg flex items-center justify-center">
-                  <User className="w-4 h-4 text-[#2563EB]" />
+                <div className="w-8 h-8 bg-brand-50 rounded-lg flex items-center justify-center">
+                  <User className="w-4 h-4 text-brand-600" />
                 </div>
                 Datos Personales
               </h2>
@@ -440,7 +440,7 @@ export function ApplyForm({
               <button
                 type="button"
                 onClick={() => goToStep(2)}
-                className="w-full py-3.5 bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-semibold rounded-xl transition-all shadow-lg shadow-[#2563EB]/20"
+                className="w-full py-3.5 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-xl transition-all shadow-lg shadow-brand-600/20"
               >
                 Continuar
               </button>
@@ -451,8 +451,8 @@ export function ApplyForm({
           {currentStep === 2 && (
             <div className="space-y-5 animate-fade-in">
               <h2 className={sectionTitleClass}>
-                <div className="w-8 h-8 bg-[#EFF6FF] rounded-lg flex items-center justify-center">
-                  <MapPin className="w-4 h-4 text-[#2563EB]" />
+                <div className="w-8 h-8 bg-brand-50 rounded-lg flex items-center justify-center">
+                  <MapPin className="w-4 h-4 text-brand-600" />
                 </div>
                 Ubicacion
               </h2>
@@ -483,7 +483,7 @@ export function ApplyForm({
                 <button type="button" onClick={() => { setStepErrors({}); setCurrentStep(1); }} className="px-6 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl transition-all">
                   Atras
                 </button>
-                <button type="button" onClick={() => goToStep(3)} className="flex-1 py-3.5 bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-semibold rounded-xl transition-all shadow-lg shadow-[#2563EB]/20">
+                <button type="button" onClick={() => goToStep(3)} className="flex-1 py-3.5 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-xl transition-all shadow-lg shadow-brand-600/20">
                   Continuar
                 </button>
               </div>
@@ -494,8 +494,8 @@ export function ApplyForm({
           {currentStep === 3 && (
             <div className="space-y-5 animate-fade-in">
               <h2 className={sectionTitleClass}>
-                <div className="w-8 h-8 bg-[#EFF6FF] rounded-lg flex items-center justify-center">
-                  <Heart className="w-4 h-4 text-[#2563EB]" />
+                <div className="w-8 h-8 bg-brand-50 rounded-lg flex items-center justify-center">
+                  <Heart className="w-4 h-4 text-brand-600" />
                 </div>
                 Representante Legal
               </h2>
@@ -518,7 +518,7 @@ export function ApplyForm({
                 <button type="button" onClick={() => { setStepErrors({}); setCurrentStep(2); }} className="px-6 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl transition-all">
                   Atras
                 </button>
-                <button type="button" onClick={() => goToStep(4)} className="flex-1 py-3.5 bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-semibold rounded-xl transition-all shadow-lg shadow-[#2563EB]/20">
+                <button type="button" onClick={() => goToStep(4)} className="flex-1 py-3.5 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-xl transition-all shadow-lg shadow-brand-600/20">
                   Continuar
                 </button>
               </div>
@@ -529,8 +529,8 @@ export function ApplyForm({
           {currentStep === 4 && (
             <div className="space-y-5 animate-fade-in">
               <h2 className={sectionTitleClass}>
-                <div className="w-8 h-8 bg-[#EFF6FF] rounded-lg flex items-center justify-center">
-                  <Upload className="w-4 h-4 text-[#2563EB]" />
+                <div className="w-8 h-8 bg-brand-50 rounded-lg flex items-center justify-center">
+                  <Upload className="w-4 h-4 text-brand-600" />
                 </div>
                 Documentos Requeridos
               </h2>
@@ -591,7 +591,7 @@ export function ApplyForm({
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="flex-1 py-3.5 bg-gradient-to-r from-[#3B82F6] to-[#2563EB] hover:from-[#2563EB] hover:to-[#1D4ED8] text-white font-semibold rounded-xl transition-all shadow-lg shadow-[#2563EB]/25 disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="flex-1 py-3.5 bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-600 hover:to-brand-700 text-white font-semibold rounded-xl transition-all shadow-lg shadow-brand-600/25 disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   {submitting ? (
                     <>

@@ -136,8 +136,8 @@ export function FileUpload({
             borderColor: required ? '#BFDBFE' : '#cbd5e1',
           }}
         >
-          <div className="w-10 h-10 bg-[#EFF6FF] rounded-xl flex items-center justify-center">
-            <Upload className="w-5 h-5 text-[#2563EB]" />
+          <div className="w-10 h-10 bg-brand-50 rounded-xl flex items-center justify-center">
+            <Upload className="w-5 h-5 text-brand-600" />
           </div>
           <span className="text-sm font-medium text-slate-700">
             {label}
@@ -148,9 +148,9 @@ export function FileUpload({
       )}
 
       {uploading && (
-        <div className="w-full flex flex-col items-center justify-center gap-2 p-5 border-2 border-[#BFDBFE] rounded-xl bg-[#EFF6FF]/50">
-          <Loader2 className="w-6 h-6 text-[#2563EB] animate-spin" />
-          <span className="text-sm text-[#1D4ED8] font-medium">Subiendo...</span>
+        <div className="w-full flex flex-col items-center justify-center gap-2 p-5 border-2 border-brand-200 rounded-xl bg-brand-50/50">
+          <Loader2 className="w-6 h-6 text-brand-600 animate-spin" />
+          <span className="text-sm text-brand-700 font-medium">Subiendo...</span>
         </div>
       )}
 
