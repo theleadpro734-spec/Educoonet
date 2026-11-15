@@ -1,8 +1,8 @@
 import { useState, useMemo, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
-import { useAuth, setStudentEmail } from '../lib/auth';
+import { useAuth, setStudentEmail, getStudentEmail } from '../lib/auth';
 import { FileUpload } from './FileUpload';
-import { ArrowLeft, FileText, User, MapPin, Heart, Upload, CheckCircle, AlertCircle } from 'lucide-react';
+import { ArrowLeft, FileText, User, MapPin, Heart, Upload, CheckCircle, AlertCircle, Download } from 'lucide-react';
 import { Application, Quota } from '../types';
 
 interface ApplyFormProps {
@@ -130,6 +130,82 @@ export function ApplyForm({
   const update = (field: keyof FormData, value: string) => {
     setForm((prev) => ({ ...prev, [field]: value }));
   };
+
+  // [PRELOAD] Temporal para la presentación — quitar este bloque completo (botón y estado) después
+  const [preloading, setPreloading] = useState(false);
+  const [preloadMsg, setPreloadMsg] = useState<string | null>(null);
+
+  const preloadData = async () => {
+    if (preloading) return;
+    setPreloading(true);
+    setPreloadMsg(null);
+    try {
+      const sessionEmail = user?.email?.trim().toLowerCase() || '';
+      const lookupEmail = isLocalUser ? (getStudentEmail() || sessionEmail) : sessionEmail;
+      const isSessionUser = !!user && !isLocalUser;
+
+      const [profileRes, studentRes, priorRes] = await Promise.all([
+        isSessionUser
+          ? supabase.from('profiles').select('full_name, phone').eq('id', user.id).maybeSingle()
+          : Promise.resolve({ data: null as { full_name: string | null; phone: string | null } | null, error: null }),
+        lookupEmail
+          ? supabase.from('student_accounts').select('name, last_name, cedula').eq('email', lookupEmail).maybeSingle()
+          : Promise.resolve({ data: null as { name: string; last_name: string | null; cedula: string | null } | null, error: null }),
+        isSessionUser
+          ? supabase.from('applications').select('*').eq('user_id', user.id).is('archived_at', null).order('created_at', { ascending: false }).limit(1).maybeSingle()
+          : lookupEmail
+            ? supabase.from('applications').select('*').eq('email', lookupEmail).is('archived_at', null).order('created_at', { ascending: false }).limit(1).maybeSingle()
+            : Promise.resolve({ data: null as Application | null, error: null }),
+      ]);
+
+      const profile = profileRes.data;
+      const student = studentRes.data;
+      const prior = (priorRes.data as Application | null) || null;
+
+      let filled = 0;
+      const next = { ...form };
+      const fill = (field: keyof FormData, value: string | null | undefined) => {
+        if (!value || String(next[field]).trim()) return;
+        next[field] = value;
+        filled++;
+      };
+
+      if (student) {
+        fill('name', student.name);
+        fill('last_name', student.last_name);
+        fill('identity_document', student.cedula);
+      }
+      if (profile) {
+        if (!student) fill('name', profile.full_name);
+        fill('phone', profile.phone);
+      }
+      if (prior) {
+        fill('last_name', prior.last_name);
+        fill('birth_date', prior.birth_date);
+        fill('birth_place', prior.birth_place);
+        fill('birth_center', prior.birth_center);
+        fill('blood_type', prior.blood_type);
+        fill('address', prior.address);
+        fill('province', prior.province);
+        fill('city', prior.city);
+        fill('sector', prior.sector);
+        fill('representative_name', prior.representative_name);
+        fill('representative_cedula', prior.representative_cedula);
+      }
+
+      setForm(next);
+      setPreloadMsg(
+        filled > 0
+          ? `Se precargaron ${filled} campo${filled === 1 ? '' : 's'} con tus datos guardados. Revísalos y edítalos antes de enviar.`
+          : 'No encontramos datos guardados para tu cuenta. Completa el formulario manualmente.'
+      );
+    } catch {
+      setPreloadMsg('No se pudieron precargar los datos. Completa el formulario manualmente.');
+    } finally {
+      setPreloading(false);
+    }
+  };
+  // [FIN PRELOAD]
 
   const uploadPath = useMemo(() => `apps/${institutionId}/${Date.now()}`, [institutionId]);
 
@@ -359,6 +435,32 @@ export function ApplyForm({
                 </div>
                 Datos Personales
               </h2>
+
+              {/* [PRELOAD] Temporal para la presentación — quitar este bloque después */}
+              {!application && (
+                <div className="p-3 bg-cyan-50/60 border border-cyan-200 rounded-xl">
+                  <button
+                    type="button"
+                    onClick={preloadData}
+                    disabled={preloading}
+                    className="w-full py-2.5 bg-white hover:bg-cyan-100 text-cyan-700 border border-cyan-300 text-sm font-semibold rounded-xl transition-all disabled:opacity-60 flex items-center justify-center gap-2"
+                  >
+                    {preloading ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-cyan-300 border-t-cyan-700 rounded-full animate-spin" />
+                        Buscando datos...
+                      </>
+                    ) : (
+                      <>
+                        <Download className="w-4 h-4" />
+                        Precargar datos
+                      </>
+                    )}
+                  </button>
+                  {preloadMsg && <p className="mt-2 text-xs text-cyan-800">{preloadMsg}</p>}
+                </div>
+              )}
+              {/* [FIN PRELOAD] */}
 
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
