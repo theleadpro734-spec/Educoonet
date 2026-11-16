@@ -193,11 +193,38 @@ export function ApplyForm({
         fill('representative_cedula', prior.representative_cedula);
       }
 
+      // [PRELOAD-DEMO] Relleno de demostración con datos ficticios verosímiles
+      // (nombres, cédulas y direcciones inventadas pero con formato real).
+      const demo: Partial<Record<keyof FormData, string>> = {
+        name: 'María Fernanda',
+        last_name: 'Rodríguez Pérez',
+        identity_document: '18472930',
+        phone: '+58 424 555 1234',
+        birth_date: '2009-08-17',
+        birth_place: 'Valencia, Venezuela',
+        birth_center: 'Hospital Central de Valencia',
+        blood_type: 'O+',
+        address: 'Av. Bolívar Norte, Residencias Los Samanes, Casa 12',
+        province: 'Carabobo',
+        city: 'Valencia',
+        sector: 'Los Samanes',
+        representative_name: 'Carlos Enrique Rodríguez Méndez',
+        representative_cedula: '12293847',
+      };
+      let demoFilled = 0;
+      for (const [field, value] of Object.entries(demo) as [keyof FormData, string][]) {
+        if (String(next[field]).trim()) continue;
+        next[field] = value;
+        demoFilled++;
+      }
+      filled += demoFilled;
+      // [FIN PRELOAD-DEMO]
+
       setForm(next);
       setPreloadMsg(
         filled > 0
-          ? `Se precargaron ${filled} campo${filled === 1 ? '' : 's'} con tus datos guardados. Revísalos y edítalos antes de enviar.`
-          : 'No encontramos datos guardados para tu cuenta. Completa el formulario manualmente.'
+          ? `Se precargaron ${filled} campo${filled === 1 ? '' : 's'}. Revísalos y edítalos antes de enviar.`
+          : 'Completa el formulario manualmente.'
       );
     } catch {
       setPreloadMsg('No se pudieron precargar los datos. Completa el formulario manualmente.');
