@@ -220,6 +220,24 @@ export function ApplyForm({
       filled += demoFilled;
       // [FIN PRELOAD-DEMO]
 
+      // [PRELOAD-DEMO-DOCS] Documentos de ejemplo precargados desde el depósito
+      // (copias reales subidas en demo/educonnet). No reemplaza lo ya subido.
+      const publicBase = `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/documents`;
+      const demoDocs: Partial<Record<keyof FormData, string>> = {
+        cedula_url: `${publicBase}/demo/educonnet/cedula-estudiante.jpg`,
+        birth_certificate_url: `${publicBase}/demo/educonnet/partida-nacimiento.jpg`,
+        residence_letter_url: `${publicBase}/demo/educonnet/carta-residencia.jpg`,
+        cedula_rep_url: `${publicBase}/demo/educonnet/cedula-representante.jpg`,
+      };
+      let docsFilled = 0;
+      for (const [field, url] of Object.entries(demoDocs) as [keyof FormData, string][]) {
+        if (next[field]) continue;
+        next[field] = url;
+        docsFilled++;
+      }
+      filled += docsFilled;
+      // [FIN PRELOAD-DEMO-DOCS]
+
       setForm(next);
       setPreloadMsg(
         filled > 0
