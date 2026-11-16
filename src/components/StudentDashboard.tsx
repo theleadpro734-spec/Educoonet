@@ -38,6 +38,9 @@ interface StudentDashboardProps {
   unreadNotifications?: number;
   onAppMessages?: (id: string) => void;
   studentName?: string;
+  nearby?: { institution: Institution; distanceKm: number | null }[];
+  locState?: 'idle' | 'locating' | 'denied';
+  onLocate?: () => void;
 }
 
 type Tab = 'home' | 'explore' | 'applications' | 'messages' | 'notifications' | 'settings';
@@ -56,6 +59,9 @@ export function StudentDashboard({
   unreadNotifications = 0,
   onAppMessages,
   studentName = 'Postulante',
+  nearby,
+  locState = 'idle',
+  onLocate,
 }: StudentDashboardProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<Tab>('home');
@@ -292,6 +298,67 @@ export function StudentDashboard({
                 <p className="text-sm text-slate-500 mt-0.5">{s.title}</p>
               </div>
             ))}
+          </div>
+
+          {/* Nearby institutions */}
+          <div className="mb-8 animate-slide-up" style={{ animationDelay: '0.3s' }}>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold text-slate-900 flex items-center gap-2">
+                <MapPin className="w-5 h-5 text-brand-600" />
+                Cerca de ti
+              </h2>
+              {nearby && nearby.length > 0 && nearby.some((n) => n.distanceKm != null) ? (
+                <span className="text-xs font-medium text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full flex items-center gap-1">
+                  <MapPin className="w-3 h-3" /> Según tu ubicación
+                </span>
+              ) : (
+                <button
+                  onClick={onLocate}
+                  disabled={locState === 'locating'}
+                  className="text-sm font-semibold text-brand-600 hover:text-brand-700 flex items-center gap-1 transition-colors disabled:opacity-50"
+                >
+                  <MapPin className="w-4 h-4" />
+                  {locState === 'locating' ? 'Detectando...' : 'Usar mi ubicación'}
+                </button>
+              )}
+            </div>
+
+            {locState === 'denied' && (
+              <p className="mb-3 text-sm text-amber-700 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3">
+                No pudimos acceder a tu ubicación. Puedes activarla en los ajustes del navegador y volver a intentarlo.
+              </p>
+            )}
+
+            <div className="grid md:grid-cols-2 gap-4">
+              {(nearby ?? []).slice(0, 4).map(({ institution: inst, distanceKm }) => (
+                <button
+                  key={inst.id}
+                  onClick={onViewInstitution}
+                  className="text-left bg-white rounded-2xl border border-slate-200/60 shadow-sm p-4 spring-hover flex items-center gap-4 hover:border-brand-300 transition-colors"
+                >
+                  {inst.logo_url ? (
+                    <img src={inst.logo_url} alt="" className="w-12 h-12 rounded-xl object-cover border border-slate-200" />
+                  ) : (
+                    <div className="w-12 h-12 rounded-xl bg-brand-800 flex items-center justify-center text-white text-lg font-bold flex-shrink-0">
+                      {inst.name.charAt(0)}
+                    </div>
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <p className="font-semibold text-slate-900 truncate">{inst.name}</p>
+                    <p className="text-sm text-slate-500 truncate flex items-center gap-1">
+                      <MapPin className="w-3.5 h-3.5 flex-shrink-0" />
+                      {inst.location || inst.address}
+                    </p>
+                  </div>
+                  {distanceKm != null && (
+                    <span className="flex-shrink-0 text-xs font-bold text-cyan-700 bg-cyan-50 border border-cyan-100 px-2.5 py-1.5 rounded-lg">
+                      {formatDistance(distanceKm)}
+                    </span>
+                  )}
+                  <ChevronRight className="w-4 h-4 text-slate-300 flex-shrink-0" />
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* Main Grid */}

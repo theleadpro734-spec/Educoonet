@@ -4,6 +4,7 @@ import { INSTITUTION_ID } from '../lib/constants';
 import { useAuth } from '../lib/auth';
 import { useUnreadNotifications } from '../lib/useUnreadNotifications';
 import { Institution, Application } from '../types';
+import { getUserLocation, rankByDistance, formatDistance, NearbyInstitution } from '../lib/nearby';
 import { StudentDashboard } from './StudentDashboard';
 import { MessagingView } from './MessagingView';
 import { ApplyForm } from './ApplyForm';
@@ -26,7 +27,7 @@ type View =
 export function StudentPanel({ onExit }: StudentPanelProps) {
   const { user, isAnonymous, isLocalUser, signOut } = useAuth();
   const [view, setView] = useState<View>('dashboard');
-  const [institution, setInstitution] = useState<Institution | null>(null);
+  const [institutions, setInstitutions] = useState<Institution[]>([]);
   const [applications, setApplications] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedApplicationId, setSelectedApplicationId] = useState<string | undefined>(undefined);
@@ -34,6 +35,20 @@ export function StudentPanel({ onExit }: StudentPanelProps) {
   const [refreshKey, setRefreshKey] = useState(0);
   const [showLinkModal, setShowLinkModal] = useState(false);
   const [editingApplication, setEditingApplication] = useState<Application | undefined>(undefined);
+  const [nearby, setNearby] = useState<NearbyInstitution[]>([]);
+  const [locState, setLocState] = useState<'idle' | 'locating' | 'denied'>('idle');
+
+  const locateNearby = async () => {
+    setLocState('locating');
+    const loc = await getUserLocation();
+    if (!loc) {
+      setLocState('denied');
+      setNearby(rankByDistance(institutions, null));
+      return;
+    }
+    setNearby(rankByDistance(institutions, loc));
+    setLocState('idle');
+  };
 
   const userId = user?.id;
   const studentEmail = user?.email || '';
@@ -47,8 +62,8 @@ export function StudentPanel({ onExit }: StudentPanelProps) {
       supabase
         .from('institutions')
         .select('*')
-        .eq('id', INSTITUTION_ID)
-        .maybeSingle(),
+        .eq('is_published', true)
+        .order('created_at', { ascending: true }),
       isLocal
         ? supabase
             .from('applications')
@@ -64,7 +79,7 @@ export function StudentPanel({ onExit }: StudentPanelProps) {
             .order('created_at', { ascending: false }),
     ]);
 
-    if (instRes.data) setInstitution(instRes.data);
+    if (instRes.data) setInstitutions(instRes.data as Institution[]);
     if (appsRes.data) setApplications(appsRes.data as Application[]);
 
     const appIds = (appsRes.data || []).map((a: Application) => a.id);
@@ -164,7 +179,7 @@ export function StudentPanel({ onExit }: StudentPanelProps) {
       <ApplyForm
         institutionId={INSTITUTION_ID}
         studentEmail={studentEmail}
-        institutionName={institution?.name}
+        institutionName={institutions[0]?.name}
         application={editingApplication}
         onBack={() => {
           setEditingApplication(undefined);
@@ -212,7 +227,7 @@ export function StudentPanel({ onExit }: StudentPanelProps) {
   if (view === 'institution') {
     return (
       <InstitutionDetailView
-        institution={institution}
+        institution={nearby[0]?.institution ?? null}
         onBack={() => setView('dashboard')}
         onApply={() => setView('apply')}
       />
@@ -243,7 +258,7 @@ export function StudentPanel({ onExit }: StudentPanelProps) {
         onMessages={() => setView('messages')}
         onNotifications={() => setView('notifications')}
         onExit={async () => { await signOut(); onExit(); }}
-        institution={institution}
+        institution={institutions[0] ?? null}
         applications={applications}
         studentName={studentName}
         unreadMessages={unreadMessages}
@@ -252,6 +267,9 @@ export function StudentPanel({ onExit }: StudentPanelProps) {
           setSelectedApplicationId(id);
           setView('messages');
         }}
+        nearby={nearby.length > 0 ? nearby : institutions.map((inst) => ({ institution: inst, distanceKm: null }))}
+        locState={locState}
+        onLocate={locateNearby}
       />
       {showLinkModal && (
         <LinkAccountModal onClose={() => setShowLinkModal(false)} />
